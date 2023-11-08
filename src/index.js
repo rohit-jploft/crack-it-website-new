@@ -7,6 +7,7 @@ import { BookingProvider } from "./context/bookingContext";
 import { UserProvider } from "./context/userContext";
 import { AgencyContext, AgencyProvider } from "./context/agencyContext";
 import { PaymentProvider } from "./context/paymentContext";
+import { ModelProvider } from "./context/ModelContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,7 +16,9 @@ root.render(
       <UserProvider>
         <AgencyProvider>
           <PaymentProvider>
-            <App />
+            <ModelProvider>
+              <App />
+            </ModelProvider>
           </PaymentProvider>
         </AgencyProvider>
       </UserProvider>

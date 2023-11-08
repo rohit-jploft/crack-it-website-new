@@ -3,7 +3,6 @@ import Logo from "./../Images/logo.png";
 import RightBg from "./../Images/right_bg.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { Checkbox, FormControlLabel } from "react-dom";
-
 import Pot from "./../Images/pot.svg";
 import Msg from "./../Images/msg.svg";
 import Google from "./../Images/Google.svg";
@@ -22,6 +21,8 @@ import { getCategoryList } from "../data/booking";
 import { ToastContainer, toast } from "react-toastify";
 import { updateExpertProfile } from "../data/experts";
 import { setProfilePicture } from "../data/user";
+import { ModelContext } from "../context/ModelContext";
+import AvatarModel from "../components/AcatarModel";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
@@ -49,6 +50,7 @@ const validationSchema = Yup.object().shape({
 const EditExpertProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState();
+  const {open, setOpen} = useContext(ModelContext)
   const [jobCategoryList, setJobCategoryList] = useState();
   const [skillsData, setSkillsData] = useState();
   const [subCategoryList, setSubCategoryList] = useState();
@@ -251,6 +253,7 @@ const EditExpertProfile = () => {
         className="main_sect"
         style={{ display: "flex", justifyContent: "center" }}
       >
+        <AvatarModel show={open} handleClose={() => setOpen(false)}/>
         <div className="content-left">
           <div className="signup-form form_sect add_expert_form">
             <form
@@ -273,17 +276,20 @@ const EditExpertProfile = () => {
                   <button
                     type="button"
                     class="profile-img-edit btn btn-primary"
-                    onClick={handleIconClick}
+                    // onClick={handleIconClick}
                   >
                     <input
                       type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileInputChange}
+                      // ref={fileInputRef}
+                      // onChange={handleFileInputChange}
                       style={{ display: "none" }}
                     />
                     <img
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
                       alt="img"
+                      onClick={() => {
+                        setOpen(true)
+                      }}
                     />
                   </button>
                 </div>

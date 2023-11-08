@@ -146,6 +146,9 @@ const Signup = (props) => {
                     handleChange={(e) => {
                       const inputValue = e.target.value;
                             // Custom validation: Allow only numbers and limit to 10 digits.
+                            if(inputValue === ""){
+                              formik.setFieldValue('firstName',inputValue )
+                            }
                           const regex = /^[A-Za-z]+$/;
                           if (regex.test(inputValue)) {
                             formik.setFieldValue("firstName", inputValue);
@@ -226,6 +229,9 @@ const Signup = (props) => {
                     handleChange={(e) => {
                       const inputValue = e.target.value;
                             // Custom validation: Allow only numbers and limit to 10 digits.
+                            if(inputValue === ""){
+                              formik.setFieldValue('lastName',inputValue )
+                            }
                           const regex = /^[A-Za-z]+$/;
                           if (regex.test(inputValue)) {
                             formik.setFieldValue("lastName", inputValue);

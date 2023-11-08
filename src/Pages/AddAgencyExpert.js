@@ -430,6 +430,9 @@ const AddAgencyExpert = () => {
                       const inputValue = e.target.value;
                             // Custom validation: Allow only numbers and limit to 10 digits.
                           const regex = /^[A-Za-z]+$/;
+                          if(inputValue === ""){
+                            formik.setFieldValue('firstName',inputValue )
+                          }
                           if (regex.test(inputValue)) {
                             formik.setFieldValue("firstName", inputValue);
                           }
@@ -446,6 +449,7 @@ const AddAgencyExpert = () => {
                 <div className="col-md-6">
                   <TextInput
                     name="lastName"
+                    
                     type="text"
                     label="Last Name *"
                     readonly={expertUserId}
@@ -453,6 +457,9 @@ const AddAgencyExpert = () => {
                     handleChange={(e) => {
                       const inputValue = e.target.value;
                             // Custom validation: Allow only numbers and limit to 10 digits.
+                            if(inputValue === ""){
+                              formik.setFieldValue('lastName',inputValue )
+                            }
                           const regex = /^[A-Za-z]+$/;
                           if (regex.test(inputValue)) {
                             formik.setFieldValue("lastName", inputValue);

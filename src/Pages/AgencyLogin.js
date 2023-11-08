@@ -99,11 +99,11 @@ const AgencyLogin = () => {
 
               <TextInput
                 type={showPassword ? "text" : "password"}
-                name="password *"
+                name="password"
                 value={formik.values.password}
                 handleChange={formik.handleChange}
                 showPassword={showPassword}
-                label="Password"
+                label="Password *"
                 setShowPassword={(value) => setShowPassword(value)}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
