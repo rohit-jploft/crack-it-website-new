@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="85" height="85" viewBox="0 0 85 85">
+  <defs>
+    <filter id="Rectangle_375" x="0" y="0" width="85" height="85" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.078"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient" x1="0.929" y1="0.163" x2="0.176" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff6e62"/>
+      <stop offset="0.51" stop-color="#9639ff"/>
+      <stop offset="1" stop-color="#0397ff"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_408" data-name="Group 408" transform="translate(-1030 -608)">
+    <g transform="matrix(1, 0, 0, 1, 1030, 608)" filter="url(#Rectangle_375)">
+      <g id="Rectangle_375-2" data-name="Rectangle 375" transform="translate(15 12)" fill="#fff" stroke="#ececec" stroke-width="1">
+        <rect width="55" height="55" rx="15" stroke="none"/>
+        <rect x="0.5" y="0.5" width="54" height="54" rx="14.5" fill="none"/>
+      </g>
+    </g>
+    <g id="logo" transform="translate(1060 634)">
+      <path id="Path" d="M12.5,0C5.458,0,0,5.158,0,12.125a11.86,11.86,0,0,0,3.926,8.968,1,1,0,0,1,.336.713L4.33,24.03a1,1,0,0,0,1.4.884l2.481-1.1a1,1,0,0,1,.668-.049,13.63,13.63,0,0,0,3.618.481c7.042,0,12.5-5.158,12.5-12.125S19.542,0,12.5,0Z" fill-rule="evenodd" fill="url(#linear-gradient)"/>
+      <path id="Path_00000132047020611933167100000006482439701923528102_" d="M100.393,179.569l3.672-5.826a1.875,1.875,0,0,1,2.711-.5l2.92,2.19a.75.75,0,0,0,.9,0l3.944-2.993a.594.594,0,0,1,.861.79l-3.672,5.826a1.875,1.875,0,0,1-2.711.5l-2.921-2.19a.75.75,0,0,0-.9,0l-3.944,2.993a.594.594,0,0,1-.861-.79Z" transform="translate(-95.399 -163.898)" fill="#fff" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

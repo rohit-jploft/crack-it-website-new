@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="235.918" height="60" viewBox="0 0 235.918 60">
+  <g id="Group_291" data-name="Group 291" transform="translate(-171.082 -94)">
+    <g id="open-door" transform="translate(171.082 94)">
+      <path id="Path_3" data-name="Path 3" d="M9.079,1H49.51a1.239,1.239,0,0,1,1.163,1.684V59.75A1.287,1.287,0,0,1,49.423,61H9.079a1.249,1.249,0,0,1-1.25-1.25V2.25A1.249,1.249,0,0,1,9.079,1ZM48.173,3.972l-25.1,4.758V53.483l25.1,4.758ZM10.329,58.5H36.12L21.595,55.746a1.25,1.25,0,0,1-1.017-1.228V7.694a1.25,1.25,0,0,1,1.017-1.228L37.241,3.5H10.329Z" transform="translate(-7.829 -1)" fill="#01d866"/>
+      <path id="Path_4" data-name="Path 4" d="M26.651,23.339a1.249,1.249,0,0,1,1.25,1.25v1.652a1.25,1.25,0,0,1-2.5,0V24.589a1.249,1.249,0,0,1,1.25-1.25Z" transform="translate(-6.938 4.585)" fill="#01d866"/>
+    </g>
+    <text id="crack-it" transform="translate(227 144)" fill="#01d866" font-size="50" font-family="BCAlphapipeTSB-Bold, BC Alphapipe" font-weight="700"><tspan x="0" y="0">crack-it</tspan></text>
+  </g>
+</svg>

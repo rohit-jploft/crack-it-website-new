@@ -1,0 +1,12 @@
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g id="Filled">
+    <g id="_37.Smile-Beam" data-name="37.Smile-Beam">
+      <circle id="Background" cx="20" cy="20" r="20" fill="#ffdd67"/>
+      <g id="Face" transform="translate(8.823 10.574)">
+        <path id="Mouth" d="M50.289,107.483a11.566,11.566,0,0,1-10.933-7.789,1.371,1.371,0,1,1,2.59-.9,8.821,8.821,0,0,0,16.686,0,1.371,1.371,0,1,1,2.59.9A11.566,11.566,0,0,1,50.289,107.483Z" transform="translate(-39.112 -86.041)" fill="#b26d3c"/>
+        <path id="Path_564" data-name="Path 564" d="M101.156,49.436c-2.514,0-4.546,3.8-4.546,2.35s2.034-5.115,4.546-5.115,4.549,3.657,4.549,5.115-2.037-2.35-4.549-2.35Z" transform="translate(-83.351 -46.576)" fill="#b26d3c"/>
+        <path id="Path_565" data-name="Path 565" d="M43.149,49.023c-2.514,0-4.549,3.8-4.549,2.352s2.037-5.115,4.549-5.115,4.546,3.657,4.546,5.115S45.661,49.023,43.149,49.023Z" transform="translate(-38.6 -46.26)" fill="#b26d3c"/>
+      </g>
+    </g>
+  </g>
+</svg>

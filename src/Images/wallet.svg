@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">
+  <g id="Group_378" data-name="Group 378" transform="translate(-310 -488)">
+    <rect id="Rectangle_60" data-name="Rectangle 60" width="44" height="44" rx="12" transform="translate(310 488)" fill="#d1ffe5"/>
+    <g id="wallet" transform="translate(320.75 497.83)">
+      <path id="Path_934" data-name="Path 934" d="M17.98,2.17a.73.73,0,0,1,.73.73v7.786a.73.73,0,1,1-1.46,0V2.9A.73.73,0,0,1,17.98,2.17Z" transform="translate(-0.428)" fill="#00bc58" fill-rule="evenodd"/>
+      <path id="Path_935" data-name="Path 935" d="M14.265,7.184a.73.73,0,0,1,1.032,0l2.6,2.6,2.6-2.6a.73.73,0,0,1,1.032,1.032L18.411,11.33a.73.73,0,0,1-1.032,0L14.265,8.216a.73.73,0,0,1,0-1.032Z" transform="translate(-0.343 -0.128)" fill="#00bc58" fill-rule="evenodd"/>
+      <path id="Path_936" data-name="Path 936" d="M2.6,4.574A4.623,4.623,0,0,1,5.873,3.22H10.33a.73.73,0,0,1,0,1.46H5.873A3.163,3.163,0,0,0,2.71,7.843v9.732a3.163,3.163,0,0,0,3.163,3.163H17.552a3.163,3.163,0,0,0,3.163-3.163V13.614a.73.73,0,0,1,1.46,0v3.961A4.623,4.623,0,0,1,17.552,22.2H5.873A4.623,4.623,0,0,1,1.25,17.575V7.843A4.623,4.623,0,0,1,2.6,4.574Z" transform="translate(0 -0.028)" fill="#00bc58" fill-rule="evenodd"/>
+      <path id="Path_937" data-name="Path 937" d="M1.25,9.95a.73.73,0,0,1,.73-.73H5.26a3.65,3.65,0,0,1,0,7.3H1.98a.73.73,0,0,1,0-1.46H5.26a2.19,2.19,0,0,0,0-4.38H1.98A.73.73,0,0,1,1.25,9.95Z" transform="translate(0 -0.189)" fill="#00bc58" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

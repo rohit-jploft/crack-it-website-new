@@ -1,0 +1,12 @@
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g id="Filled">
+    <g id="_36.smile" data-name="36.smile">
+      <circle id="Background" cx="20" cy="20" r="20" fill="#ffdd67"/>
+      <g id="Face" transform="translate(8.974 12.496)">
+        <path id="Mouth" d="M50.289,107.483a11.566,11.566,0,0,1-10.933-7.789,1.371,1.371,0,1,1,2.59-.9,8.821,8.821,0,0,0,16.686,0,1.371,1.371,0,1,1,2.59.9A11.566,11.566,0,0,1,50.289,107.483Z" transform="translate(-39.263 -87.963)" fill="#b26d3c"/>
+        <circle id="Ellipse_22" data-name="Ellipse 22" cx="2.629" cy="2.629" r="2.629" transform="translate(15.026)" fill="#b26d3c"/>
+        <circle id="Ellipse_23" data-name="Ellipse 23" cx="2.629" cy="2.629" r="2.629" transform="translate(1.768)" fill="#b26d3c"/>
+      </g>
+    </g>
+  </g>
+</svg>
