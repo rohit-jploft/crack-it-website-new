@@ -17,14 +17,16 @@ import { format, render, cancel, register } from "timeago.js";
 import Socket from "../data/socket";
 import { isExpert, isUser, isUserNameDisplay } from "../utils/authHelper";
 import FileInputIcon from "../components/FileInputIcon";
-import { BASE_URL } from "../constant";
-import pdfIcon from '../Images/pdf_icon.png'
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
+import pdfIcon from "../Images/pdf_icon.png";
 import { Button } from "react-bootstrap";
 const Chat = () => {
   const navigate = useNavigate();
-  const {convoId} = useParams()
+  const { convoId } = useParams();
 
-  const [selectedConversation, setSelectedConversation] = useState(convoId || null);
+  const [selectedConversation, setSelectedConversation] = useState(
+    convoId || null
+  );
   const [newMessage, setNewMessage] = useState("");
   const [convoData, setConvoData] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -165,7 +167,16 @@ const Chat = () => {
                               key={conversation._id}
                             >
                               <div class="wrap">
-                                <img src={Bookingimg} alt="img" />
+                                <img
+                                  src={
+                                    isUserNameDisplay(
+                                      conversation?.participants[1]?._id
+                                    )
+                                      ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
+                                      : `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                  }
+                                  alt="img"
+                                />
                                 <div class="meta">
                                   <p class="name">
                                     {isUserNameDisplay(
@@ -289,9 +300,14 @@ const Chat = () => {
                                       "_blank"
                                     )
                                   }
-                                  style={{ width: "130px", color:'grey', padding:'12px', border:0 }}
+                                  style={{
+                                    width: "130px",
+                                    color: "grey",
+                                    padding: "12px",
+                                    border: 0,
+                                  }}
                                 >
-                                  <img alt="pdf-icon" src={pdfIcon}/>
+                                  <img alt="pdf-icon" src={pdfIcon} />
                                   Open File
                                 </button>
                                 <h6>{format(message?.createdAt)}</h6>

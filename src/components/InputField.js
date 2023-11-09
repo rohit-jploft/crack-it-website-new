@@ -19,7 +19,7 @@ const TextInput = ({
       const pressedKey = e.key;
 
       // Check if the pressed key is "e" or "i"
-      if (pressedKey === "e" || pressedKey === "i" || pressedKey === '+' || pressedKey === "E" || pressedKey === ".") {
+      if (pressedKey === "e" || pressedKey === "i" || pressedKey === '+' || pressedKey === "E" || pressedKey === "." || pressedKey === '-') {
         // Prevent the keypress from being added to the input value
         e.preventDefault();
       }

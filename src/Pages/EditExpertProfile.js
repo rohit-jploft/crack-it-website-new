@@ -13,7 +13,7 @@ import * as Yup from "yup"; // Import Yup for validation
 import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../context/userContext";
 import Axios from "axios";
-import { BASE_URL } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
 import ExpertImg from './../Images/expert-img.svg';
 import Header from "./Header";
@@ -22,7 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { updateExpertProfile } from "../data/experts";
 import { setProfilePicture } from "../data/user";
 import { ModelContext } from "../context/ModelContext";
-import AvatarModel from "../components/AcatarModel";
+import AvatarModel from "../components/AvatarModel";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
@@ -268,7 +268,7 @@ const EditExpertProfile = () => {
                   <img
                     src={
                       userData && userData?.expert?.user?.profilePhoto
-                        ? `${BASE_URL}${userData?.expert?.user?.profilePhoto}`
+                        ? `${AVATAR_BASE_URL}${userData?.expert?.user?.profilePhoto}`
                         : ExpertImg
                     }
                     alt="Img"

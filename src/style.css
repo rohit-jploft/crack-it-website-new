@@ -2651,7 +2651,7 @@ input[type=number] {
   display: inline-block;
 }
 .img-img.active{
-  border: 1px solid #01D866;
+  border: 2.5px solid #01D866;
 }
 .img-img img{
   width: 100%;

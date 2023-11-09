@@ -15,7 +15,7 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../context/userContext";
 import ExpertImg from './../Images/expert-img.svg';
 import Axios from "axios";
-import { BASE_URL } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import { getCategoryList } from "../data/booking";
@@ -23,6 +23,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { updateExpertProfile } from "../data/experts";
 import { updateAgencyProfile } from "../data/agency";
 import { setProfilePicture } from "../data/user";
+import { ModelContext } from "../context/ModelContext";
+import AvatarModel from "../components/AvatarModel";
 const validationSchema = Yup.object().shape({
   agencyName: Yup.string().required("agencyName is required"),
 
@@ -47,6 +49,7 @@ const validationSchema = Yup.object().shape({
 });
 const EditAgencyProfile = () => {
   const navigate = useNavigate();
+  const {open, setOpen} = useContext(ModelContext)
   const [userData, setUserData] = useState();
   const [jobCategoryList, setJobCategoryList] = useState();
   const [skillsData, setSkillsData] = useState();
@@ -142,6 +145,7 @@ const EditAgencyProfile = () => {
       formik.setFieldValue("price", res.data.data?.expert?.price);
       formik.setFieldValue("experience", res.data.data?.expert?.experience);
       setRecievedPic(res.data.data?.expert?.agency?.profilePhoto)
+      console.log(res.data.data?.expert?.agency?.profilePhoto, "profilePic")
 
       console.log(
         "job category when selected",
@@ -250,6 +254,7 @@ const EditAgencyProfile = () => {
     <>
       <ToastContainer />
       <Header />
+      <AvatarModel handleClose={() => setOpen(false)} show={open} />
       <section
         className="main_sect"
         style={{ display: "flex", justifyContent: "center" }}
@@ -267,7 +272,7 @@ const EditAgencyProfile = () => {
                 <div class="expert-image">
                 <img
                     src={
-                      recievedPic ? `${BASE_URL}${recievedPic}` : ExpertImg
+                      recievedPic ? `${AVATAR_BASE_URL}${recievedPic}` : ExpertImg
                     }
                     // src="/static/media/expert-img.199747df04b3a83a67b449c8ff5963a0.svg"
                     alt="Img"
@@ -276,17 +281,19 @@ const EditAgencyProfile = () => {
                     <button
                     type="button"
                     class="profile-img-edit btn btn-primary"
-                    onClick={handleIconClick}
+                    // onClick={handleIconClick}
+                    onClick={() => setOpen(true)}
                   >
-                    <input
+                    {/* <input
                       type="file"
                       ref={fileInputRef}
                       onChange={handleFileInputChange}
                       style={{ display: "none" }}
-                    />
+                    /> */}
                     <img
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
                       alt="img"
+                      
                     />
                   </button>
                 </div>

@@ -15,7 +15,7 @@ import Logout from "./../Images/logout.svg";
 import ProfileH from "./../Images/profile.png";
 import DownArrow from "./../Images/down_Arrow.svg";
 import Axios from "axios";
-import { BASE_URL } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { isUser } from "../utils/authHelper";
@@ -171,7 +171,7 @@ const Header = () => {
                       className="profile-drop-img"
                       src={
                         profileData && profileData.profilePhoto
-                          ? `${BASE_URL}${profileData.profilePhoto}`
+                          ? `${AVATAR_BASE_URL}${profileData.profilePhoto}`
                           : ProfileH
                       }
                       alt="user pic"

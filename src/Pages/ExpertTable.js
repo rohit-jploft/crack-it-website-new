@@ -14,6 +14,7 @@ import Cancelicon from "./../Images/cancel-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { deleteAgencyExpert, getAllAgencyExpert } from "../data/agency";
 import { ToastContainer, toast } from "react-toastify";
+import { AVATAR_BASE_URL } from "../constant";
 
 const ExpertTable = () => {
   const navigate = useNavigate();
@@ -84,12 +85,13 @@ const ExpertTable = () => {
                     <tbody>
                       {agencyExpertList &&
                         agencyExpertList.map((exp) => {
+                          console.log(exp, "map response")
                           return (
                             <tr>
                               <td>
                                 <img
                                   className="wallet-img"
-                                  src={Bookingimg}
+                                  src={`${AVATAR_BASE_URL}${exp.user.profilePhoto}`}
                                   alt="img"
                                 />
                               </td>

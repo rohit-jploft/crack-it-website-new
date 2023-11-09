@@ -1,5 +1,5 @@
 import './../style.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Container from 'react-bootstrap/Container';
@@ -13,13 +13,17 @@ import Modal from 'react-bootstrap/Modal';
 import Edit from './../Images/edit.svg';
 import Cancelicon from './../Images/cancel-icon.svg';
 import Axios from 'axios';
-import { BASE_URL } from '../constant';
+import { AVATAR_BASE_URL, BASE_URL } from '../constant';
 import { setProfilePicture } from '../data/user';
 import { ToastContainer , toast} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ModelContext } from '../context/ModelContext';
+import AvatarModel from '../components/AvatarModel';
 
 const MyProfile = () => {
     const navigate = useNavigate()
+    const {  open,
+      setOpen,} = useContext(ModelContext)
     const [show, setShow] = useState(false);
     const [userdata, setUserData] = useState(false);
     const [profilePic, setProfilePic] = useState();
@@ -34,8 +38,9 @@ const MyProfile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(res, "userData response")
+
       if (res.data.data) {
-        console.log(res.data.data)
         setUserData(res.data.data);
       }
     };
@@ -81,13 +86,13 @@ const MyProfile = () => {
       // Trigger the file input when the icon is clicked
       fileInputRef.current.click();
     };
-    
  
     return (
     <>
     <Header />
     <ToastContainer/>
     <section className="">
+      <AvatarModel show={open} handleClose={() => setOpen(false)}/>
       <Container>
         <div className='main-content'>
           <div className='job-categ'>
@@ -95,21 +100,23 @@ const MyProfile = () => {
                 <h3>My Profile</h3>
                 <div className='expertprofile-detail'>
                    <div className='expert-image'>
+                 
                     <img src={
-                      userdata && userdata.profilePhoto ? `${BASE_URL}${userdata.profilePhoto}` : ExpertImg
+                      userdata && userdata.profilePhoto ? `${AVATAR_BASE_URL}${userdata.profilePhoto}` : ExpertImg
                     } alt="Img" />
                     {/* <Button className='profile-img-edit' onClick=''><img src={Edit} alt="img" /></Button> */}
                     <button
                     type="button"
                     class="profile-img-edit btn btn-primary"
-                    onClick={handleIconClick}
+                    // onClick={handleIconClick}
+                    onClick={() => setOpen(true)}
                   >
-                    <input
+                    {/* <input
                       type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileInputChange}
+                      // ref={fileInputRef}
+                      // onChange={handleFileInputChange}
                       style={{ display: "none" }}
-                    />
+                    /> */}
                     <img
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
                       alt="img"

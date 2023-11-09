@@ -37,7 +37,9 @@ const MyBookings = () => {
   const navigate = useNavigate();
   const { tabKey } = useParams();
   const [show, setShow] = useState(false);
+  const [showDecline, setShowDecline] = useState(false);
   const [bookingCancelId, setBookingCancelId] = useState();
+  const [bookingDeclineId, setBookingDeclineId] = useState();
   const [cancelDone, setCancelDone] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -61,16 +63,18 @@ const MyBookings = () => {
   }, [key, cancelDone]);
 
   const cancelBooking = async (bookingId) => {
-    const role = localStorage.getItem('role')
-    const cancel = await Axios.put(`${BASE_URL}booking/cancel/${bookingId}?role=${role}`);
+    const role = localStorage.getItem("role");
+    const cancel = await Axios.put(
+      `${BASE_URL}booking/cancel/${bookingId}?role=${role}`
+    );
     console.log(cancel);
     if (cancel && cancel?.data?.status === 200) {
       toast.success(cancel.data.message);
       setCancelDone(true);
       handleClose();
     }
-    if(cancel && cancel?.data.status === 201){
-      toast.error(cancel.data.message)
+    if (cancel && cancel?.data.status === 201) {
+      toast.error(cancel.data.message);
     }
   };
   const AcceptBooking = async (bookingId) => {
@@ -88,7 +92,7 @@ const MyBookings = () => {
     if (accept && accept?.data?.status === 200) {
       toast.success(accept.data.message);
       setCancelDone(true);
-      handleClose();
+      setShowDecline(false)
     }
   };
 
@@ -103,23 +107,26 @@ const MyBookings = () => {
     getDeviceToken();
   }, []);
 
-
   const clickChatRedirect = async (bookingId) => {
     const role = localStorage.getItem("role");
-    
+
     if (role !== "AGENCY") {
       const res = await getChatIdFromMeeting(bookingId);
       console.log(res);
-      if(res && !res.success){
-        toast.error(res.message)
-      }
+  
       if (res && res.data && res.data.chat) {
         console.log(res.data.chat);
         navigate(`/chat/${res.data.chat}`);
       }
       if (res && res.status === 200 && res.message) {
-        toast.success(res.message);
-        navigate(`/chat/${res.data.chat}`);
+        if (res.success) {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+        if (res && res?.data && res?.data?.chat) {
+          navigate(`/chat/${res?.data?.chat}`);
+        }
       }
     }
   };
@@ -168,8 +175,9 @@ const MyBookings = () => {
                               handleShow();
                             }}
                             onClickDecline={() => {
-                              declineBooking(meet?._id);
-                              handleShow();
+                              // declineBooking(meet?._id);
+                              setBookingDeclineId(meet?._id)
+                              setShowDecline(true)
                             }}
                             onClickAccept={() => {
                               AcceptBooking(meet?._id);
@@ -191,7 +199,7 @@ const MyBookings = () => {
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <img src={Cancelicon} alt="img" />
-          <Modal.Title>Are you sure to cancel the booking</Modal.Title>
+          <Modal.Title>Are you sure to Cancel the booking</Modal.Title>
           <p>
             It will refund 50% amount of the booking and 50% penalty when you
             cancel it within 24 hours.<br></br>
@@ -205,6 +213,30 @@ const MyBookings = () => {
           <Button
             className="yes-btn"
             onClick={() => cancelBooking(bookingCancelId)}
+          >
+            Yes
+          </Button>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showDecline} onHide={() => setShowDecline(false)} className="cancel_modal">
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <img src={Cancelicon} alt="img" />
+          <Modal.Title>Are you sure to Decline the booking</Modal.Title>
+          {/* <p>
+            It will refund 50% amount of the booking and 50% penalty when you
+            cancel it within 24 hours.<br></br>
+            If the cancel before 4 hours of the meeting then you will get 25%
+            amount of the booking Refund amount will be credited into your
+            wallet and you can use it to booking next booking.
+          </p> */}
+          <Button className="no-btn" onClick={() => setShowDecline(false)}>
+            No
+          </Button>
+          <Button
+            className="yes-btn"
+            onClick={() =>  declineBooking(bookingDeclineId)}
+
           >
             Yes
           </Button>

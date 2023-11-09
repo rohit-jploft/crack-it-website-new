@@ -17,7 +17,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Edit from "./../Images/edit.svg";
 import Cancelicon from "./../Images/cancel-icon.svg";
-import { BASE_URL } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 const ExpertsProfile = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -76,7 +76,16 @@ const ExpertsProfile = () => {
                 <h3>Profile</h3>
                 <div className="expertprofile-detail">
                   <div className="expert-image">
-                    <img src={profileData && profileData?.expert?.user?.profilePhoto ? `${BASE_URL}${profileData?.expert.user.profilePhoto}` : ExpertImg} alt="Img" />
+                    <img
+                      src={
+                        role === "AGENCY" ? profileData && profileData?.expert && profileData?.expert?.agency && profileData?.expert?.agency?.profilePhoto
+                        ? `${AVATAR_BASE_URL}${profileData?.expert?.agency?.profilePhoto}`
+                        : ExpertImg : profileData && profileData?.expert && profileData?.expert?.user && profileData?.expert?.user?.profilePhoto
+                        ? `${AVATAR_BASE_URL}${profileData?.expert?.user?.profilePhoto}`
+                        : ExpertImg
+                      }
+                      alt="Img"
+                    />
                   </div>
                   <h2>
                     {role === "EXPERT" && profileData?.expert.user.firstName}{" "}

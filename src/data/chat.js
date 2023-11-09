@@ -15,7 +15,7 @@ export const sendMessage = async (convoId, msg, audio) => {
   if (audio) {
     newFormData.append("chat", convoId);
     newFormData.append("sender", sender);
-    newFormData.append("type", "file");
+    newFormData.append("type", audio.type);
     newFormData.append("content", audio ? "file" : msg);
     newFormData.append("audio", audio);
   }
