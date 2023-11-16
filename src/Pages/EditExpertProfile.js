@@ -250,11 +250,11 @@ const EditExpertProfile = () => {
       <ToastContainer />
       <Header />
       <section
-        className="main_sect"
+        className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <AvatarModel show={open} handleClose={() => setOpen(false)}/>
-        <div className="content-left">
+        <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form
               onSubmit={(e) => {
@@ -514,7 +514,7 @@ const EditExpertProfile = () => {
                     <div class="price-icon">$</div>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-lg-6">
                   <TextInput
                     name="experience"
                     type="number"
@@ -530,7 +530,7 @@ const EditExpertProfile = () => {
                     }
                   />
                 </div>
-                <div className="col-md-6">
+                <div className="col-lg-6">
                   <div class="input-field language-field">
                     <h6>Language</h6>
                     <div class="language-checkbox">

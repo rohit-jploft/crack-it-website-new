@@ -379,11 +379,11 @@ const AddAgencyExpert = () => {
       <ToastContainer />
       <Header />
       <section
-        className="main_sect"
+        className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
         <AvatarModel show={open} handleClose={() => setOpen(false)} id={expertUserId} onlySet={expertUserId ? false : true} setAvatarSvg={(value) => setAvatarSvg(value)}/>
-        <div className="content-left">
+        <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form
               onSubmit={(e) => {
