@@ -474,7 +474,6 @@
   border-radius: 25px;
   background: #fff;
   padding: 41px 45px;
-  min-height: 780px;
   margin-bottom: 30px;
 }
 
@@ -802,7 +801,6 @@ a {
   background: #fff;
 }
 .job-categ {
-  min-height: 698px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1278,14 +1276,31 @@ a {
   font-weight: 400;
 }
 .notification-menu .dropdown-menu {
-  box-shadow: 0px 3px 20px #00000029 !important;
-  border: none !important;
-  border-radius: 20px !important;
-  padding: 12px 18px;
-  width: 430px;
-  top: 60px !important;
-  left: auto !important;
-  right: -180px;
+    box-shadow: 0px 3px 20px #00000029 !important;
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 12px 18px;
+    width: 300px;
+    top: 60px !important;
+    left: auto !important;
+    right: -180px;
+}
+.notification-menu .dropdown-menu {
+    padding: 0;
+}
+.notification-menu .dropdown-item {
+    overflow: unset !important;
+    white-space: unset;
+    height: auto !important;
+    padding: 0 15px !important;
+}
+.notification-menu .dropdown-item h6 {
+    white-space: nowrap;
+}
+.notification-menu .dropdown-menu {
+    height: calc(100vh - 150px);
+    overflow: auto;
+    padding-bottom: 10px;
 }
 .notification-menu .dropdown-item:hover {
   background-color: #fff;
@@ -1510,7 +1525,7 @@ td a {
 }
 
 .in_details {
-  margin-top: 60px !important;
+  margin-top: 40px !important;
   margin-bottom: 30px;
 }
 .in_details .input-field {
@@ -1519,18 +1534,19 @@ td a {
   margin-bottom: 15px;
 }
 .addbankdetails_field .btn-pay {
-  width: 370px;
-  margin: auto;
+    width: 100%;
+    margin: auto;
 }
 .job-categ.addbank {
   align-items: baseline;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .main-content.chat-screen {
-  padding: 0;
-  min-height: unset;
-  height: calc(100vh - 170px);
+    padding: 0;
+    min-height: unset;
+    height: calc(100vh - 170px);
+    overflow: hidden;
 }
 #frame {
   width: 100%;
@@ -1568,7 +1584,6 @@ td a {
   }
   .chat_field #frame {
     width: 100%;
-    height: calc(100vh - 120px);
 }
 }
 #frame #sidepanel {
@@ -1943,7 +1958,15 @@ td a {
   height: calc(100vh - 220px);
 }
 #frame #sidepanel #contacts ul {
-  padding-left: 0;
+    padding-left: 0;
+    margin: 0;
+    padding-bottom: 1rem;
+}
+.message-input div {
+    align-items: center;
+}
+#frame .content .message-input .wrap .attachment {
+    margin-top: 0 !important;
 }
 @media screen and (max-width: 735px) {
   #frame #sidepanel #contacts {
@@ -2661,6 +2684,40 @@ button.navbar-toggler {
   width: calc(100% - 56px);
   min-width: unset !important;
 }
+#frame .content .message-input .wrap .attachment {
+    margin-right: 10px;
+    width: 16px;
+}
+.message-input div img {
+    width: 16px;
+}
+#frame .content .messages ul li.replies p, #frame .content .messages ul li.sent p {
+    padding: 10px 20px;
+}
+#frame .content .message-input .wrap {
+    padding: 10px;
+    height: unset;
+}
+#frame .content .message-input .wrap input {
+    padding: 5px 0px 6px 8px;
+    width: calc(100% - 48px);
+}
+#frame .content .messages {
+    height: calc(100vh - 193px);
+}
+#frame #sidepanel #contacts ul li.contact {
+    margin-bottom: 0;
+}
+.main-content.chat-screen {
+    height: calc(100vh - 107px);
+}
+.chat_field #frame {
+    height: calc(100vh - 97px);
+}
+#frame .content {
+    height: calc(100vh - 98px);
+}
+
 }
 
 @media(max-width: 360px){
@@ -2860,6 +2917,8 @@ button.navbar-toggler {
   background-image: url(../src/Images/rrff.png);
   padding: 30px 30px 165px 40px;
   background-size: cover;
+  background-position: right;
+  border-radius: 16px;
 }
 .refer-banner h2 {
   color: #fff;
@@ -2892,13 +2951,14 @@ button.navbar-toggler {
   justify-content: center;
 }
 .input-copy p {
-  display: flex;
-  gap: 90px;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #d5d5d5;
-  border-radius: 10px;
-  padding: 10px 15px;
-  margin: 30px 0 60px;
+    display: flex;
+    gap: 90px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin: 30px 0 0px;
+    word-break: break-all;
 }
 
 .add_expert_form {
@@ -3168,5 +3228,47 @@ button.navbar-toggler {
 }
 .expertise {
   text-align: center;
+}
+.refer-banner {
+    width: 100%;
+    padding: 15px 15px 25px 15px;
+}
+.refer-banner h2 {
+    font-size: 24px;
+}
+.text-refer {
+    margin: 20px auto;
+    width: 100%;
+}
+.social-link-man button.react-share__ShareButton img {
+    width: 60px;
+}
+.social-link-man li:nth-child(2) button.react-share__ShareButton img {
+    width: 32px !important;
+    height: 32px !important;
+}
+.input-copy p {
+    gap: 11px;
+    padding: 10px 15px;
+    margin: 30px 0 0px;
+    font-size: 14px;
+}
+.refer-earn {
+    border-radius: 20px;
+    padding: 20px;
+}
+.notification-menu .dropdown-menu {
+    width: 250px;
+    top: 40px !important;
+    left: auto !important;
+    right: -50px;
+    height: calc(100vh - 90px);
+}
+.notif_msg h3 {
+    font-size: 13px;
+}
+.notif_msg p {
+    font-size: 11px;
+    margin-bottom: 0;
 }
 }

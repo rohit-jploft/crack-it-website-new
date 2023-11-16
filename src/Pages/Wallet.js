@@ -87,6 +87,7 @@ const Wallet = () => {
                                   <th width="1%"></th>
                                   <th width="15%">Name</th>
                                   <th width="24%">Date</th>
+                                  <th width="24%">Title</th>
                                   <th width="15%">Status</th>
                                   <th width="15%">Amount</th>
                                 </tr>
@@ -102,6 +103,7 @@ const Wallet = () => {
                                       amount,
                                       status,
                                       type,
+                                      title,
                                       user,
                                       otherUser,
                                       createdAt,
@@ -121,6 +123,9 @@ const Wallet = () => {
                                         </td>
                                         <td>
                                           {getDateFromTimeStamps(createdAt)}
+                                        </td>
+                                        <td>
+                                          {title}
                                         </td>
                                         <td>
                                           <div className="status_success">
@@ -255,6 +260,7 @@ const Wallet = () => {
                             <tr width="100%">
                               <th width="1%"></th>
                               <th width="15%">Name</th>
+                              <th width="15%">Title</th>
                               <th width="24%">Date</th>
                               <th width="15%">Status</th>
                               <th width="15%">Amount</th>
@@ -269,6 +275,7 @@ const Wallet = () => {
                             amount,
                             status,
                             type,
+                            title,
                             user,
                             otherUser,
                             createdAt,
@@ -285,7 +292,9 @@ const Wallet = () => {
                               <td className="Wname">
                                 {otherUser?.firstName} {otherUser?.lastName}
                               </td>
+                              <td>{title}</td>
                               <td>{getDateFromTimeStamps(createdAt)}</td>
+                            
                               <td>
                                 <div className="status_success">{status}</div>
                               </td>

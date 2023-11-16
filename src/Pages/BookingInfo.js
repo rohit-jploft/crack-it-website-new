@@ -15,15 +15,29 @@ import { BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PaymentContext } from "../context/paymentContext";
+import { Button, Modal } from "react-bootstrap";
+
+import {
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+} from "@mui/material";
 
 const BookingInfo = () => {
   const { bookingId } = useParams();
-  const {bookingIdAfterPayment, setBookingIdAfterPayment} = useContext(PaymentContext)
+  const { bookingIdAfterPayment, setBookingIdAfterPayment } =
+    useContext(PaymentContext);
+  const [showPaymentMethodModel, setShowPaymentMethodModel] = useState(false);
   const [bookingData, setBookingData] = useState();
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoRemoved, setPromoRemoved] = useState(false);
   const [lastTriedPromo, setLastTriedPromo] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentAmount, setPaymentAmount] = useState();
+  const [walletPaymentDone, setWalletPaymentDone] = useState(false);
   const getBookingData = async () => {
     const data = await getSingleBookingDetail(bookingId);
     console.log(data);
@@ -33,7 +47,8 @@ const BookingInfo = () => {
     getBookingData();
     setPromoApplied(false);
     setPromoRemoved(false);
-  }, [promoApplied, promoRemoved, bookingId]);
+    setWalletPaymentDone(false)
+  }, [promoApplied, promoRemoved, bookingId, walletPaymentDone]);
 
   const applyPromoCode = async () => {
     if (lastTriedPromo !== promoCode) {
@@ -88,10 +103,10 @@ const BookingInfo = () => {
       });
 
       const session = await response.json();
-      console.log(session, "payment session")
-      setBookingIdAfterPayment(meetingId)
-      localStorage.setItem("bookingIdAfterPayment", meetingId)
-      localStorage.setItem("sessionId", session.id)
+      console.log(session, "payment session");
+      setBookingIdAfterPayment(meetingId);
+      localStorage.setItem("bookingIdAfterPayment", meetingId);
+      localStorage.setItem("sessionId", session.id);
 
       const result = stripe.redirectToCheckout({
         sessionId: session.id,
@@ -105,6 +120,32 @@ const BookingInfo = () => {
     }
   };
   const role = localStorage.getItem("role");
+  const userId = localStorage.getItem("userId");
+
+  const paymentProceed = async () => {
+    if (paymentMethod === "STRIPE" && paymentAmount) {
+      makePayment(paymentAmount, bookingId);
+    }
+    if (paymentMethod === "WALLET" && paymentAmount) {
+      const payWallet = await Axios.put(`${BASE_URL}payment/wallet`, {
+        bookingId: bookingId,
+        amount: paymentAmount,
+        userId: userId,
+      });
+      if(payWallet && payWallet.data.success && payWallet.data.data){
+        toast.success("Payment successfull")
+        setShowPaymentMethodModel(false)
+        setWalletPaymentDone(true)
+      } else if(payWallet && !payWallet.data.success){
+        setShowPaymentMethodModel(false)
+        toast.error(payWallet?.data?.message, {autoClose:300})
+      }
+      else {
+        toast.error("Something went wrong")
+      }
+      console.log(payWallet, "response after payment through wallet")
+    }
+  };
   return (
     <>
       <Header />
@@ -265,10 +306,12 @@ const BookingInfo = () => {
                       type="submit"
                       style={{ marginLeft: "auto", width: "35%" }}
                       onClick={() => {
-                        makePayment(
-                          bookingData?.booking?.grandTotal,
-                          bookingId
-                        );
+                        // makePayment(
+                        //   bookingData?.booking?.grandTotal,
+                        //   bookingId
+                        // );
+                        setPaymentAmount(bookingData?.booking?.grandTotal);
+                        setShowPaymentMethodModel(true);
                       }}
                     >
                       Pay & Proceed
@@ -278,6 +321,45 @@ const BookingInfo = () => {
             </div>
           </div>
         </Container>
+        <Modal
+          show={showPaymentMethodModel}
+          onHide={() => setShowPaymentMethodModel(false)}
+          className="cancel_modal"
+        >
+          <Modal.Header closeButton></Modal.Header>
+          <Modal.Body>
+            {/* <img src={Cancelicon} alt="img" /> */}
+            <Modal.Title>Select payment method</Modal.Title>
+            <div>
+              <FormControl>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                  onChange={(e) => {
+                    setPaymentMethod(e.target.value);
+                  }}
+                  value={paymentMethod}
+                >
+                  <FormControlLabel
+                    value="WALLET"
+                    control={<Radio />}
+                    label="Wallet"
+                  />
+                  <FormControlLabel
+                    value="STRIPE"
+                    control={<Radio />}
+                    label="Credit & debit cards"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+
+            <Button className="yes-btn" onClick={() => paymentProceed()}>
+              Pay
+            </Button>
+          </Modal.Body>
+        </Modal>
       </section>
     </>
   );
