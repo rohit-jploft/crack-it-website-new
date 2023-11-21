@@ -84,7 +84,7 @@ const ChangePassword = () => {
       <section className="">
         <Container>
           <div className="main-content">
-            <div className="job-categ addbank">
+            <div className="job-categ addbank change_password_form">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

@@ -1,3 +1,5 @@
+import { timeZoneList } from "../constant";
+
 export const getDayName = (dayIndex) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -48,24 +50,50 @@ export function scrollToBottom(containerId) {
   }
 }
 export function convertTimeToJsDate(time) {
-    const [hours, minutes] = time.split(':').map(Number);
-    if (!isNaN(hours) && !isNaN(minutes)) {
-      const now = new Date();
-      now.setHours(hours);
-      now.setMinutes(minutes);
-      now.setSeconds(0); // Optionally, set seconds to 0
-      return now;
-    } else {
-      return null; // Invalid time format
+  const [hours, minutes] = time.split(":").map(Number);
+  if (!isNaN(hours) && !isNaN(minutes)) {
+    const now = new Date();
+    now.setHours(hours);
+    now.setMinutes(minutes);
+    now.setSeconds(0); // Optionally, set seconds to 0
+    return now;
+  } else {
+    return null; // Invalid time format
+  }
+}
+export function objectToFormData(obj) {
+  const formData = new FormData();
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      formData.append(key, obj[key]);
     }
   }
- export function objectToFormData(obj) {
-    const formData = new FormData();
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        formData.append(key, obj[key]);
-      }
-    }
-    console.log(formData, "form data")
-    return formData;
-  }
+  console.log(formData, "form data");
+  return formData;
+}
+export function getCurrentDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let day = today.getDate();
+
+  // Ensure month and day are in the 'MM' and 'DD' format, respectively
+  month = month < 10 ? "0" + month : month;
+  day = day < 10 ? "0" + day : day;
+
+  return `${year}-${month}-${day}`;
+}
+
+export function addMinutesToDate(date, minutesToAdd) {
+  return new Date(date.getTime() + minutesToAdd * 60000);
+}
+export const convertDateStampToTimeZone =  (dateStamp, timeZone) => {
+  console.log(dateStamp, timeZone, "inputs")
+  const time = timeZoneList.find((t) => t.symbol === timeZone.toString());
+  const date = new Date(dateStamp.toString());
+  console.log(date, "offSetTime")
+  console.log(time, "offSetTime")
+  const modifiedDateStamp =  addMinutesToDate(date, time.offsetMinutes);
+
+  return new Date(modifiedDateStamp);
+};

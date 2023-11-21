@@ -13,12 +13,14 @@ import Ex4 from "./../Images/ex4.svg";
 import Axios from "axios";
 import { Rating as RatingComponent } from "@mui/material";
 import { BASE_URL } from "../constant";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BookingContext } from "../context/bookingContext";
 
 const Rating = () => {
   const { expertId } = useParams();
+  const {ratingBookingId, setRatingBookingId} = useContext(BookingContext)
   const navigate = useNavigate();
   const [expertData, setExpertData] = useState();
   const [rateValue, setRateValue] = useState(0);
@@ -47,6 +49,7 @@ const Rating = () => {
         expert: expertId,
         ratedBy: loggedUserId,
         rating: rateValue,
+        bookingId:ratingBookingId,
         comment: comment,
       });
       if (
@@ -58,6 +61,7 @@ const Rating = () => {
         data.data.status === 200
       ) {
         toast.success("Expert rated successfully", { autoClose: 600 });
+        setRatingBookingId("")
         navigate("/myBookings");
       }
       console.log(data, "rating response");

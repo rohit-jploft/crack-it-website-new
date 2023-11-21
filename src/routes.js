@@ -36,6 +36,7 @@ import AgencyExpertProfile from "./Pages/AgencyExpertProfile";
 import AgencyExpertBooking from "./Pages/AgencyExpertBooking";
 import SetupAgencyProfile from "./Pages/SetupAgencyProfile";
 import CheckPayment from "./Pages/CheckPayment";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -205,6 +206,10 @@ function AppRoutes() {
     {
       path: "/setup-profile",
       element: isAuthenticateds ? <SetupExpertProfile/> : <Navigate to="/login" /> ,
+    },
+    {
+      path: "/privacy-policy",
+      element:  <PrivacyPolicy/>  ,
     },
     {
       path: "/agency/setup-profile",

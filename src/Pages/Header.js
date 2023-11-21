@@ -75,7 +75,10 @@ const Header = () => {
   };
   return (
     <>
-      <Navbar expand="lg" className="nav_sect">
+      <Navbar
+        expand="lg"
+        className={`nav_sect ${isTheUser ? "nav_wrapper_user" : ""}`}
+      >
         <Container>
           <Navbar.Brand href="/mybookings">
             <div className="brand-logo">
@@ -86,7 +89,7 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               {isTheUser && (
-                <Nav.Link href="/JobCategory">
+                <Nav.Link href="/JobCategory" className="button_user">
                   <button className="btn_login">BOOK NOW</button>
                 </Nav.Link>
               )}

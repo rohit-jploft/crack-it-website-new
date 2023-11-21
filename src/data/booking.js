@@ -94,6 +94,7 @@ export const listExpert = async (search, jobCategory, minExperience, maxExperien
 
 export const createBooking = async (data) => {
   try {
+    console.log(data, "booing req data")
     const res = await Axios.post(`${BASE_URL}booking/create`, { ...data });
     console.log(res);
     return res.data;

@@ -7,7 +7,7 @@ import Bookingimg2 from "./../Images/booking-img2.svg";
 import Time2 from "./../Images/time2.svg";
 import Message2 from "./../Images/message2.svg";
 import { getSingleBookingDetail } from "../data/booking";
-import { getDateFromTimeStamps, getTimeFromTimestamps } from "../helper/helper";
+import { convertDateStampToTimeZone, getDateFromTimeStamps, getTimeFromTimestamps } from "../helper/helper";
 import TextInput from "../components/InputField";
 import Axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
@@ -40,7 +40,7 @@ const BookingInfo = () => {
   const [walletPaymentDone, setWalletPaymentDone] = useState(false);
   const getBookingData = async () => {
     const data = await getSingleBookingDetail(bookingId);
-    console.log(data);
+    console.log(data, "bookingData");
     setBookingData(data.data);
   };
   useEffect(() => {
@@ -146,6 +146,7 @@ const BookingInfo = () => {
       console.log(payWallet, "response after payment through wallet")
     }
   };
+  console.log(bookingData?.booking?.booking?.startTime, "startTime")
   return (
     <>
       <Header />
@@ -200,7 +201,7 @@ const BookingInfo = () => {
                       <img src={Time2} alt="img" />
                     </div>
                     <div>
-                      <h5>Date & Time</h5>
+                      <h5>Date & Time{" "}{"("}{bookingData?.booking?.booking?.timeZone}{")"}</h5>
                       <p>
                         {getDateFromTimeStamps(
                           bookingData?.booking?.booking?.date
@@ -210,6 +211,11 @@ const BookingInfo = () => {
                         {getTimeFromTimestamps(
                           bookingData?.booking?.booking?.startTime
                         )}{" "}
+                        {/* {console.log("inputs", bookingData?.booking?.booking?.startTime,  bookingData?.booking?.booking?.timeZone)}
+                        {convertDateStampToTimeZone(
+                          bookingData?.booking?.booking?.startTime,
+                          bookingData?.booking?.booking?.timeZone
+                        )}{" "} */}
                         -{" "}
                         {getTimeFromTimestamps(
                           bookingData?.booking?.booking?.endTime
@@ -229,7 +235,7 @@ const BookingInfo = () => {
                     </div>
                   </div> */}
                 </div>
-                {bookingData?.booking?.status === "UNPAID" &&
+                {bookingData?.booking?.booking?.status === "ACCEPTED" &&
                   role === "USER" && (
                     <div className="promo-card-container promocode-nader">
                       <h3>Promos & Gift Codes</h3>

@@ -9,22 +9,25 @@ export const BookingProvider = ({ children }) => {
   const [date, setDate] = useState();
   const [time, setTime] = useState();
   const [timeZone, setTimeZone] = useState();
+  const [ratingBookingId, setRatingBookingId] = useState("");
 
   const [storeSkills, setStoreSkills] = useState([]);
   const getReqData = {
     jobCategory,
     jobDescription,
-    skills:storeSkills,
+    skills: storeSkills,
     date,
-    startTime:time,
+    startTime: time,
     duration,
-    timeZone
-  }
+    timeZone,
+  };
   return (
     <BookingContext.Provider
       value={{
         jobCategory,
         setJobCategory,
+        ratingBookingId,
+        setRatingBookingId,
         subCategory,
         setSubCategory,
         storeSkills,
@@ -39,7 +42,7 @@ export const BookingProvider = ({ children }) => {
         setTimeZone,
         jobDescription,
         setJobDescription,
-        getReqData
+        getReqData,
       }}
     >
       {children}

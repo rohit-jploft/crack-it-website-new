@@ -33,6 +33,7 @@ const SubCategory = () => {
     const data = await getCategoryList(parent);
     console.log(data);
     setSubCategoryData(data.data);
+    setSubCategory(data.data[0]._id)
   };
   const getSkillsData = async (parent, search) => {
     const data = await getCategoryList(parent, search);

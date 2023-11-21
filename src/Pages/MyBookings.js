@@ -14,7 +14,11 @@ import Cancelicon from "./../Images/cancel-icon.svg";
 import { ToastContainer, toast } from "react-toastify";
 import BookingListItem from "../components/BookingListItem";
 import { getAllmeetings } from "../data/booking";
-import { getDayName, getTimeFromTimestamps } from "../helper/helper";
+import {
+  convertDateStampToTimeZone,
+  getDayName,
+  getTimeFromTimestamps,
+} from "../helper/helper";
 import { BASE_URL, VAPID_KEY } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
@@ -75,6 +79,7 @@ const MyBookings = () => {
     }
     if (cancel && cancel?.data.status === 201) {
       toast.error(cancel.data.message);
+      handleClose();
     }
   };
   const AcceptBooking = async (bookingId) => {
@@ -92,7 +97,7 @@ const MyBookings = () => {
     if (accept && accept?.data?.status === 200) {
       toast.success(accept.data.message);
       setCancelDone(true);
-      setShowDecline(false)
+      setShowDecline(false);
     }
   };
 
@@ -113,7 +118,7 @@ const MyBookings = () => {
     if (role !== "AGENCY") {
       const res = await getChatIdFromMeeting(bookingId);
       console.log(res);
-  
+
       if (res && res.data && res.data.chat) {
         console.log(res.data.chat);
         navigate(`/chat/${res.data.chat}`);
@@ -164,9 +169,10 @@ const MyBookings = () => {
                             expertName={`${meet?.expert?.firstName} ${meet?.expert?.lastName} `}
                             startTime={getTimeFromTimestamps(meet.startTime)}
                             endTime={getTimeFromTimestamps(meet.endTime)}
+                            timeZone={meet.timeZone}
                             experience={meet?.expertData?.experience}
                             cancelled={meet.status === "CANCELLED"}
-                            cancelButton={meet.status === "REQUESTED"}
+                            cancelButton={meet.status === "REQUESTED" || meet.status === "CONFIRMED"}
                             status={meet.status}
                             expertPrimaryId={meet?.expert?._id}
                             onClickChat={() => clickChatRedirect(meet?._id)}
@@ -176,9 +182,10 @@ const MyBookings = () => {
                             }}
                             onClickDecline={() => {
                               // declineBooking(meet?._id);
-                              setBookingDeclineId(meet?._id)
-                              setShowDecline(true)
+                              setBookingDeclineId(meet?._id);
+                              setShowDecline(true);
                             }}
+                            isExpertRated={meet?.isExpertRated}
                             onClickAccept={() => {
                               AcceptBooking(meet?._id);
                             }}
@@ -218,7 +225,11 @@ const MyBookings = () => {
           </Button>
         </Modal.Body>
       </Modal>
-      <Modal show={showDecline} onHide={() => setShowDecline(false)} className="cancel_modal">
+      <Modal
+        show={showDecline}
+        onHide={() => setShowDecline(false)}
+        className="cancel_modal"
+      >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <img src={Cancelicon} alt="img" />
@@ -235,8 +246,7 @@ const MyBookings = () => {
           </Button>
           <Button
             className="yes-btn"
-            onClick={() =>  declineBooking(bookingDeclineId)}
-
+            onClick={() => declineBooking(bookingDeclineId)}
           >
             Yes
           </Button>

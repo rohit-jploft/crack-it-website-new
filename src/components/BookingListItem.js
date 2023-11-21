@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { isAgency, isExpert, isUser } from "../utils/authHelper";
 import { loadStripe } from "@stripe/stripe-js";
 import { BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
+import { useContext } from "react";
+import { BookingContext } from "../context/bookingContext";
 const BookingListItem = ({
   startTime,
   endTime,
@@ -18,12 +20,15 @@ const BookingListItem = ({
   onClickCancel,
   onClickAccept,
   onClickDecline,
+  isExpertRated,
   status,
+  timeZone,
   amount,
   meetingId,
   expertPrimaryId,
 }) => {
   const navigate = useNavigate();
+  const { ratingBookingId, setRatingBookingId } = useContext(BookingContext);
   const isThisExpert = isExpert();
   const isThisAgency = isAgency();
   const isThisUser = isUser();
@@ -57,6 +62,7 @@ const BookingListItem = ({
       return error;
     }
   };
+  console.log(startTime, "startTime");
   return (
     <div className="booking_field active">
       <div className="daydate">
@@ -65,6 +71,8 @@ const BookingListItem = ({
       </div>
       <div className="time">
         <img src={Time} alt="time" />
+        {timeZone}
+        <br />
         {startTime} - {endTime}
       </div>
       <div className="profile-detail">
@@ -110,11 +118,12 @@ const BookingListItem = ({
               Pay
             </button>
           )}
-        {isThisUser && status === "COMPLETED" && (
+        {isThisUser && status === "COMPLETED" && !isExpertRated && (
           <button
             className="btn_bg"
             onClick={(e) => {
               e.stopPropagation();
+              setRatingBookingId(meetingId)
               navigate(`/rate/expert/${expertPrimaryId}`);
             }}
           >

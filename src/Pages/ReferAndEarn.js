@@ -7,7 +7,7 @@ import Facebook from "./../Images/facebook.svg";
 import Twitter from "./../Images/twitter.svg";
 import Msg from "./../Images/msg-1.svg";
 import Copy from "./../Images/copy.svg";
-import WhatsappIcon from "../Images/whatsappIcon.png";
+import WhatsappIcon from "../Images/whatsapp_ic.svg";
 import { Link, useLocation } from "react-router-dom";
 import { FE_BASE_URL } from "../constant";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -69,7 +69,7 @@ const ReferAndEarn = () => {
                     <img */}
                     <img
                       src={WhatsappIcon}
-                      style={{ height: "45px", width: "45px" }}
+                      // style={{ height: "45px", width: "45px" }}
                     />
                   </WhatsappShareButton>
                 </li>

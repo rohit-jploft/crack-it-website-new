@@ -12,6 +12,7 @@ import { BookingContext } from "../context/bookingContext";
 import { getCategoryList } from "../data/booking";
 import { durationList } from "../helper/duration";
 import { getAllTimeZones } from "../data/timeZone";
+import { getCurrentDate } from "../helper/helper";
 const RequestCateg = () => {
   const [key, setKey] = useState();
   const navigate = useNavigate();
@@ -216,6 +217,7 @@ const RequestCateg = () => {
                         </label>
                         <input
                           type="date"
+                          min={getCurrentDate()}
                           value={date}
                           onChange={(e) => setDate(e.target.value)}
                           className="form-control"

@@ -185,9 +185,14 @@ const Chat = () => {
                                       ? `${conversation?.participants[0]?.firstName} ${conversation?.participants[0]?.lastName}`
                                       : `${conversation?.participants[1]?.firstName} ${conversation?.participants[1]?.lastName}`}
                                   </p>
-                                  {/* <p class="preview">
-                                  My progress getting better. Thank you
-                                </p> */}
+                                  <div style={{display:"flex", justifyContent:"space-between", width:"260px"}}>
+                                    <p class="preview">
+                                      {conversation?.latestMessage?.content}
+                                    </p>
+                                    <p class="preview">
+                                      {format(conversation?.latestMessage?.createdAt)}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </li>
@@ -398,6 +403,7 @@ const Chat = () => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
+              className="no_chat"
             >
               You have no conversations
             </div>

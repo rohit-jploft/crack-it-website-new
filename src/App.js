@@ -13,6 +13,7 @@ import { BASE_URL, VAPID_KEY } from "./constant";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getTimeZoneFromLatLong } from "./data/timeZone";
 function App() {
   const requestPermission = async () => {
     const usertoken = localStorage.getItem("userId");
@@ -59,6 +60,7 @@ function App() {
   };
   useEffect(() => {
     // permission for notification
+    getTimeZoneFromLatLong()
     requestPermission();
   }, []);
   return (
