@@ -1,15 +1,25 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import Logo from './../Images/logo.png';
 import Up_arrow from './../Images/up-right-arrow.svg';
 import Container from 'react-bootstrap/Container';
 
 const Footer = ({setModal}) => {
+  const navigate = useNavigate()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional smooth scrolling behavior
+    });
+  };
   return (
     <>
       <div className='footer'>
       <Container>
           <div className='footer_top'>
-              <div className="brand-logo">
+              <div className="brand-logo" style={{cursor:"pointer"}} onClick={() => {
+                scrollToTop()
+                navigate("/")
+              }}>
                   <img src={Logo} alt="Logo" />
               </div>
               <div>
@@ -25,7 +35,16 @@ const Footer = ({setModal}) => {
                   <p>© Crack-it 2023. All rights reserved.</p>
               </div>
               <div>
-                <p>TERMS & CONDITIONS | PRIVACY POLICY</p>
+                <p><span style={{cursor:"pointer"}} onClick={() => {
+              scrollToTop()
+
+                  navigate("/terms-conditions")
+              }}>TERMS & CONDITIONS</span> | <span style={{cursor:"pointer"}} onClick={() => {
+                scrollToTop()
+
+                navigate("/privacy-policy")
+              }}>PRIVACY POLICY</span></p>
+
               </div>
           </div>
           </Container>

@@ -195,9 +195,22 @@ const MyBookings = () => {
                         </div>
                       );
                     })}
+                    {meetingData?.length === 0 && (
+                       <div
+                       style={{
+                         display: "flex",
+                         justifyContent: "center",
+                         alignItems: "center",
+                       }}
+                       className="no_chat"
+                     >
+                       You have no meetings
+                     </div>
+                    )}
                   </Tab>
                 );
               })}
+              
             </Tabs>
           </div>
         </Container>

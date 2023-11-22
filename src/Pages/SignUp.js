@@ -306,8 +306,8 @@ const Signup = (props) => {
                   <label for="">
                     {" "}
                     By signing up, you're agree to our{" "}
-                    <span>Terms & Conditions</span> and{" "}
-                    <span>Privacy Policy</span>
+                    <span style={{cursor:"pointer"}} onClick={() => navigate("/terms-conditions")}>Terms & Conditions</span> and{" "}
+                    <span style={{cursor:"pointer"}} onClick={() => navigate("/privacy-policy")}>Privacy Policy</span>
                   </label>
                   {formik.touched.termAndConditions &&
                     Boolean(formik.errors.termAndConditions) && (

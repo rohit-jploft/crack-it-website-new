@@ -37,6 +37,7 @@ import AgencyExpertBooking from "./Pages/AgencyExpertBooking";
 import SetupAgencyProfile from "./Pages/SetupAgencyProfile";
 import CheckPayment from "./Pages/CheckPayment";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import TermsAndConditions from "./Pages/TermsConditions";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -210,6 +211,10 @@ function AppRoutes() {
     {
       path: "/privacy-policy",
       element:  <PrivacyPolicy/>  ,
+    },
+    {
+      path: "/terms-conditions",
+      element:  <TermsAndConditions/>  ,
     },
     {
       path: "/agency/setup-profile",

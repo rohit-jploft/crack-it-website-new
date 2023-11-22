@@ -29,6 +29,9 @@ const Chat = () => {
   );
   const [newMessage, setNewMessage] = useState("");
   const [convoData, setConvoData] = useState(null);
+  const [latestMsg, setLatestMsg] = useState("")
+  const [lastestMsgTime, setLatestMsgTime] = useState("")
+  // const [latestMsg, setLatest] = useState()
   const [messages, setMessages] = useState([]);
   const [messageSent, setMessageSent] = useState(false);
   const [conversations, setConversations] = useState([]);
@@ -68,7 +71,7 @@ const Chat = () => {
   }, [selectedConversation, Socket, newMsgObj, messageSent]);
   useEffect(() => {
     getConvo();
-  }, []);
+  }, [messageSent]);
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -120,6 +123,8 @@ const Chat = () => {
       .then((res) => {
         setMessages([...messages, newMessage]);
         setFile("");
+        setLatestMsgTime(new Date())
+        setLatestMsg(newMessage)
         // const res =
         Socket.emit("sendMessage", {
           chat: selectedConversation,
@@ -177,6 +182,17 @@ const Chat = () => {
                                   }
                                   alt="img"
                                 />
+                                <img
+                                  src={
+                                    !isUserNameDisplay(
+                                      conversation?.participants[1]?._id
+                                    )
+                                      ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
+                                      : `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                  }
+                                  alt="img"
+                                  style={{marginLeft:"-40px"}}
+                                />
                                 <div class="meta">
                                   <p class="name">
                                     {isUserNameDisplay(
@@ -184,13 +200,15 @@ const Chat = () => {
                                     )
                                       ? `${conversation?.participants[0]?.firstName} ${conversation?.participants[0]?.lastName}`
                                       : `${conversation?.participants[1]?.firstName} ${conversation?.participants[1]?.lastName}`}
+                                      {conversation?.admin && `${" & "}` + conversation?.admin.firstName}
+                                      {conversation?.superAdmin &&  `${" & "}` +  conversation?.superAdmin.firstName}
                                   </p>
                                   <div style={{display:"flex", justifyContent:"space-between", width:"260px"}}>
                                     <p class="preview">
                                       {conversation?.latestMessage?.content}
                                     </p>
                                     <p class="preview">
-                                      {format(conversation?.latestMessage?.createdAt)}
+                                      { format(conversation?.latestMessage?.createdAt)}
                                     </p>
                                   </div>
                                 </div>

@@ -24,6 +24,7 @@ const Experts = () => {
 
   // filter states
   const [minPrice, setMinPrice] = useState(0);
+  const [reqSent, setReqSent] = useState(false);
   const [maxPrice, setMaxPrice] = useState(250);
   const [minExperience, setMinExperience] = useState(0);
   const [maxExperience, setMaxExperience] = useState(50);
@@ -71,6 +72,7 @@ const Experts = () => {
       .then((result) => {
         if (result && result.status === 200 && result.message) {
           toast(result.message, { type: "success" });
+          setReqSent(true)
         }
         if (result && result.status === 203 && result.type === "error") {
           toast(result.message, { type: "error" });
@@ -292,7 +294,7 @@ const Experts = () => {
                                   onBookingExperts(e, expert?.user?._id);
                                 }}
                               >
-                                Request
+                                {reqSent ? "Requested" : "Request"}
                               </button>
                               {/* </Link> */}
                             </td>

@@ -10,6 +10,7 @@ export const BookingProvider = ({ children }) => {
   const [time, setTime] = useState();
   const [timeZone, setTimeZone] = useState();
   const [ratingBookingId, setRatingBookingId] = useState("");
+  // const []
 
   const [storeSkills, setStoreSkills] = useState([]);
   const getReqData = {

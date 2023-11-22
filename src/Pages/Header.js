@@ -20,6 +20,9 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { isUser } from "../utils/authHelper";
 import { format } from "timeago.js";
+import { NotificationType } from "../utils/NotificationType";
+import { getChatIdFromMeeting } from "../data/chat";
+import { ToastContainer, toast } from "react-toastify";
 const Header = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(UserContext);
@@ -65,16 +68,50 @@ const Header = () => {
   const isTheUser = isUser();
   const role = localStorage.getItem("role");
   console.log(isTheUser, " isTheUser");
-
-  const redirectThroughNotification = async (notiId, data, isRead) => {
+  const clickChatRedirect = async (bookingId) => {
+    const role = localStorage.getItem("role");
+    if (role !== "AGENCY") {
+      const res = await getChatIdFromMeeting(bookingId);
+      console.log(res);
+      if (res && res.data && res.data.chat) {
+        console.log(res.data.chat);
+        navigate(`/chat/${res.data.chat}`);
+      }
+      if (res && res.status === 200 && res.message) {
+        if (res.success) {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+        if (res && res?.data && res?.data?.chat) {
+          navigate(`/chat/${res?.data?.chat}`);
+        }
+      }
+    }
+  };
+  const redirectThroughNotification = async (notiId, data, isRead, type, title) => {
     console.log(notiId, "noti id");
     if (!isRead) {
       const res = await Axios.put(`${BASE_URL}notification/read/${notiId}`);
     }
-    navigate(`/bookingInfo/${data.targetId}`);
+    if(type === NotificationType.Booking){
+      navigate(`/bookingInfo/${data.targetId}`);
+    }
+    if(type === NotificationType.Chat && title === "New Message" ){
+      navigate(`/chat/${data.targetId}`);
+    }
+    if(type === NotificationType.Chat && title !== "New Message"){
+      await clickChatRedirect(data.targetId)
+      // navigate(`/chat/${data.targetId}`);
+    }
+    if(type === NotificationType.Withdrawal){
+      navigate(`/wallet`);
+    }
+    // if(type)
   };
   return (
     <>
+    <ToastContainer/>
       <Navbar
         expand="lg"
         className={`nav_sect ${isTheUser ? "nav_wrapper_user" : ""}`}
@@ -118,7 +155,9 @@ const Header = () => {
                             redirectThroughNotification(
                               noti?._id,
                               noti?.data,
-                              noti?.isRead
+                              noti?.isRead,
+                              noti?.type,
+                              noti?.title
                             )
                           }
                         >

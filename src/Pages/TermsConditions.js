@@ -3,7 +3,7 @@ import { isAuthenticated } from "../utils/authHelper";
 import Footer from "./Footer";
 import Header from "./Header";
 import Logo from "./../Images/logo.png";
-const PrivacyPolicy = () => {
+const TermsAndConditions = () => {
   const navigate = useNavigate()
   const isAuth = isAuthenticated()
   return (
@@ -29,7 +29,7 @@ const PrivacyPolicy = () => {
           </div></div>}
       <div className="container">
       <body class="background background--light background--dark">
-<h2>Privacy Policy</h2>
+<h2>Terms & Conditions</h2>
 <p>Your privacy is important to us. It is Human Assist AI's policy to respect your privacy regarding any information we may collect from you through our app, odoan.</p>
 <p>We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we’re collecting it and how it will be used.</p>
 <p>We only retain collected information for as long as necessary to provide you with your requested service. What data we store, we’ll protect within commercially acceptable means to prevent loss and theft, as well as unauthorized access, disclosure, copying, use or modification.</p>
@@ -45,4 +45,4 @@ const PrivacyPolicy = () => {
     </>
   );
 };
-export default PrivacyPolicy;
+export default TermsAndConditions;

@@ -111,7 +111,18 @@ const RequestCateg = () => {
       setStoreSkills(newArr);
     }
   }
-
+  const getCurrentTime = () => {
+    const curr = new Date();
+    let hour = curr.getHours();
+    let minute = curr.getMinutes();
+  
+    // Adding leading zero manually if needed
+    hour = hour < 10 ? `0${hour}` : hour;
+    minute = minute < 10 ? `0${minute}` : minute;
+  
+    return `${hour}:${minute}`;
+  };
+  // const minTime = getCurrentTime()
   return (
     <>
       <Header />
@@ -255,6 +266,7 @@ const RequestCateg = () => {
                           className="form-control"
                           id="exampleFormControlInput1"
                           placeholder=""
+                          // min={minTime}
                         />
                         {/* <img class="visible-icon" src={Time3} alt=""></img> */}
                       </div>
