@@ -22,6 +22,7 @@ export const getTimeZoneFromLatLong = async () => {
         `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&format=json&apiKey=${geoapify_key}`
       );
       console.log(data.data.results[0].timezone.abbreviation_STD, "timeZone response");
+      return data?.data?.results[0]?.timezone
     });
   }
  

@@ -284,7 +284,7 @@ const BookingInfo = () => {
                   <h5>Payment Info</h5>
                   <div className="pay-rate">
                     <div>Total Price</div>
-                    <div>${bookingData?.booking.totalAmount}</div>
+                    <div>${bookingData?.booking?.totalAmount}</div>
                   </div>
                   <div className="pay-rate">
                     <div>Platform fees</div>
@@ -299,7 +299,7 @@ const BookingInfo = () => {
                   <hr className="info-hr"></hr>
                   <div className="pay-total">
                     <div>Payment Total</div>
-                    <div>${bookingData?.booking.grandTotal}</div>
+                    <div>${bookingData?.booking?.grandTotal}</div>
                   </div>
                 </div>
               </div>
