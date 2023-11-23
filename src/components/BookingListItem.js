@@ -3,7 +3,7 @@ import Bookingimg from "./../Images/booking-img.svg";
 import { useNavigate } from "react-router-dom";
 import { isAgency, isExpert, isUser } from "../utils/authHelper";
 import { loadStripe } from "@stripe/stripe-js";
-import { BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
 import { useContext } from "react";
 import { BookingContext } from "../context/bookingContext";
 const BookingListItem = ({
@@ -26,6 +26,10 @@ const BookingListItem = ({
   amount,
   meetingId,
   expertPrimaryId,
+  chatButtonDisabled,
+  userName,
+  userPic,
+  expertPic,
 }) => {
   const navigate = useNavigate();
   const { ratingBookingId, setRatingBookingId } = useContext(BookingContext);
@@ -63,6 +67,7 @@ const BookingListItem = ({
     }
   };
   console.log(startTime, "startTime");
+
   return (
     <div className="booking_field active">
       <div className="daydate">
@@ -75,15 +80,32 @@ const BookingListItem = ({
         <br />
         {startTime} - {endTime}
       </div>
-      <div className="profile-detail">
-        <div>
-          <img src={Bookingimg} alt="img" />
+      {!isThisExpert && (
+        <div className="profile-detail">
+          <div>
+            {expertPic && (
+              <img src={`${AVATAR_BASE_URL}${expertPic}`} alt="img" />
+            )}
+            {!expertPic && <img src={Bookingimg} alt="img" />}
+          </div>
+          <div>
+            <h4>{expertName}</h4>
+            <p>{JobCategory}</p>
+          </div>
         </div>
-        <div>
-          <h4>{expertName}</h4>
-          <p>{JobCategory}</p>
+      )}
+      {isThisExpert && (
+        <div className="profile-detail">
+          <div>
+            {userPic && <img src={`${AVATAR_BASE_URL}${userPic}`} alt="img" />}
+            {!userPic && <img src={Bookingimg} alt="img" />}
+          </div>
+          <div>
+            <h4>{userName}</h4>
+            {/* <p>{JobCategory}</p> */}
+          </div>
         </div>
-      </div>
+      )}
       <div className="experience">
         <p>Experience</p>
         <h4>{experience} year</h4>
@@ -123,7 +145,7 @@ const BookingListItem = ({
             className="btn_bg"
             onClick={(e) => {
               e.stopPropagation();
-              setRatingBookingId(meetingId)
+              setRatingBookingId(meetingId);
               navigate(`/rate/expert/${expertPrimaryId}`);
             }}
           >
@@ -189,6 +211,7 @@ const BookingListItem = ({
         {!cancelled && status === "CONFIRMED" && (
           <button
             className="btn_bg"
+            disabled={chatButtonDisabled}
             onClick={(e) => {
               e.stopPropagation();
               onClickChat();

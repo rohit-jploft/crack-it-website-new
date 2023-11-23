@@ -11,7 +11,7 @@ import { convertDateStampToTimeZone, getDateFromTimeStamps, getTimeFromTimestamp
 import TextInput from "../components/InputField";
 import Axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
-import { BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PaymentContext } from "../context/paymentContext";
@@ -24,6 +24,7 @@ import {
   RadioGroup,
   Radio,
 } from "@mui/material";
+import { isExpert } from "../utils/authHelper";
 
 const BookingInfo = () => {
   const { bookingId } = useParams();
@@ -38,6 +39,8 @@ const BookingInfo = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentAmount, setPaymentAmount] = useState();
   const [walletPaymentDone, setWalletPaymentDone] = useState(false);
+  const isThisExpert = isExpert();
+  
   const getBookingData = async () => {
     const data = await getSingleBookingDetail(bookingId);
     console.log(data, "bookingData");
@@ -177,20 +180,26 @@ const BookingInfo = () => {
             </div>
             <div className="provider-info">
               <div className="info-header">
-                <h6>Service Provider Info</h6>
+                {!isThisExpert && <h6>Service Provider Info</h6>}
+                {isThisExpert && <h6>Service Taker Info</h6>}
                 <div className="profile-detail">
                   <div>
-                    <img src={Bookingimg2} alt="img" />
+                   {!isThisExpert &&  <img src={bookingData?.booking?.booking?.expert?.profilePhoto ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.expert?.profilePhoto}` : Bookingimg2} alt="img" />}
+                   {isThisExpert &&  <img src={bookingData?.booking?.booking?.expert?.profilePhoto ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.user?.profilePhoto}` : Bookingimg2} alt="img" />}
                   </div>
                   <div>
-                    <h4>
+                   {!isThisExpert && <h4>
                       {bookingData?.booking?.booking?.expert?.firstName}{" "}
                       {bookingData?.booking?.booking?.expert?.lastName}
-                    </h4>
-                    <p>
+                    </h4>}
+                   {isThisExpert && <h4>
+                      {bookingData?.booking?.booking?.user?.firstName}{" "}
+                      {bookingData?.booking?.booking?.user?.lastName}
+                    </h4>}
+                   {!isThisExpert && <p>
                       {bookingData?.expertProfile?.jobCategory?.title} |{" "}
                       {bookingData?.expertProfile?.experience} year
-                    </p>
+                    </p>}
                   </div>
                 </div>
               </div>

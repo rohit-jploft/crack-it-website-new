@@ -23,6 +23,7 @@ import { updateExpertProfile } from "../data/experts";
 import { setProfilePicture } from "../data/user";
 import { ModelContext } from "../context/ModelContext";
 import AvatarModel from "../components/AvatarModel";
+import PhoneInput from "react-phone-input-2";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
@@ -31,11 +32,11 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
   phone: Yup.string()
-    .required("Phone is required")
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    ),
+    .required("Phone is required"),
+    // .matches(
+    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+    //   "Phone number must be exactly 10 digits"
+    // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -50,6 +51,7 @@ const validationSchema = Yup.object().shape({
 const EditExpertProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState();
+  const [dailCode, setDialCode] = useState()
   const {open, setOpen} = useContext(ModelContext)
   const [jobCategoryList, setJobCategoryList] = useState();
   const [skillsData, setSkillsData] = useState();
@@ -341,13 +343,33 @@ const EditExpertProfile = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <TextInput
+                  {/* <TextInput
                     name="phone"
                     type="number"
                     label="Phone *"
                     readonly={true}
                     value={formik.values.phone}
                     handleChange={formik.handleChange}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                   <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    value={"+"+formik.values.phone}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log('phone', phone);
+                      console.log('e', e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+  
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />

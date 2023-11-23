@@ -28,10 +28,10 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
   phone: Yup.string()
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    )
+    // .matches(
+    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+    //   "Phone number must be exactly 10 digits"
+    // )
     .required("Phone number is required"),
   password: Yup.string()
     .required("Password is required")
@@ -115,7 +115,7 @@ const Signup = (props) => {
     const pressedKey = e.key;
 
     // Check if the pressed key is "e" or "i"
-    if (pressedKey === 'e' || pressedKey === 'i') {
+    if (pressedKey === "e" || pressedKey === "i") {
       // Prevent the keypress from being added to the input value
       e.preventDefault();
     }
@@ -145,14 +145,14 @@ const Signup = (props) => {
                     value={formik.values.firstName}
                     handleChange={(e) => {
                       const inputValue = e.target.value;
-                            // Custom validation: Allow only numbers and limit to 10 digits.
-                            if(inputValue === ""){
-                              formik.setFieldValue('firstName',inputValue )
-                            }
-                          const regex = /^[A-Za-z]+$/;
-                          if (regex.test(inputValue)) {
-                            formik.setFieldValue("firstName", inputValue);
-                          }
+                      // Custom validation: Allow only numbers and limit to 10 digits.
+                      if (inputValue === "") {
+                        formik.setFieldValue("firstName", inputValue);
+                      }
+                      const regex = /^[A-Za-z]+$/;
+                      if (regex.test(inputValue)) {
+                        formik.setFieldValue("firstName", inputValue);
+                      }
                     }}
                     label="First Name *"
                     error={
@@ -165,7 +165,7 @@ const Signup = (props) => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <TextInput
+                  {/* <TextInput
                     type="number"
                     name="phone"
                     label="Phone Number *"
@@ -181,7 +181,28 @@ const Signup = (props) => {
                     }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                  <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    value={`+${dailCode}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log('phone', phone);
+                      console.log('e', e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+  
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
                   />
+                  {formik.touched.phone && formik.errors.phone}
                   {/* <PhoneInput
                   country={'in'}
                   className="country-selector"
@@ -228,14 +249,14 @@ const Signup = (props) => {
                     value={formik.values.lastName}
                     handleChange={(e) => {
                       const inputValue = e.target.value;
-                            // Custom validation: Allow only numbers and limit to 10 digits.
-                            if(inputValue === ""){
-                              formik.setFieldValue('lastName',inputValue )
-                            }
-                          const regex = /^[A-Za-z]+$/;
-                          if (regex.test(inputValue)) {
-                            formik.setFieldValue("lastName", inputValue);
-                          }
+                      // Custom validation: Allow only numbers and limit to 10 digits.
+                      if (inputValue === "") {
+                        formik.setFieldValue("lastName", inputValue);
+                      }
+                      const regex = /^[A-Za-z]+$/;
+                      if (regex.test(inputValue)) {
+                        formik.setFieldValue("lastName", inputValue);
+                      }
                     }}
                     label="Last Name *"
                     error={
@@ -306,8 +327,19 @@ const Signup = (props) => {
                   <label for="">
                     {" "}
                     By signing up, you're agree to our{" "}
-                    <span style={{cursor:"pointer"}} onClick={() => navigate("/terms-conditions")}>Terms & Conditions</span> and{" "}
-                    <span style={{cursor:"pointer"}} onClick={() => navigate("/privacy-policy")}>Privacy Policy</span>
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => navigate("/terms-conditions")}
+                    >
+                      Terms & Conditions
+                    </span>{" "}
+                    and{" "}
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => navigate("/privacy-policy")}
+                    >
+                      Privacy Policy
+                    </span>
                   </label>
                   {formik.touched.termAndConditions &&
                     Boolean(formik.errors.termAndConditions) && (

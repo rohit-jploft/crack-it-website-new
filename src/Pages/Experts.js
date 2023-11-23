@@ -24,6 +24,7 @@ const Experts = () => {
 
   // filter states
   const [minPrice, setMinPrice] = useState(0);
+  const [disableButton, setDisableButton]= useState(false)
   const [reqSent, setReqSent] = useState(false);
   const [maxPrice, setMaxPrice] = useState(250);
   const [minExperience, setMinExperience] = useState(0);
@@ -71,11 +72,19 @@ const Experts = () => {
     })
       .then((result) => {
         if (result && result.status === 200 && result.message) {
-          toast(result.message, { type: "success" });
+          toast(result.message, { type: "success", autoClose:1500 });
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          },2000 )
           setReqSent(true)
         }
         if (result && result.status === 203 && result.type === "error") {
-          toast(result.message, { type: "error" });
+          toast(result.message, { type: "error", autoClose:1500 });
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          },2000 )
         }
         console.log(result);
       })
@@ -289,12 +298,13 @@ const Experts = () => {
                               {/* <Link to={`/ExpertsProfile/${expert?.user?._id}`}> */}
                               <button
                                 className="btn_request"
+                                disabled={disableButton}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   onBookingExperts(e, expert?.user?._id);
                                 }}
                               >
-                                {reqSent ? "Requested" : "Request"}
+                                 Request
                               </button>
                               {/* </Link> */}
                             </td>

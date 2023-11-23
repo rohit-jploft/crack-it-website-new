@@ -22,7 +22,8 @@ const phoneOrEmailSchema = Yup.string().test('phoneOrEmail', 'Invalid phone or e
   const phoneRegex = /^[0-9]+$/;
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
-  if (phoneRegex.test(value) || emailRegex.test(value)) {
+  // if (phoneRegex.test(value) || emailRegex.test(value)) {
+  if (value.length >= 12) {
     return true; // Valid phone number or email
   } else {
     return false; // Invalid input
@@ -39,10 +40,10 @@ const Forgotpassword = () => {
     },
     validationSchema: Yup.object().shape({
       phone: Yup.string()
-        .matches(
-          /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-          "Phone number must be exactly 10 digits"
-        )
+        // .matches(
+        //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+        //   "Phone number must be exactly 10 digits"
+        // )
         .required("Phone number is required"),
     }),
     onSubmit: async (values) => {
@@ -107,7 +108,7 @@ const Forgotpassword = () => {
                 />
                     <div className="phone-number-fils"> */}
                 <div>
-                  <TextInput
+                  {/* <TextInput
                     name="phone"
                     type="text"
                     handleChange={(e) => {
@@ -120,6 +121,26 @@ const Forgotpassword = () => {
                     }}
                     label="Phone *"
                     value={formik.values.phone}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                  <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    value={`+${dailCode}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log('phone', phone);
+                      console.log('e', e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+  
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />

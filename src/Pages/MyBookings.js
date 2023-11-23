@@ -42,6 +42,7 @@ const MyBookings = () => {
   const { tabKey } = useParams();
   const [show, setShow] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
+  const [disableButton, setDisableButton]= useState(false)
   const [bookingCancelId, setBookingCancelId] = useState();
   const [bookingDeclineId, setBookingDeclineId] = useState();
   const [cancelDone, setCancelDone] = useState(false);
@@ -125,9 +126,17 @@ const MyBookings = () => {
       }
       if (res && res.status === 200 && res.message) {
         if (res.success) {
-          toast.success(res.message);
+          toast.success(res.message, {autoClose:1500});
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          },2000 )
         } else {
-          toast.error(res.message);
+          toast.error(res.message, {autoClose:1500});
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          },2000 )
         }
         if (res && res?.data && res?.data?.chat) {
           navigate(`/chat/${res?.data?.chat}`);
@@ -167,6 +176,9 @@ const MyBookings = () => {
                             JobCategory={meet.jobCategory.title}
                             day={getDayName(new Date(meet.date).getDay())}
                             expertName={`${meet?.expert?.firstName} ${meet?.expert?.lastName} `}
+                            userName={`${meet?.user?.firstName} ${meet?.user?.lastName} `}
+                            expertPic={meet?.expert?.profilePhoto}
+                            userPic={meet?.user?.profilePhoto}
                             startTime={getTimeFromTimestamps(meet.startTime)}
                             endTime={getTimeFromTimestamps(meet.endTime)}
                             timeZone={meet.timeZone}
@@ -176,6 +188,7 @@ const MyBookings = () => {
                             status={meet.status}
                             expertPrimaryId={meet?.expert?._id}
                             onClickChat={() => clickChatRedirect(meet?._id)}
+                            chatButtonDisabled={disableButton}
                             onClickCancel={() => {
                               setBookingCancelId(meet?._id);
                               handleShow();

@@ -26,6 +26,7 @@ const SubCategory = () => {
   } = useContext(BookingContext);
   const { profileSetupData, setProfileSetupData } = useContext(UserContext);
   const [subCategoryData, setSubCategoryData] = useState();
+  const [disableButton, setDisableButton]= useState(false)
   const [skills, setSkills] = useState();
   const [search, setSearch] = useState("");
   console.log(jobCategory);
@@ -227,13 +228,14 @@ const SubCategory = () => {
                 <div className="text-center">
                   <button
                     className="btn_continue"
+                    disabled={disableButton}
                     onClick={() => {
                       const isThisExpert = isExpert();
                       if (storeSkills.length > 0 && !isThisExpert && !isThisAgency) {
                         navigate("/RequestCateg");
                       }
                       if (storeSkills.length === 0) {
-                        toast.error("please select atleast one skill");
+                        toast.error("please select atleast one skill", {autoClose:1000});
                       }
                       if (isThisExpert) {
                         setupExpertProfileData();
@@ -241,6 +243,10 @@ const SubCategory = () => {
                       if (isThisAgency) {
                         setupAgencyprofileData();
                       }
+                      setDisableButton(true)
+                      setTimeout(() => {
+                        setDisableButton(false)
+                      },1500 )
                     }}
                   >
                     CONTINUE

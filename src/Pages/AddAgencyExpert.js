@@ -3,7 +3,6 @@ import Logo from "./../Images/logo.png";
 import RightBg from "./../Images/right_bg.jpg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Checkbox, FormControlLabel } from "react-dom";
-
 import Pot from "./../Images/pot.svg";
 import Msg from "./../Images/msg.svg";
 import Google from "./../Images/Google.svg";
@@ -25,6 +24,7 @@ import { addNewAgencyExpert } from "../data/agency";
 import { setProfilePicture } from "../data/user";
 import { ModelContext } from "../context/ModelContext";
 import AvatarModel from "../components/AvatarModel";
+import PhoneInput from "react-phone-input-2";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
@@ -40,11 +40,11 @@ const validationSchema = Yup.object().shape({
       "Password must contain at least 8 characters, one uppercase letter, one number, and one special character"
     ),
   phone: Yup.string()
-    .required("Phone is required")
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    ),
+    .required("Phone is required"),
+    // .matches(
+    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+    //   "Phone number must be exactly 10 digits"
+    // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -65,11 +65,11 @@ const validationSchemaWithOutPassword = Yup.object().shape({
     .required("Email is required"),
 
   phone: Yup.string()
-    .required("Phone is required")
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    ),
+    .required("Phone is required"),
+    // .matches(
+    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+    //   "Phone number must be exactly 10 digits"
+    // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -84,9 +84,10 @@ const validationSchemaWithOutPassword = Yup.object().shape({
 const AddAgencyExpert = () => {
   const { expertUserId } = useParams();
   const navigate = useNavigate();
-  const {open , setOpen} = useContext(ModelContext)
+  const { open, setOpen } = useContext(ModelContext);
   const [userData, setUserData] = useState();
   const [jobCategoryList, setJobCategoryList] = useState();
+  const [dailCode, setDialCode] = useState();
   const [skillsData, setSkillsData] = useState();
   const [subCategoryList, setSubCategoryList] = useState();
   const [storeSkills, setStoreSkills] = useState([]);
@@ -190,23 +191,20 @@ const AddAgencyExpert = () => {
         } else {
           console.log("entered add new wali console");
           console.log(values, "values");
-          const data = await addNewAgencyExpert(
-            {
-              firstName: values.firstName,
-              lastName: values.lastName,
-              email: values.email,
-              phone: values.phone,
-              password: values.password,
-              description: values?.description,
-              jobCategory: values?.jobCategory,
-              price: values?.price,
-              expertise: storeSkills,
-              languages: values.languages,
-              experience: values?.experience,
-              profilePhoto:avatarSvg ? avatarSvg : "avatar1.svg"
-            },
-            
-          );
+          const data = await addNewAgencyExpert({
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            phone: values.phone,
+            password: values.password,
+            description: values?.description,
+            jobCategory: values?.jobCategory,
+            price: values?.price,
+            expertise: storeSkills,
+            languages: values.languages,
+            experience: values?.experience,
+            profilePhoto: avatarSvg ? avatarSvg : "avatar1.svg",
+          });
           console.log(data);
           console.log(data, "new agency expert response data");
           if (data && data.success && data.status === 200) {
@@ -382,7 +380,13 @@ const AddAgencyExpert = () => {
         className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <AvatarModel show={open} handleClose={() => setOpen(false)} id={expertUserId} onlySet={expertUserId ? false : true} setAvatarSvg={(value) => setAvatarSvg(value)}/>
+        <AvatarModel
+          show={open}
+          handleClose={() => setOpen(false)}
+          id={expertUserId}
+          onlySet={expertUserId ? false : true}
+          setAvatarSvg={(value) => setAvatarSvg(value)}
+        />
         <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form
@@ -401,7 +405,11 @@ const AddAgencyExpert = () => {
                   {console.log(recievedPic, "recieved pic")}
                   <img
                     src={
-                      recievedPic ? `${AVATAR_BASE_URL}${recievedPic}` : avatarSvg ? `${AVATAR_BASE_URL}${avatarSvg}` : ExpertImage
+                      recievedPic
+                        ? `${AVATAR_BASE_URL}${recievedPic}`
+                        : avatarSvg
+                        ? `${AVATAR_BASE_URL}${avatarSvg}`
+                        : ExpertImage
                     }
                     // src="/static/media/expert-img.199747df04b3a83a67b449c8ff5963a0.svg"
                     alt="Img"
@@ -435,14 +443,14 @@ const AddAgencyExpert = () => {
                     value={formik.values.firstName}
                     handleChange={(e) => {
                       const inputValue = e.target.value;
-                            // Custom validation: Allow only numbers and limit to 10 digits.
-                          const regex = /^[A-Za-z]+$/;
-                          if(inputValue === ""){
-                            formik.setFieldValue('firstName',inputValue )
-                          }
-                          if (regex.test(inputValue)) {
-                            formik.setFieldValue("firstName", inputValue);
-                          }
+                      // Custom validation: Allow only numbers and limit to 10 digits.
+                      const regex = /^[A-Za-z]+$/;
+                      if (inputValue === "") {
+                        formik.setFieldValue("firstName", inputValue);
+                      }
+                      if (regex.test(inputValue)) {
+                        formik.setFieldValue("firstName", inputValue);
+                      }
                     }}
                     error={
                       formik.touched.firstName &&
@@ -456,21 +464,20 @@ const AddAgencyExpert = () => {
                 <div className="col-md-6">
                   <TextInput
                     name="lastName"
-                    
                     type="text"
                     label="Last Name *"
                     readonly={expertUserId}
                     value={formik.values.lastName}
                     handleChange={(e) => {
                       const inputValue = e.target.value;
-                            // Custom validation: Allow only numbers and limit to 10 digits.
-                            if(inputValue === ""){
-                              formik.setFieldValue('lastName',inputValue )
-                            }
-                          const regex = /^[A-Za-z]+$/;
-                          if (regex.test(inputValue)) {
-                            formik.setFieldValue("lastName", inputValue);
-                          }
+                      // Custom validation: Allow only numbers and limit to 10 digits.
+                      if (inputValue === "") {
+                        formik.setFieldValue("lastName", inputValue);
+                      }
+                      const regex = /^[A-Za-z]+$/;
+                      if (regex.test(inputValue)) {
+                        formik.setFieldValue("lastName", inputValue);
+                      }
                     }}
                     error={
                       formik.touched.lastName && Boolean(formik.errors.lastName)
@@ -493,7 +500,7 @@ const AddAgencyExpert = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <TextInput
+                  {/* <TextInput
                     name="phone"
                     type="number"
                     label="Phone *"
@@ -507,6 +514,26 @@ const AddAgencyExpert = () => {
                           if (regex.test(inputValue)) {
                             formik.setFieldValue("phone", inputValue);
                           }
+                    }}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                  <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    value={`+${dailCode}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log("phone", phone);
+                      console.log("e", e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+
+                      // setFieldValue("mobilenumberCountryCode", phone);
                     }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
@@ -680,11 +707,11 @@ const AddAgencyExpert = () => {
                       value={formik.values.price}
                       handleChange={(e) => {
                         const inputValue = e.target.value;
-                              // Custom validation: Allow only numbers and limit to 10 digits.
-                            const regex = /^(?!.*e)\d{0,5}$/;
-                            if (regex.test(inputValue)) {
-                              formik.setFieldValue("price", inputValue);
-                            }
+                        // Custom validation: Allow only numbers and limit to 10 digits.
+                        const regex = /^(?!.*e)\d{0,5}$/;
+                        if (regex.test(inputValue)) {
+                          formik.setFieldValue("price", inputValue);
+                        }
                       }}
                       error={
                         formik.touched.price && Boolean(formik.errors.price)

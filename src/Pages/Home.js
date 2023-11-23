@@ -26,8 +26,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import { BASE_URL } from "../constant";
 import { ToastContainer, toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2"
 const Home = () => {
   const [showContactForm, setShowContactForm] = useState(false);
+  const [dailCode, setDialCode] = useState(false);
   const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
@@ -173,12 +175,32 @@ const Home = () => {
                   />
                 </Grid>
                 <Grid item sm={12}>
-                  <TextInput
+                  {/* <TextInput
                     type="text"
                     name="phone"
                     value={formik.values.phone}
                     handleChange={formik.handleChange}
                     label="phone *"
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                   <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    value={`+${dailCode}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log('phone', phone);
+                      console.log('e', e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+  
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
