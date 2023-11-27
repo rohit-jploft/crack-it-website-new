@@ -10,23 +10,27 @@ import Google from "./../Images/Google.svg";
 import Visible from "./../Images/visible.svg";
 import TextInput from "../components/InputField";
 import { useFormik } from "formik";
+import defaultProfileImage from "../Images/default_avatar.png";
 import * as Yup from "yup"; // Import Yup for validation
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import Axios from "axios";
-import { BASE_URL } from "../constant";
+import { AVATAR_BASE_URL, BASE_URL } from "../constant";
+import PhoneInput from "react-phone-input-2";
+import { ModelContext } from "../context/ModelContext";
+import AvatarModel from "../components/AvatarModel";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
-  email: Yup.string().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
+  email: Yup.string()
+    .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
     .email("Invalid email format")
     .required("Email is required"),
-  phone: Yup.string()
-    .required("Phone is required")
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    ),
+  phone: Yup.string().required("Phone is required"),
+  // .matches(
+  //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+  //   "Phone number must be exactly 10 digits"
+  // ),
   experience: Yup.number().required("experience is required"),
   description: Yup.string()
     .min(100, "Description should minimum length of 100")
@@ -40,6 +44,9 @@ const SetupExpertProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState();
   const { profileSetupData, setProfileSetupData } = useContext(UserContext);
+  const { open, setOpen } = useContext(ModelContext);
+  const [dailCode, setDialCode] = useState();
+  const [avatarSvg, setAvatarSvg] = useState("");
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -59,6 +66,7 @@ const SetupExpertProfile = () => {
     },
     validationSchema,
   });
+  const expertUserId = localStorage.getItem("userId");
   const handleCheckboxChange = (event, value) => {
     const { name, checked } = event.target;
     const { languages } = formik.values;
@@ -99,6 +107,13 @@ const SetupExpertProfile = () => {
           <div className="brand-logo">
             <img src={Logo} alt="Logo" />
           </div>
+          <AvatarModel
+            show={open}
+            handleClose={() => setOpen(false)}
+            id={expertUserId}
+            onlySet={expertUserId ? false : true}
+            setAvatarSvg={(value) => setAvatarSvg(value)}
+          />
           <div className="signup-form form_sect">
             <form
               onSubmit={(e) => {
@@ -110,12 +125,17 @@ const SetupExpertProfile = () => {
                 <h2>Profile Setup</h2>
                 <div class="expert-image">
                   <img
-                    src="/static/media/expert-img.199747df04b3a83a67b449c8ff5963a0.svg"
+                    src={
+                      userData && userData.profilePhoto
+                        ? `${AVATAR_BASE_URL}${userData.profilePhoto}`
+                        : defaultProfileImage
+                    }
                     alt="Img"
                   />
                   <button
                     type="button"
                     class="profile-img-edit btn btn-primary"
+                    onClick={() => setOpen(true)}
                   >
                     <img
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
@@ -171,7 +191,7 @@ const SetupExpertProfile = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <TextInput
+                  {/* <TextInput
                     name="phone"
                     type="number"
                     label="Phone *"
@@ -180,7 +200,30 @@ const SetupExpertProfile = () => {
                     handleChange={formik.handleChange}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                  <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    style={{ outerWidth: "100%" }}
+                    value={`+${userData?.phone}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log("phone", phone);
+                      console.log("e", e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
+                    disabled={true}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
                   />
+                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
                 </div>
 
                 <div className="col-md-12">
@@ -226,11 +269,11 @@ const SetupExpertProfile = () => {
                       value={formik.values.price}
                       handleChange={(e) => {
                         const inputValue = e.target.value;
-                              // Custom validation: Allow only numbers and limit to 10 digits.
-                            const regex = /^(?!.*e)\d{0,5}$/;                            ;
-                            if (regex.test(inputValue)) {
-                              formik.setFieldValue("price", inputValue);
-                            }
+                        // Custom validation: Allow only numbers and limit to 10 digits.
+                        const regex = /^(?!.*e)\d{0,5}$/;
+                        if (regex.test(inputValue)) {
+                          formik.setFieldValue("price", inputValue);
+                        }
                       }}
                       error={
                         formik.touched.price && Boolean(formik.errors.price)

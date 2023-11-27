@@ -370,9 +370,11 @@ const EditExpertProfile = () => {
   
                       // setFieldValue("mobilenumberCountryCode", phone);
                     }}
+                    disabled
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
+                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
                 </div>
 
                 <div className="col-md-12">

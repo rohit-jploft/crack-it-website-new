@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
-import ExpertImg from "./../Images/expert-img.svg";
+import ExpertImg from "./../Images/default_avatar.png";
 import Star from "./../Images/star.svg";
 import { getAgencyProfile, getExpertProfile } from "../data/experts";
 import { BookingContext } from "../context/bookingContext";

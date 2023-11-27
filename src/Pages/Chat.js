@@ -204,7 +204,7 @@ const Chat = () => {
                                       {conversation?.superAdmin &&  `${" & "}` +  conversation?.superAdmin.firstName}
                                   </p>
                                   <div style={{display:"flex", justifyContent:"space-between", width:"260px"}}>
-                                    <p class="preview">
+                                    <p class="preview" style={{width:"100px"}}>
                                       {conversation?.latestMessage?.content}
                                     </p>
                                     <p class="preview">

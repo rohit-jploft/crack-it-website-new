@@ -14,6 +14,7 @@ import * as Yup from "yup"; // Import Yup for validation
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import Axios from "axios";
+import PhoneInput from "react-phone-input-2"
 import { BASE_URL } from "../constant";
 const validationSchema = Yup.object().shape({
   agencyName: Yup.string().required("agency name is required"),
@@ -23,10 +24,11 @@ const validationSchema = Yup.object().shape({
     .required("Email is required"),
   phone: Yup.string()
     .required("Phone is required")
-    .matches(
-      /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-      "Phone number must be exactly 10 digits"
-    ),
+    // .matches(
+    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+    //   "Phone number must be exactly 10 digits"
+    // ),
+    ,
   experience: Yup.number().required("experience is required"),
   description: Yup.string()
     .min(100, "Description should minimum length of 100")
@@ -39,6 +41,7 @@ const SetupAgencyProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState();
   const { profileSetupData, setProfileSetupData } = useContext(UserContext);
+  const [dailCode, setDialCode] = useState();
   const formik = useFormik({
     initialValues: {
         agencyname:'',
@@ -151,7 +154,7 @@ const SetupAgencyProfile = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <TextInput
+                  {/* <TextInput
                     name="phone"
                     type="number"
                     label="Phone *"
@@ -160,7 +163,29 @@ const SetupAgencyProfile = () => {
                     handleChange={formik.handleChange}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
+                  /> */}
+                   <PhoneInput
+                    name="phone"
+                    label="Phone Number *"
+                    autoCorrect="off"
+                    placeholder="Enter a Valid Phone Number"
+                    country={"in"}
+                    style={{outerWidth:"100%"}}
+                    value={`+${userData?.phone}`}
+                    // value={formik.values.phone}
+                    onChange={(phone, e) => {
+                      console.log('phone', phone);
+                      console.log('e', e);
+                      setDialCode(e.dialCode);
+                      formik.setFieldValue("phone", phone);
+                      // setMobileNumberCountryCode(phone)
+  
+                      // setFieldValue("mobilenumberCountryCode", phone);
+                    }}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
                   />
+                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
                 </div>
                 <div className="col-md-6">
                   <TextInput

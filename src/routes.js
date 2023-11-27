@@ -156,6 +156,10 @@ function AppRoutes() {
       element: isAuthenticateds && isThisAgency ?  <AgencyExpertProfile/> :<Navigate to="/login" /> 
     },
     {
+      path: "/expert/profile/:agencyExpertUserId",
+      element: isAuthenticateds ?  <AgencyExpertProfile/> :<Navigate to="/login" /> 
+    },
+    {
       path: "agency/Myprofile",
       element: isAuthenticateds ? isThisAgency ?  <ExpertsProfile/> : <MyProfile />:<Navigate to="/login" /> 
     },

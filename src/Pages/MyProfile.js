@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Container from 'react-bootstrap/Container';
-import ExpertImg from './../Images/expert-img.svg';
+import ExpertImg from './../Images/default_avatar.png';
 import Email from './../Images/email.svg';
 import Phone from './../Images/phone-call.svg';
 import RightArrow from './../Images/Right_Arrow.svg';

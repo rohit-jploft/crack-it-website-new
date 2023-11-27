@@ -12,6 +12,8 @@ const TextInput = ({
   error,
   helperText,
   readonly,
+  max
+ 
 }) => {
   const handleKeyPress = (e) => {
     // Get the pressed key
@@ -32,6 +34,7 @@ const TextInput = ({
       </label>
       <input
         type={type}
+        maxLength={max}
         name={name}
         value={value}
         onKeyPress={handleKeyPress}
@@ -41,6 +44,7 @@ const TextInput = ({
         placeholder={placeholder}
         autoComplete="on"
         readOnly={readonly}
+        
         style={{ paddingRight: setShowPassword ? "40px" : "0px" }}
       />
       {setShowPassword && (

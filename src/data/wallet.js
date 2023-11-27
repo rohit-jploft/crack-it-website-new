@@ -38,7 +38,8 @@ export const createWithDrawalReq = async (data) => {
     }
 }
 export const getAllWithDrawal = async () => {
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token')
     try {
         const res = await Axios.get(`${BASE_URL}wallet/withdrawal/get/all?userId=${userId}`) 
         return res.data;

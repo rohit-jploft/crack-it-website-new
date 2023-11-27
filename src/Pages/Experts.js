@@ -268,9 +268,10 @@ const Experts = () => {
                       {data?.map((expert) => {
                         return (
                           <tr
-                            // onClick={() =>
-                            //   navigate(`/ExpertsProfile/${expert?.user?._id}`)
-                            // }
+                          style={{cursor:"pointer"}}
+                            onClick={() =>
+                              navigate(`/expert/profile/${expert?.user?._id}`)
+                            }
                           >
                             <td>
                               <img
@@ -284,7 +285,7 @@ const Experts = () => {
                             </td>
                             <td>{expert?.jobCategory?.title}</td>
                             <td>{expert?.experience} year</td>
-                            <td>${expert?.price}</td>
+                            <td>${expert?.price}/hr</td>
                             <td>
                              
                                 <img

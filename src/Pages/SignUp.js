@@ -188,6 +188,7 @@ const Signup = (props) => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
+                    style={{outerWidth:"100%"}}
                     value={`+${dailCode}`}
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
@@ -202,7 +203,7 @@ const Signup = (props) => {
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                  {formik.touched.phone && formik.errors.phone}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
                   {/* <PhoneInput
                   country={'in'}
                   className="country-selector"

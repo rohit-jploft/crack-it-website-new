@@ -12,7 +12,7 @@ import Bookings from "./../Images/booking.svg";
 import WalletIcon from "./../Images/wallet.svg";
 import Chats from "./../Images/message.svg";
 import Logout from "./../Images/logout.svg";
-import ProfileH from "./../Images/profile.png";
+import ProfileH from "./../Images/default_avatar.png";
 import DownArrow from "./../Images/down_Arrow.svg";
 import Axios from "axios";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
@@ -23,6 +23,7 @@ import { format } from "timeago.js";
 import { NotificationType } from "../utils/NotificationType";
 import { getChatIdFromMeeting } from "../data/chat";
 import { ToastContainer, toast } from "react-toastify";
+import { Avatar } from "@mui/material";
 const Header = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(UserContext);
@@ -217,7 +218,7 @@ const Header = () => {
                           : ProfileH
                       }
                       alt="user pic"
-                    />
+                    /> 
                     <img className="arrow-drop-img" src={DownArrow} alt="" />
                   </div>
                 }

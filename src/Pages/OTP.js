@@ -28,7 +28,7 @@ const OTP = () => {
       otp: "",
     },
     validationSchema: Yup.object().shape({
-      otp: Yup.number().required("otp is required"),
+      otp: Yup.number().required("otp is required")
     }),
     onSubmit: async (values) => {
       const res = await forgotPasswordVerifyOtp(phoneForOtp, values.otp);
@@ -38,7 +38,7 @@ const OTP = () => {
           autoClose: 800,
         });
       }
-      if (res && res?.message && res?.success && res?.status===200) {
+      if (res && res?.message && res?.success && res?.status === 200) {
         setResetToken(res.data.token);
         toast.success(res?.message, {
           autoClose: 700,
@@ -77,6 +77,7 @@ const OTP = () => {
                 <TextInput
                   type="number"
                   name="otp"
+                  max={6}
                   class="form-control"
                   id="exampleFormControlInput1"
                   placeholder=""

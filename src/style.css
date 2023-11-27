@@ -352,8 +352,8 @@
 }
 
 .signup-form.form_sect .input-field {
-  margin-top: 9px;
-  margin-bottom: 9px;
+  margin-top: 0;
+  margin-bottom: 24px;
 }
 
 .signup-btn {
@@ -815,14 +815,15 @@ a {
   align-items: center;
   justify-content: center;
 }
+
 .categ-detail {
-    width: 198px;
-    height: 300px;
-    border: 1px solid #d5d5d5;
-    border-radius: 20px;
-    margin: 50px 8px;
-    text-align: center;
-    padding: 20px 12px;
+  border: 2px solid #d5d5d5;
+  border-radius: 20px;
+  height: 300px;
+  margin: 50px 8px;
+  padding: 20px 12px;
+  text-align: center;
+  width: 298px;
 }
 .categ-detail:hover,
 .categ-detail.active {
@@ -3434,4 +3435,26 @@ input[type='number'] {
   padding: 41px 45px;
   font-size: 18px;
   text-align: center;
+}
+
+.react-tel-input .form-control{
+  height: 60px !important;
+  border-radius: 8px !important;
+  width: 100% !important;
+}
+.react-tel-input .flag-dropdown{
+  background-color: transparent !important;
+  border: 0px solid #cacaca !important;
+}
+.react-tel-input .country-list{
+  text-align: left;
+}
+.react-tel-input .flag-dropdown.open .selected-flag{
+  border-radius: 8px !important;
+}
+.react-tel-input .selected-flag {
+  width: 45px !important;
+  height: 98% !important; 
+  top: 1px;
+  left: 1px;
 }
