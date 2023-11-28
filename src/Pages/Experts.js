@@ -326,7 +326,7 @@ const Experts = () => {
                             <td>${expert?.price}/hr</td>
                             <td>
                               <img className="star-img" src={Star} alt="img" />{" "}
-                              {expert?.rating}
+                              {parseFloat(expert?.rating).toFixed(2)}
                             </td>
                             <td>
                               {/* <Link to={`/ExpertsProfile/${expert?.user?._id}`}> */}
