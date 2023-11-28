@@ -74,14 +74,23 @@ export const listExpert = async (search, jobCategory, minExperience, maxExperien
     if (typeOfExpert) {
       queryParams.typeOfExpert = typeOfExpert;
     }
-    if(minPrice && maxPrice){
+    if(minPrice){
       queryParams.startPrice = minPrice;
+      queryParams.endPrice = 250;
+    }
+    if(maxPrice){
+      queryParams.startPrice = 0;
       queryParams.endPrice = maxPrice;
     }
-    if(minExperience && maxExperience){
+    if(minExperience){
       queryParams.minExperience = minExperience;
+      queryParams.maxExperience = 50;
+    }
+    if(maxExperience){
+      queryParams.minExperience = 0;
       queryParams.maxExperience = maxExperience;
     }
+    
 
     const queryString = new URLSearchParams(queryParams).toString();
     console.log(url+queryString, "url+ query")
@@ -91,6 +100,7 @@ export const listExpert = async (search, jobCategory, minExperience, maxExperien
     return error.message;
   }
 };
+
 
 export const createBooking = async (data) => {
   try {

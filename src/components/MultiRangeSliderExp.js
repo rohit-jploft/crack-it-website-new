@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import classnames from "classnames";
-const MultiRangeSlider = ({
+const MultiRangeSliderExp = ({
   min,
   max,
   onChange,
@@ -99,4 +99,4 @@ const MultiRangeSlider = ({
   );
 };
 
-export default MultiRangeSlider;
+export default MultiRangeSliderExp;

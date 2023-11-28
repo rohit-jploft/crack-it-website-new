@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
-import Bookingimg2 from "./../Images/booking-img2.svg";
+import Bookingimg2 from "./../Images/default_avatar.png";
 import Time2 from "./../Images/time2.svg";
 import Message2 from "./../Images/message2.svg";
 import { getSingleBookingDetail } from "../data/booking";

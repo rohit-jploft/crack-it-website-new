@@ -129,15 +129,15 @@ const MyProfile = () => {
                 <div className='user-details'>
                   <div className='row'>
                     <div className='col-md-6 text-center'>
-                      <div className='usersubdetail b-rgt'>
+                      <div className='usersubdetail b-rgt'  onClick={() => window.location.href = `mailto:${userdata?.email}`} style={{cursor:"pointer"}}>
                         <img src={Email} alt="img" />
                         <p>{userdata.email}</p>
                       </div>
                     </div>
                     <div className='col-md-6 text-center'>
-                      <div className='usersubdetail'>
+                      <div className='usersubdetail' onClick={() => window.location.href = `tel:${userdata?.phone}`} style={{cursor:"pointer"}}>
                         <img src={Phone} alt="img" />
-                          <p>{userdata.countryCode} {userdata.phone}</p>
+                          <p>{userdata.countryCode} {userdata?.phone}</p>
                       </div>
                     </div>
                   </div>

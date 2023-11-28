@@ -637,6 +637,24 @@ a {
   border-radius: 15px;
   background: #fff;
 }
+.btn_pending {
+  color: #e9b014;
+  font-size: 15px;
+  width: max-content;
+  height: 30px;
+  border: 1px solid #e9b014;
+  border-radius: 15px;
+  background: #fff;
+}
+.btn_success {
+  color: #14e949;
+  font-size: 15px;
+  width: 115px;
+  height: 30px;
+  border: 1px solid #14e949;
+  border-radius: 15px;
+  background: #fff;
+}
 .cancel_modal {
   display: flex !important;
   align-items: center;

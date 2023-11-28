@@ -152,11 +152,11 @@ const Home = () => {
                     value={formik.values.name}
                     handleChange={(e) => {
                       const inputValue = e.target.value;
-                            // Custom validation: Allow only numbers and limit to 10 digits.
-                          const regex = /^[A-Za-z]+$/;
-                          if (regex.test(inputValue)) {
+                      //       // Custom validation: Allow only numbers and limit to 10 digits.
+                      //     const regex = /^[A-Za-z]+$/;
+                      //     if (regex.test(inputValue)) {
                             formik.setFieldValue("name", inputValue);
-                          }
+                          // }
                     }}
                     label="name *"
                     error={formik.touched.name && Boolean(formik.errors.name)}

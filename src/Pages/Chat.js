@@ -20,6 +20,7 @@ import FileInputIcon from "../components/FileInputIcon";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import pdfIcon from "../Images/pdf_icon.png";
 import { Button } from "react-bootstrap";
+import DefaultAvatar from "../Images/default_avatar.png";
 const Chat = () => {
   const navigate = useNavigate();
   const { convoId } = useParams();
@@ -29,8 +30,8 @@ const Chat = () => {
   );
   const [newMessage, setNewMessage] = useState("");
   const [convoData, setConvoData] = useState(null);
-  const [latestMsg, setLatestMsg] = useState("")
-  const [lastestMsgTime, setLatestMsgTime] = useState("")
+  const [latestMsg, setLatestMsg] = useState("");
+  const [lastestMsgTime, setLatestMsgTime] = useState("");
   // const [latestMsg, setLatest] = useState()
   const [messages, setMessages] = useState([]);
   const [messageSent, setMessageSent] = useState(false);
@@ -123,8 +124,8 @@ const Chat = () => {
       .then((res) => {
         setMessages([...messages, newMessage]);
         setFile("");
-        setLatestMsgTime(new Date())
-        setLatestMsg(newMessage)
+        setLatestMsgTime(new Date());
+        setLatestMsg(newMessage);
         // const res =
         Socket.emit("sendMessage", {
           chat: selectedConversation,
@@ -191,7 +192,7 @@ const Chat = () => {
                                       : `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
                                   }
                                   alt="img"
-                                  style={{marginLeft:"-40px"}}
+                                  style={{ marginLeft: "-40px" }}
                                 />
                                 <div class="meta">
                                   <p class="name">
@@ -200,15 +201,30 @@ const Chat = () => {
                                     )
                                       ? `${conversation?.participants[0]?.firstName} ${conversation?.participants[0]?.lastName}`
                                       : `${conversation?.participants[1]?.firstName} ${conversation?.participants[1]?.lastName}`}
-                                      {conversation?.admin && `${" & "}` + conversation?.admin.firstName}
-                                      {conversation?.superAdmin &&  `${" & "}` +  conversation?.superAdmin.firstName}
+                                    {conversation?.admin &&
+                                      `${" & "}` +
+                                        conversation?.admin.firstName}
+                                    {conversation?.superAdmin &&
+                                      `${" & "}` +
+                                        conversation?.superAdmin.firstName}
                                   </p>
-                                  <div style={{display:"flex", justifyContent:"space-between", width:"260px"}}>
-                                    <p class="preview" style={{width:"100px"}}>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      width: "260px",
+                                    }}
+                                  >
+                                    <p
+                                      class="preview"
+                                      style={{ width: "100px" }}
+                                    >
                                       {conversation?.latestMessage?.content}
                                     </p>
                                     <p class="preview">
-                                      { format(conversation?.latestMessage?.createdAt)}
+                                      {format(
+                                        conversation?.latestMessage?.createdAt
+                                      )}
                                     </p>
                                   </div>
                                 </div>
@@ -269,7 +285,19 @@ const Chat = () => {
                                 }}
                               >
                                 {/* <h6>{format(message?.createdAt)}</h6> */}
-
+                                {message?.sender?._id !== userId && <img
+                                  src={
+                                    message?.sender.profilePhoto
+                                      ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
+                                      : DefaultAvatar
+                                  }
+                                  alt="img"
+                                  style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    margin: "2px",
+                                  }}
+                                />}
                                 <img
                                   alt="image"
                                   src={imgurl}
@@ -298,6 +326,21 @@ const Chat = () => {
                                 }`}
                                 key={message?._id}
                               >
+                                {message?.sender?._id !== userId && (
+                                  <img
+                                    src={
+                                      message?.sender.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
+                                        : DefaultAvatar
+                                    }
+                                    alt="img"
+                                    style={{
+                                      width: "40px",
+                                      height: "40px",
+                                      margin: "2px",
+                                    }}
+                                  />
+                                )}
                                 <audio
                                   src={`${BASE_URL}${message?.media}`}
                                   controls
@@ -316,6 +359,21 @@ const Chat = () => {
                                 }`}
                                 key={message?._id}
                               >
+                                {message?.sender?._id !== userId && (
+                                  <img
+                                    src={
+                                      message?.sender.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
+                                        : DefaultAvatar
+                                    }
+                                    alt="img"
+                                    style={{
+                                      width: "40px",
+                                      height: "40px",
+                                      margin: "2px",
+                                    }}
+                                  />
+                                )}
                                 <button
                                   onClick={() =>
                                     window.open(
@@ -347,6 +405,21 @@ const Chat = () => {
                                 }`}
                                 key={message?._id}
                               >
+                                {message?.sender?._id !== userId && (
+                                  <img
+                                    src={
+                                      message?.sender.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
+                                        : DefaultAvatar
+                                    }
+                                    alt="img"
+                                    style={{
+                                      width: "40px",
+                                      height: "40px",
+                                      margin: "2px",
+                                    }}
+                                  />
+                                )}
                                 <p>{message?.content}</p>
                                 <h6>{format(message?.createdAt)}</h6>
                               </li>

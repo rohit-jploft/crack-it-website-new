@@ -140,6 +140,9 @@ const BookingListItem = ({
               Pay
             </button>
           )}
+        {isThisExpert && status === "ACCEPTED" && (
+          <button className="btn_pending">{"Payment Pending"}</button>
+        )}
         {isThisUser && status === "COMPLETED" && !isExpertRated && (
           <button
             className="btn_bg"
@@ -151,6 +154,9 @@ const BookingListItem = ({
           >
             Rate
           </button>
+        )}
+        {isExpertRated && status === "COMPLETED" && (
+          <button className="btn_success">{status}</button>
         )}
         {!isThisExpert && status === "ACCEPTED" && (
           <button

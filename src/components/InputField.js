@@ -43,6 +43,7 @@ const TextInput = ({
         id="exampleFormControlInput1"
         placeholder={placeholder}
         autoComplete="on"
+        
         readOnly={readonly}
         
         style={{ paddingRight: setShowPassword ? "40px" : "0px" }}

@@ -16,15 +16,22 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { Button, Modal } from "react-bootstrap";
 import MultiRangeSlider from "../components/MultiRangeSlider";
+import MultiRangeSliderExp from "../components/MultiRangeSliderExp";
+import Loader from "../components/Loader";
 const Experts = () => {
   const { jobCategory, getReqData, time } = useContext(BookingContext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
+  const [priceminFilter1, setPriceMinFilter1] = useState(0);
+  const [pricemaxFilter1, setPriceMaxFilter1] = useState(50);
+  const [priceminFilter, setPriceMinFilter] = useState(0);
+  const [pricemaxFilter, setPriceMaxFilter] = useState(250);
   const [data, setData] = useState();
   const [search, setSearch] = useState();
 
   // filter states
   const [minPrice, setMinPrice] = useState(0);
-  const [disableButton, setDisableButton]= useState(false)
+  const [disableButton, setDisableButton] = useState(false);
   const [reqSent, setReqSent] = useState(false);
   const [maxPrice, setMaxPrice] = useState(250);
   const [minExperience, setMinExperience] = useState(0);
@@ -33,6 +40,15 @@ const Experts = () => {
   const [typeOfExpert, setTypeOfExpert] = useState("EXPERT,AGENCY");
   const [filterSubmitted, setFilterSubmitted] = useState(false);
   const getDataList = async () => {
+    console.log({
+       search,
+      jobCategory ,
+      minExperience,
+      maxExperience,
+      minPrice,
+      maxPrice,
+      rating,
+      typeOfExpert}, "query parameter")
     const data = await listExpert(
       search,
       jobCategory ? jobCategory : "",
@@ -52,14 +68,17 @@ const Experts = () => {
     }
   }, [search, jobCategory]);
   useEffect(() => {
-    setFilterSubmitted(false)
-    getDataList();
-  }, [
-    search,
-    jobCategory,
-    filterSubmitted
-  ]);
+    setIsLoading(true)
+    setFilterSubmitted(false);
+    // setImmediate(() => {
+      getDataList();
+    // })
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 300)
+  }, [search, jobCategory, filterSubmitted]);
   console.log(getReqData);
+
   const onBookingExperts = async (e, ExuserId) => {
     e.preventDefault();
 
@@ -72,19 +91,19 @@ const Experts = () => {
     })
       .then((result) => {
         if (result && result.status === 200 && result.message) {
-          toast(result.message, { type: "success", autoClose:1500 });
-          setDisableButton(true)
+          toast(result.message, { type: "success", autoClose: 1500 });
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
-          },2000 )
-          setReqSent(true)
+            setDisableButton(false);
+          }, 2000);
+          setReqSent(true);
         }
         if (result && result.status === 203 && result.type === "error") {
-          toast(result.message, { type: "error", autoClose:1500 });
-          setDisableButton(true)
+          toast(result.message, { type: "error", autoClose: 1500 });
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
-          },2000 )
+            setDisableButton(false);
+          }, 2000);
         }
         console.log(result);
       })
@@ -107,15 +126,20 @@ const Experts = () => {
       rating,
       typeOfExpert,
     });
-    setFilterSubmitted(true)
-    handleClose()
+    setFilterSubmitted(true);
+    handleClose();
+
   };
+
+  console.log("pricemaxFilter", pricemaxFilter, priceminFilter);
+  console.log(typeOfExpert, "typeOfExpert")
   return (
     <>
       <ToastContainer />
       <Header />
       <section className="">
         <Container>
+          <Loader open={isLoading}/>
           <div className="main-content">
             <div className="">
               <div>
@@ -136,6 +160,7 @@ const Experts = () => {
                     onClick={handleShow}
                     className="img-fluid"
                     src={Filter}
+                    style={{ cursor: "pointer" }}
                   />
                   <Modal
                     className="filter-mddl"
@@ -154,7 +179,13 @@ const Experts = () => {
                             onChange={({ min, max }) => {
                               setMinPrice(min);
                               setMaxPrice(max);
+                              setPriceMinFilter(min);
+                              setPriceMaxFilter(max);
                             }}
+                            // setPriceMaxFilter={setPriceMaxFilter}
+                            // setMinExperience={setMinExperience}
+                            pricemaxFilter={pricemaxFilter}
+                            priceminFilter={priceminFilter}
                           />
                         </div>
 
@@ -191,22 +222,27 @@ const Experts = () => {
 
                         <h4>Experience</h4>
                         <div className="price-rang-slider mt-3">
-                          <MultiRangeSlider
+                          <MultiRangeSliderExp
                             min={0}
                             max={50}
                             onChange={({ min, max }) => {
                               setMinExperience(min);
                               setMaxExperience(max);
+                              setPriceMinFilter1(min);
+                              setPriceMaxFilter1(max);
                             }}
+                            pricemaxFilter={pricemaxFilter1}
+                            priceminFilter={priceminFilter1}
                           />
                         </div>
                         <div className="d-flex justify-content-between my-4">
-                          <div>
+                          <div style={{cursor:"pointer"}}>
                             <label>
                               <input
                                 type="radio"
                                 className="me-2"
                                 name="1"
+                                checked={typeOfExpert === "AGENCY"}
                                 onChange={() => {
                                   setTypeOfExpert("AGENCY");
                                 }}
@@ -214,12 +250,13 @@ const Experts = () => {
                               Agency
                             </label>
                           </div>
-                          <div>
+                          <div style={{cursor:"pointer"}}>
                             <label>
                               <input
                                 type="radio"
                                 className="me-2"
                                 name="1"
+                                checked={typeOfExpert === "EXPERT"}
                                 onChange={() => {
                                   setTypeOfExpert("EXPERT");
                                 }}
@@ -227,12 +264,13 @@ const Experts = () => {
                               Expert
                             </label>
                           </div>
-                          <div>
+                          <div style={{cursor:"pointer"}}>
                             <label>
                               <input
                                 type="radio"
                                 className="me-2"
                                 name="1"
+                                checked={typeOfExpert === "AGENCY,EXPERT"}
                                 onChange={() => {
                                   setTypeOfExpert("AGENCY,EXPERT");
                                 }}
@@ -259,7 +297,7 @@ const Experts = () => {
                         <th width="15%">Name</th>
                         <th width="24%">Expertise</th>
                         <th width="15%">Experience</th>
-                        <th width="15%">Price</th>
+                        <th width="15%">Price/hr</th>
                         <th width="15%">Rating</th>
                         <th width="15%"></th>
                       </tr>
@@ -268,7 +306,7 @@ const Experts = () => {
                       {data?.map((expert) => {
                         return (
                           <tr
-                          style={{cursor:"pointer"}}
+                            style={{ cursor: "pointer" }}
                             onClick={() =>
                               navigate(`/expert/profile/${expert?.user?._id}`)
                             }
@@ -287,13 +325,8 @@ const Experts = () => {
                             <td>{expert?.experience} year</td>
                             <td>${expert?.price}/hr</td>
                             <td>
-                             
-                                <img
-                                  className="star-img"
-                                  src={Star}
-                                  alt="img"
-                                />{" "}
-                                {expert?.rating}
+                              <img className="star-img" src={Star} alt="img" />{" "}
+                              {expert?.rating}
                             </td>
                             <td>
                               {/* <Link to={`/ExpertsProfile/${expert?.user?._id}`}> */}
@@ -305,7 +338,7 @@ const Experts = () => {
                                   onBookingExperts(e, expert?.user?._id);
                                 }}
                               >
-                                 Request
+                                Request
                               </button>
                               {/* </Link> */}
                             </td>

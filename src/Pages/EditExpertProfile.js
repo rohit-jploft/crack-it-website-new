@@ -15,7 +15,7 @@ import { UserContext } from "../context/userContext";
 import Axios from "axios";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
-import ExpertImg from './../Images/expert-img.svg';
+import ExpertImg from "./../Images/expert-img.svg";
 import Header from "./Header";
 import { getCategoryList } from "../data/booking";
 import { ToastContainer, toast } from "react-toastify";
@@ -31,12 +31,11 @@ const validationSchema = Yup.object().shape({
     .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
     .email("Invalid email format")
     .required("Email is required"),
-  phone: Yup.string()
-    .required("Phone is required"),
-    // .matches(
-    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-    //   "Phone number must be exactly 10 digits"
-    // ),
+  phone: Yup.string().required("Phone is required"),
+  // .matches(
+  //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+  //   "Phone number must be exactly 10 digits"
+  // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -51,8 +50,8 @@ const validationSchema = Yup.object().shape({
 const EditExpertProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState();
-  const [dailCode, setDialCode] = useState()
-  const {open, setOpen} = useContext(ModelContext)
+  const [dailCode, setDialCode] = useState();
+  const { open, setOpen } = useContext(ModelContext);
   const [jobCategoryList, setJobCategoryList] = useState();
   const [skillsData, setSkillsData] = useState();
   const [subCategoryList, setSubCategoryList] = useState();
@@ -88,6 +87,8 @@ const EditExpertProfile = () => {
         console.log("entered api call update wali");
         // Handle form submission here
         const data = await updateExpertProfile(userId, {
+          firstName: values?.firstName,
+          lastName: values?.lastName,
           description: values?.description,
           jobCategory: values?.jobCategory,
           price: values?.price,
@@ -137,7 +138,7 @@ const EditExpertProfile = () => {
     console.log(res);
     if (res.data.data) {
       setUserData(res.data.data);
-      console.log(res.data.data, "final data")
+      console.log(res.data.data, "final data");
       setPreEditExpertData(res?.data?.data);
       formik.setFieldValue("firstName", res.data.data?.expert?.user?.firstName);
       formik.setFieldValue("lastName", res.data.data?.expert?.user?.lastName);
@@ -255,7 +256,7 @@ const EditExpertProfile = () => {
         className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <AvatarModel show={open} handleClose={() => setOpen(false)}/>
+        <AvatarModel show={open} handleClose={() => setOpen(false)} />
         <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form
@@ -290,7 +291,7 @@ const EditExpertProfile = () => {
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
                       alt="img"
                       onClick={() => {
-                        setOpen(true)
+                        setOpen(true);
                       }}
                     />
                   </button>
@@ -302,7 +303,7 @@ const EditExpertProfile = () => {
                     name="firstName"
                     type="text"
                     label="First Name *"
-                    readonly={true}
+                    readonly={false}
                     value={formik.values.firstName}
                     handleChange={formik.handleChange}
                     error={
@@ -319,7 +320,7 @@ const EditExpertProfile = () => {
                     name="lastName"
                     type="text"
                     label="Last Name *"
-                    readonly={true}
+                    readonly={false}
                     value={formik.values.lastName}
                     handleChange={formik.handleChange}
                     error={
@@ -353,28 +354,32 @@ const EditExpertProfile = () => {
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   /> */}
-                   <PhoneInput
+                  <PhoneInput
                     name="phone"
                     label="Phone Number *"
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
-                    value={"+"+formik.values.phone}
+                    value={"+" + formik.values.phone}
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
-                      console.log('phone', phone);
-                      console.log('e', e);
+                      console.log("phone", phone);
+                      console.log("e", e);
                       setDialCode(e.dialCode);
                       formik.setFieldValue("phone", phone);
                       // setMobileNumberCountryCode(phone)
-  
+
                       // setFieldValue("mobilenumberCountryCode", phone);
                     }}
                     disabled
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && (
+                    <span style={{ color: "red", fontSize: "14px" }}>
+                      {formik.touched.phone && formik.errors.phone}
+                    </span>
+                  )}
                 </div>
 
                 <div className="col-md-12">
@@ -496,7 +501,7 @@ const EditExpertProfile = () => {
                     )}
                 </div>
                 <div className="col-md-12">
-                  <h6> Select Skills</h6>
+                  {skillsData?.length !== 0 && <h6> Select Skills</h6>}
                   <div className="categ-technology">
                     {skillsData?.map((skil) => {
                       return (
