@@ -293,8 +293,8 @@ const Chat = () => {
                                   }
                                   alt="img"
                                   style={{
-                                    width: "40px",
-                                    height: "40px",
+                                    width: "50px",
+                                    height: "50px",
                                     margin: "2px",
                                   }}
                                 />}
@@ -309,8 +309,9 @@ const Chat = () => {
                                   }}
                                   style={{
                                     width: "200px",
-                                    height: "120px",
+                                    height: "130px",
                                     borderRadius: 0,
+                                    border:"2px solid green"
                                   }}
                                 />
                               </li>

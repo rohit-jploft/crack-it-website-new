@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { isAuthenticated } from "./utils/authHelper";
 import Router from "./routes";
-import { useEffect } from "react";
+import { StrictMode, useEffect } from "react";
 import { messaging } from "./firebase/firebase";
 import { getToken } from "firebase/messaging";
 import { BASE_URL, VAPID_KEY } from "./constant";
@@ -60,15 +60,17 @@ function App() {
   };
   useEffect(() => {
     // permission for notification
-    getTimeZoneFromLatLong()
+    getTimeZoneFromLatLong();
     requestPermission();
   }, []);
   return (
     <div className="App">
-      <BrowserRouter>
-        <ToastContainer />
-        <Router />
-      </BrowserRouter>
+      <StrictMode>
+        <BrowserRouter>
+          <ToastContainer />
+          <Router />
+        </BrowserRouter>
+      </StrictMode>
     </div>
   );
 }

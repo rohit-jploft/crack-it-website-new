@@ -39,12 +39,11 @@ const validationSchema = Yup.object().shape({
       /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
       "Password must contain at least 8 characters, one uppercase letter, one number, and one special character"
     ),
-  phone: Yup.string()
-    .required("Phone is required"),
-    // .matches(
-    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-    //   "Phone number must be exactly 10 digits"
-    // ),
+  phone: Yup.string().required("Phone is required"),
+  // .matches(
+  //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+  //   "Phone number must be exactly 10 digits"
+  // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -64,12 +63,11 @@ const validationSchemaWithOutPassword = Yup.object().shape({
     .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
     .required("Email is required"),
 
-  phone: Yup.string()
-    .required("Phone is required"),
-    // .matches(
-    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-    //   "Phone number must be exactly 10 digits"
-    // ),
+  phone: Yup.string().required("Phone is required"),
+  // .matches(
+  //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+  //   "Phone number must be exactly 10 digits"
+  // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -212,6 +210,8 @@ const AddAgencyExpert = () => {
             setTimeout(() => {
               navigate("/agency/experts/all");
             }, 600);
+          } else if (data && !data.success) {
+            toast.error(data.message, { autoClose: 500 });
           } else {
             toast.error("Something went wrong");
           }
@@ -538,7 +538,11 @@ const AddAgencyExpert = () => {
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && (
+                    <span style={{ color: "red", fontSize: "14px" }}>
+                      {formik.touched.phone && formik.errors.phone}
+                    </span>
+                  )}
                 </div>
                 {!expertUserId && (
                   <div className="col-md-12">
@@ -680,7 +684,9 @@ const AddAgencyExpert = () => {
                     )}
                 </div>
                 <div className="col-md-12">
-                  <h6> Select Skills</h6>
+                  {skillsData && skillsData.length !== 0 && (
+                    <h6> Select Skills</h6>
+                  )}
                   <div className="categ-technology">
                     {skillsData?.map((skil) => {
                       return (

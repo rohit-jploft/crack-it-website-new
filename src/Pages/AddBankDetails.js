@@ -34,13 +34,19 @@ const AddBankDtails = () => {
   const AddUpiID = async (obj) => {
     const userId = localStorage.getItem("userId");
     const data = await addBankDetail({ type: "BANK", ...obj, user: userId });
+    console.log(data);
     if (data && data?.data && data?.status === 200 && data?.success) {
       toast.success("Bank details added successfully", {
         autoClose: 400,
       });
       setTimeout(() => {
         navigate("/withdraw-amount");
-      }, 800)
+      }, 800);
+    }
+    if (data && data?.response && data?.response?.data) {
+      toast.error(data?.response?.data?.message, {
+        autoClose: 400,
+      });
     }
   };
 

@@ -1,6 +1,7 @@
 import "./../style.css";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
 import ExpertImg from "./../Images/default_avatar.png";
@@ -18,10 +19,12 @@ import Modal from "react-bootstrap/Modal";
 import Edit from "./../Images/edit.svg";
 import Cancelicon from "./../Images/cancel-icon.svg";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
+import LogoutModal from "../components/LogoutModal";
 const ExpertsProfile = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [showLogOutModal, setShowLogoutModal] = useState(false);
   const handleClose1 = () => setShow(false);
   const handleShow1 = () => setShow(true);
   const loggedUserId = localStorage.getItem("userId");
@@ -215,10 +218,7 @@ const ExpertsProfile = () => {
                     className="text-center logout"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      localStorage.removeItem("token");
-                      localStorage.removeItem("userId");
-                      localStorage.removeItem("role");
-                      navigate("/login");
+                      setShowLogoutModal(true)
                     }}
                   >
                     <img src={Logout2} alt="img" /> Logout
@@ -229,6 +229,16 @@ const ExpertsProfile = () => {
           </div>
         </Container>
       </section>
+      <LogoutModal
+        open={showLogOutModal}
+        handleClose={() => setShowLogoutModal(false)}
+        logOut={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          localStorage.removeItem("role");
+          navigate("/login");
+        }}
+      />
       <Modal show={show} onHide={handleClose1} className="cancel_modal">
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>

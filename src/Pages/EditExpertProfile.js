@@ -157,7 +157,7 @@ const EditExpertProfile = () => {
       );
       let skilArr = [];
       for (let ski of res.data.data?.expert?.expertise) {
-        skilArr.push(ski._id);
+        skilArr.push(ski._id.toString());
       }
       setStoreSkills(skilArr);
       formik.setFieldValue("languages", res.data.data?.expert?.languages);
@@ -236,7 +236,7 @@ const EditExpertProfile = () => {
     getJobCateList();
   }, [profilePicUploadDone]);
   useEffect(() => {
-    setStoreSkills([]);
+    // setStoreSkills([]);    /.tushasr
     getSubCateList();
   }, [formik.values.jobCategory]);
   useEffect(() => {
@@ -248,6 +248,9 @@ const EditExpertProfile = () => {
     // Trigger the file input when the icon is clicked
     fileInputRef.current.click();
   };
+
+  console.log("storeSkills----------", storeSkills, skillsData);
+
   return (
     <>
       <ToastContainer />
@@ -507,7 +510,9 @@ const EditExpertProfile = () => {
                       return (
                         <div
                           class={`techno ${
-                            storeSkills?.includes(skil?._id) ? "active" : ""
+                            storeSkills?.includes(skil?._id.toString())
+                              ? "active"
+                              : ""
                           }`}
                           onClick={() =>
                             toggleSkillInArray(storeSkills, skil._id)

@@ -24,10 +24,12 @@ import { NotificationType } from "../utils/NotificationType";
 import { getChatIdFromMeeting } from "../data/chat";
 import { ToastContainer, toast } from "react-toastify";
 import { Avatar } from "@mui/material";
+import LogoutModal from "../components/LogoutModal";
 const Header = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(UserContext);
   const [userNotificationData, setuserNotificationData] = useState();
+  const [showLogOutModal, setShowLogoutModal] = useState();
   const [pageNo, setPageNo] = useState(10);
   const [totalCount, setTotalCount] = useState();
   const [unReadCount, setUnReadCount] = useState();
@@ -90,29 +92,36 @@ const Header = () => {
       }
     }
   };
-  const redirectThroughNotification = async (notiId, data, isRead, type, title) => {
+  const redirectThroughNotification = async (
+    notiId,
+    data,
+    isRead,
+    type,
+    title
+  ) => {
     console.log(notiId, "noti id");
     if (!isRead) {
       const res = await Axios.put(`${BASE_URL}notification/read/${notiId}`);
     }
-    if(type === NotificationType.Booking){
+    if (type === NotificationType.Booking) {
       navigate(`/bookingInfo/${data.targetId}`);
     }
-    if(type === NotificationType.Chat && title === "New Message" ){
+    if (type === NotificationType.Chat && title === "New Message") {
       navigate(`/chat/${data.targetId}`);
     }
-    if(type === NotificationType.Chat && title !== "New Message"){
-      await clickChatRedirect(data.targetId)
+    if (type === NotificationType.Chat && title !== "New Message") {
+      await clickChatRedirect(data.targetId);
       // navigate(`/chat/${data.targetId}`);
     }
-    if(type === NotificationType.Withdrawal){
+    if (type === NotificationType.Withdrawal) {
       navigate(`/wallet`);
     }
     // if(type)
   };
+
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <Navbar
         expand="lg"
         className={`nav_sect ${isTheUser ? "nav_wrapper_user" : ""}`}
@@ -218,7 +227,7 @@ const Header = () => {
                           : ProfileH
                       }
                       alt="user pic"
-                    /> 
+                    />
                     <img className="arrow-drop-img" src={DownArrow} alt="" />
                   </div>
                 }
@@ -273,9 +282,10 @@ const Header = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   onClick={() => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("userId");
-                    navigate("/login");
+                    setShowLogoutModal(true);
+                    // localStorage.removeItem("token");
+                    // localStorage.removeItem("userId");
+                    // navigate("/login");
                   }}
                 >
                   <img src={Logout} alt="" />
@@ -288,6 +298,15 @@ const Header = () => {
       </Navbar>
 
       <Outlet />
+      <LogoutModal
+        open={showLogOutModal}
+        handleClose={() => setShowLogoutModal(false)}
+        logOut={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          navigate("/login");
+        }}
+      />
     </>
   );
 };

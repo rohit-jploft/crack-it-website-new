@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
 import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../context/userContext";
-import ExpertImg from './../Images/expert-img.svg';
+import ExpertImg from "./../Images/expert-img.svg";
 import Axios from "axios";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,15 +28,15 @@ import AvatarModel from "../components/AvatarModel";
 const validationSchema = Yup.object().shape({
   agencyName: Yup.string().required("agencyName is required"),
 
-  email: Yup.string().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
+  email: Yup.string()
+    .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
     .email("Invalid email format")
     .required("Email is required"),
-  phone: Yup.string()
-    .required("Phone is required"),
-    // .matches(
-    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-    //   "Phone number must be exactly 10 digits"
-    // ),
+  phone: Yup.string().required("Phone is required"),
+  // .matches(
+  //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+  //   "Phone number must be exactly 10 digits"
+  // ),
   experience: Yup.number().required("experience is required"),
   jobCategory: Yup.string().required("job category is required"),
   subCategory: Yup.string().required(),
@@ -49,16 +49,16 @@ const validationSchema = Yup.object().shape({
 });
 const EditAgencyProfile = () => {
   const navigate = useNavigate();
-  const {open, setOpen} = useContext(ModelContext)
-  const [dailCode, setDialCode] = useState()
+  const { open, setOpen } = useContext(ModelContext);
+  const [dailCode, setDialCode] = useState();
   const [userData, setUserData] = useState();
   const [jobCategoryList, setJobCategoryList] = useState();
   const [skillsData, setSkillsData] = useState();
   const [subCategoryList, setSubCategoryList] = useState();
   const [storeSkills, setStoreSkills] = useState([]);
   const [profilePic, setProfilePic] = useState();
-    const [recievedPic, setRecievedPic] = useState();
-    const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
+  const [recievedPic, setRecievedPic] = useState();
+  const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
   const {
     profileSetupData,
     setProfileSetupData,
@@ -145,20 +145,17 @@ const EditAgencyProfile = () => {
       formik.setFieldValue("description", res.data.data?.expert?.description);
       formik.setFieldValue("price", res.data.data?.expert?.price);
       formik.setFieldValue("experience", res.data.data?.expert?.experience);
-      setRecievedPic(res.data.data?.expert?.agency?.profilePhoto)
-      console.log(res.data.data?.expert?.agency?.profilePhoto, "profilePic")
+      setRecievedPic(res.data.data?.expert?.agency?.profilePhoto);
+      console.log(res.data.data?.expert?.agency?.profilePhoto, "profilePic");
 
-      console.log(
-        "job category when selected",
-        res.data.data?.expert
-      );
+      console.log("job category when selected", res.data.data?.expert);
       formik.setFieldValue(
         "jobCategory",
         res.data.data?.expert?.jobCategory?._id
       );
       let skilArr = [];
       for (let ski of res.data.data?.expert?.expertise) {
-        skilArr.push(ski._id);
+        skilArr.push(ski._id.toString());
       }
       setStoreSkills(skilArr);
       formik.setFieldValue("languages", res.data?.data?.expert?.languages);
@@ -202,7 +199,7 @@ const EditAgencyProfile = () => {
   }
   const handleFileInputChange = async (e) => {
     const selectedFile = e.target.files[0];
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem("userId");
     if (selectedFile) {
       const fileType = selectedFile.type;
       const acceptedTypes = ["image/*"];
@@ -231,26 +228,29 @@ const EditAgencyProfile = () => {
         fileInputRef.current.value = "";
       }
     }
-  
   };
   useEffect(() => {
     getUserData();
     getJobCateList();
   }, [profilePicUploadDone]);
   useEffect(() => {
-    setStoreSkills([]);
+    // setStoreSkills([]);
+    //
+
     getSubCateList();
   }, [formik.values.jobCategory]);
   useEffect(() => {
     getSkills();
   }, [formik.values.subCategory]);
 
-   // set profile pic functions
-   const fileInputRef = useRef(null);
-   const handleIconClick = () => {
-     // Trigger the file input when the icon is clicked
-     fileInputRef.current.click();
-   };
+  // set profile pic functions
+  const fileInputRef = useRef(null);
+  const handleIconClick = () => {
+    // Trigger the file input when the icon is clicked
+    fileInputRef.current.click();
+  };
+
+  console.log("storeSkills----------", storeSkills);
   return (
     <>
       <ToastContainer />
@@ -271,15 +271,17 @@ const EditAgencyProfile = () => {
               <div class="profileSetup">
                 <h2>Edit Profile</h2>
                 <div class="expert-image">
-                <img
+                  <img
                     src={
-                      recievedPic ? `${AVATAR_BASE_URL}${recievedPic}` : ExpertImg
+                      recievedPic
+                        ? `${AVATAR_BASE_URL}${recievedPic}`
+                        : ExpertImg
                     }
                     // src="/static/media/expert-img.199747df04b3a83a67b449c8ff5963a0.svg"
                     alt="Img"
                   />
-                    {/* <Button className='profile-img-edit' onClick=''><img src={Edit} alt="img" /></Button> */}
-                    <button
+                  {/* <Button className='profile-img-edit' onClick=''><img src={Edit} alt="img" /></Button> */}
+                  <button
                     type="button"
                     class="profile-img-edit btn btn-primary"
                     // onClick={handleIconClick}
@@ -294,7 +296,6 @@ const EditAgencyProfile = () => {
                     <img
                       src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
                       alt="img"
-                      
                     />
                   </button>
                 </div>
@@ -317,7 +318,7 @@ const EditAgencyProfile = () => {
                     }
                   />
                 </div>
-               
+
                 <div className="col-md-6">
                   <TextInput
                     name="email"
@@ -341,28 +342,32 @@ const EditAgencyProfile = () => {
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   /> */}
-                   <PhoneInput
+                  <PhoneInput
                     name="phone"
                     label="Phone Number *"
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
-                    value={"+"+formik.values.phone}
+                    value={"+" + formik.values.phone}
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
-                      console.log('phone', phone);
-                      console.log('e', e);
+                      console.log("phone", phone);
+                      console.log("e", e);
                       setDialCode(e.dialCode);
                       formik.setFieldValue("phone", phone);
                       // setMobileNumberCountryCode(phone)
-  
+
                       // setFieldValue("mobilenumberCountryCode", phone);
                     }}
                     disabled
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && (
+                    <span style={{ color: "red", fontSize: "14px" }}>
+                      {formik.touched.phone && formik.errors.phone}
+                    </span>
+                  )}
                 </div>
 
                 <div className="col-md-12">
@@ -484,13 +489,15 @@ const EditAgencyProfile = () => {
                     )}
                 </div>
                 <div className="col-md-12">
-                  <h6> Select Skills</h6>
+                  {skillsData?.length !== 0 && <h6> Select Skills</h6>}
                   <div className="categ-technology">
                     {skillsData?.map((skil) => {
                       return (
                         <div
                           class={`techno ${
-                            storeSkills?.includes(skil?._id) ? "active" : ""
+                            storeSkills?.includes(skil?._id.toString())
+                              ? "active"
+                              : ""
                           }`}
                           onClick={() =>
                             toggleSkillInArray(storeSkills, skil._id)
@@ -503,7 +510,7 @@ const EditAgencyProfile = () => {
                     })}
                   </div>
                 </div>
-              
+
                 <div className="col-lg-6">
                   <TextInput
                     name="experience"

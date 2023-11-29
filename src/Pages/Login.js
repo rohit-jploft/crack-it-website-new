@@ -54,7 +54,7 @@ const Login = () => {
           setExpertVerified(res.data.data.user.isExpertProfileVerified);
           toast.success(res?.data?.message, {
             onClose: () => {
-                if(!res.data.data.user.isExpertProfileVerified && res.data.data.user.role === "EXPERT"){
+                if(res.data.data.user.role === "EXPERT" && !res.data.data.user.isExpertProfileVerified ){
                     navigate("/setup-profile")
                 } else {
                     navigate("/mybookings")
