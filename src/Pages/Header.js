@@ -10,6 +10,10 @@ import Notification from "./../Images/notification.svg";
 import Profile from "./../Images/profile.svg";
 import Bookings from "./../Images/booking.svg";
 import WalletIcon from "./../Images/wallet.svg";
+import WalletIcon1 from "./../Images/wallet-1.svg";
+import Message1 from "./../Images/message.svg";
+import Changepassword from "./../Images/password.svg";
+import Money from "./../Images/money.svg";
 import Chats from "./../Images/message.svg";
 import Logout from "./../Images/logout.svg";
 import ProfileH from "./../Images/default_avatar.png";
@@ -265,19 +269,19 @@ const Header = () => {
                   </NavDropdown.Item>
                 )}
                 <NavDropdown.Item href="/wallet">
-                  <img src={WalletIcon} alt="" />
+                  <img src={WalletIcon1} alt="" />
                   Wallet
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/Chat">
-                  <img src={Chats} alt="" />
+                  <img src={Message1} alt="" />
                   Chats
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/change-password">
-                  <img src={Chats} alt="" />
+                  <img src={Changepassword} alt="" />
                   Change Password
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/refer/earn">
-                  <img src={Chats} alt="" />
+                  <img src={Money} alt="" />
                   Refer & Earn
                 </NavDropdown.Item>
                 <NavDropdown.Item

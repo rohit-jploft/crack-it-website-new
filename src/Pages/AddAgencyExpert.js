@@ -322,7 +322,7 @@ const AddAgencyExpert = () => {
     getJobCateList();
   }, []);
   useEffect(() => {
-    setStoreSkills([]);
+    // setStoreSkills([]); tushal
     getSubCateList();
   }, [formik.values.jobCategory]);
   useEffect(() => {
@@ -524,7 +524,11 @@ const AddAgencyExpert = () => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
-                    value={`+${dailCode}`}
+                    value={
+                      expertUserId
+                        ? `+${formik.values.phone}`
+                        : formik.values.phone
+                    }
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
                       console.log("phone", phone);
@@ -610,7 +614,11 @@ const AddAgencyExpert = () => {
                     <select
                       name="jobCategory"
                       value={formik.values.jobCategory}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        setStoreSkills([])
+
+                        formik.handleChange(e)
+                      }}
                       className="form-control"
                       id=""
                     >

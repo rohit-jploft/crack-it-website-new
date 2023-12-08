@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Visible from "./../Images/visible.svg";
+import Visible from "./../Images/show.png";
+import hidden from "./../Images/hide.png";
 const TextInput = ({
   label,
   value,
@@ -51,9 +52,9 @@ const TextInput = ({
       {setShowPassword && (
         <img
           className="visible-icon"
-          src={Visible}
+          src={type ==="password" ? hidden: Visible}
           alt=""
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", height:"25px", marginBottom:"25px" }}
           onClick={() => setShowPassword(!showPassword)}
         />
       )}

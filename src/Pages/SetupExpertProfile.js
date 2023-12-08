@@ -241,6 +241,7 @@ const SetupExpertProfile = () => {
                       placeholder=""
                       rows={3}
                     />
+                    
                     {formik.touched.description &&
                       Boolean(formik.errors.description) && (
                         <div

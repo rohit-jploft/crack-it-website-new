@@ -11,10 +11,12 @@ import Tabs from "react-bootstrap/Tabs";
 import { BookingContext } from "../context/bookingContext";
 import { getCategoryList } from "../data/booking";
 import { durationList } from "../helper/duration";
+import { ToastContainer, toast } from "react-toastify";
 import { getAllTimeZones } from "../data/timeZone";
-import { getCurrentDate } from "../helper/helper";
+import { getCurrentDate, isDateTodayOrAbove } from "../helper/helper";
 const RequestCateg = () => {
   const [key, setKey] = useState();
+  const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
   const {
     jobCategory,
@@ -115,11 +117,11 @@ const RequestCateg = () => {
     const curr = new Date();
     let hour = curr.getHours();
     let minute = curr.getMinutes();
-  
+
     // Adding leading zero manually if needed
     hour = hour < 10 ? `0${hour}` : hour;
     minute = minute < 10 ? `0${minute}` : minute;
-  
+
     return `${hour}:${minute}`;
   };
   // const minTime = getCurrentTime()
@@ -230,7 +232,9 @@ const RequestCateg = () => {
                           type="date"
                           min={getCurrentDate()}
                           value={date}
-                          onChange={(e) => setDate(e.target.value)}
+                          onChange={(e) => {
+                            setDate(e.target.value);
+                          }}
                           className="form-control"
                           id="exampleFormControlInput1"
                           placeholder=""
@@ -365,10 +369,21 @@ const RequestCateg = () => {
                       error.skills ||
                       error.subCategory ||
                       error.time ||
-                      error.timeZone
+                      error.timeZone || disableButton
                     }
                     onClick={() => {
-                      navigate("/Experts")
+                      if (isDateTodayOrAbove(date)) {
+                        navigate("/Experts");
+                      } else {
+                        toast(
+                          "please dont select the previous date for the meeting",
+                          { type: "error", autoClose: 1000 }
+                        );
+                        setDisableButton(true);
+                        setTimeout(() => {
+                          setDisableButton(false);
+                        }, 1500);
+                      }
                     }}
                   >
                     SUBMIT

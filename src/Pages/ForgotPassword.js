@@ -33,6 +33,7 @@ const phoneOrEmailSchema = Yup.string().test('phoneOrEmail', 'Invalid phone or e
 const Forgotpassword = () => {
   const navigate = useNavigate();
   const [dailCode, setDialCode] = useState("+91");
+  const [disableButton, setDisableButton]= useState(false)
   const { setPhoneForOtp, phoneForOtp } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
@@ -62,7 +63,11 @@ const Forgotpassword = () => {
         // props.close(false);
       }
       if (!res?.success && res?.status === 200)
-        toast(res.message, { type: "error" });
+        toast(res.message, { type: "error" , autoClose:1000});
+        setDisableButton(true)
+        setTimeout(() => {
+          setDisableButton(false)
+        },1500 )
     },
   });
   return (
@@ -146,7 +151,7 @@ const Forgotpassword = () => {
                   />
                 </div>
               </div>
-              <button type="submit" className="form-btn">
+              <button type="submit" disabled={disableButton} className="form-btn">
                 CONTINUE
               </button>
             </form>

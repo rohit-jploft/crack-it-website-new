@@ -415,7 +415,11 @@ const EditAgencyProfile = () => {
                     <select
                       name="jobCategory"
                       value={formik.values.jobCategory}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        setStoreSkills([])
+
+                        formik.handleChange(e)
+                      }}
                       className="form-control"
                       id=""
                     >

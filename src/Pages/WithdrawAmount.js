@@ -121,7 +121,7 @@ const WithdrawAmount = () => {
                               Account Name <b>{bank?.accountName}</b>
                             </p>
                             <p>
-                              Account Number <b>{bank?.accountName}</b>
+                              Account Number <b>{bank?.accountNo}</b>
                             </p>
                             <p>
                               IFSC Code <b>{bank?.ifscCode}</b>

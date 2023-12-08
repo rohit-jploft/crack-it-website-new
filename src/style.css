@@ -336,7 +336,7 @@
 .img-pot {
   position: absolute;
   bottom: 0px;
-  width: 161px;
+  width: 120px;
   height: 200px;
   z-index: -1;
   right: 40%;
@@ -842,6 +842,7 @@ a {
   padding: 20px 12px;
   text-align: center;
   width: 298px;
+  flex: 0 0 auto;
 }
 .categ-detail:hover,
 .categ-detail.active {
@@ -3199,7 +3200,7 @@ button.navbar-toggler {
 
 @media(max-width: 1399px){
 .categ-detail {
-    width: 150px;
+  width: 263px;
     margin: 20px 10px 0;
 }
 }

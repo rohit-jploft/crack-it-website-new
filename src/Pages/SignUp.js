@@ -28,10 +28,10 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email format")
     .required("Email is required"),
   phone: Yup.string()
-    // .matches(
-    //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-    //   "Phone number must be exactly 10 digits"
-    // )
+    .matches(
+      /^[0-9]{12}$/, // You can adjust the regular expression to match your desired format
+      "Phone number must be exactly 10 digits"
+    )
     .required("Phone number is required"),
   password: Yup.string()
     .required("Password is required")
@@ -188,22 +188,36 @@ const Signup = (props) => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
-                    style={{outerWidth:"100%"}}
+                    style={{ outerWidth: "100%" }}
                     value={`+${dailCode}`}
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
-                      console.log('phone', phone);
-                      console.log('e', e);
+                      console.log("phone", phone);
+                      console.log("e", e);
                       setDialCode(e.dialCode);
                       formik.setFieldValue("phone", phone);
                       // setMobileNumberCountryCode(phone)
-  
+
                       // setFieldValue("mobilenumberCountryCode", phone);
                     }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                  {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && (
+                    <div
+                      style={{
+                        color: "red",
+                        textAlign: "left",
+                        marginLeft: "9px",
+                        fontSize: "13px",
+                        marginBottom: Boolean(formik.errors.phone) ? "15px" :"-4px",
+                        marginTop: "3px",
+                      }}
+                    >
+                      <span>{formik.touched.phone && formik.errors.phone}</span>
+                    </div>
+                  )}
+                 
                   {/* <PhoneInput
                   country={'in'}
                   className="country-selector"
@@ -317,8 +331,8 @@ const Signup = (props) => {
 
                   {/* <span style={{ color: "red", fontSize: "10px", marginTop:'-7px' }}>error</span> */}
                 </div>
-                <div class="checkbox_div">
-                  <input
+                <div class="checkbox_div" style={{display:"flex", flexDirection:"column"}}>
+                 <div> <input
                     type="checkbox"
                     name="termAndConditions"
                     id="3"
@@ -341,7 +355,7 @@ const Signup = (props) => {
                     >
                       Privacy Policy
                     </span>
-                  </label>
+                  </label></div>
                   {formik.touched.termAndConditions &&
                     Boolean(formik.errors.termAndConditions) && (
                       <div

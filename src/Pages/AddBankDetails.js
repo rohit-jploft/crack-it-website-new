@@ -83,7 +83,7 @@ const AddBankDtails = () => {
                       <div class="input-field">
                         <TextInput
                           name="accountName"
-                          label="Account Name *"
+                          label="Account Holder Name *"
                           value={formik.values.accountName}
                           handleChange={formik.handleChange}
                           error={

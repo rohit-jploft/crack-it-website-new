@@ -14,6 +14,7 @@ import { isAgency, isExpert } from "../utils/authHelper";
 import { UserContext } from "../context/userContext";
 import Axios from "axios";
 import { BASE_URL } from "../constant";
+import { isDateTodayOrAbove } from "../helper/helper";
 const SubCategory = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState();
@@ -237,6 +238,8 @@ const SubCategory = () => {
                       if (storeSkills.length === 0) {
                         toast.error("please select atleast one skill", {autoClose:1000});
                       }
+                      
+
                       if (isThisExpert) {
                         setupExpertProfileData();
                       }

@@ -7,7 +7,7 @@ import Msg from "./../Images/msg.svg";
 import { useFormik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
 import { forgotPasswordVerifyOtp } from "../data/user";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import TextInput from "../components/InputField";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 const OTP = () => {
   const { setPhoneForOtp, phoneForOtp, resetToken, setResetToken } =
     useContext(UserContext);
-
+    const [disableButton, setDisableButton]= useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +49,11 @@ const OTP = () => {
         // props.close(false);
       }
       if (!res?.success && res?.status === 200)
-        toast(res.message, { type: "error" });
+        toast(res.message, { type: "error" , autoClose:1000});
+        setDisableButton(true)
+        setTimeout(() => {
+          setDisableButton(false)
+        },1500 )
     },
   });
 
@@ -89,7 +93,7 @@ const OTP = () => {
                 />
               </div>
               {/* <Link to="/Resetpassword"> */}
-              <button className="form-btn" type="submit">
+              <button className="form-btn" type="submit" disabled={disableButton}>
                 VERIFY
               </button>
               {/* </Link> */}

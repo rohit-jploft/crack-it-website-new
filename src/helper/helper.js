@@ -97,3 +97,13 @@ export const convertDateStampToTimeZone =  (dateStamp, timeZone) => {
 
   return new Date(modifiedDateStamp);
 };
+export function isDateTodayOrAbove(inputDate) {
+  // Get the current date in UTC (year-month-date format)
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  // Convert the inputDate to a UTC date string
+  const inputUTCDate = new Date(inputDate).toISOString().split('T')[0];
+
+  // Compare the input date with the current date
+  return inputUTCDate >= currentDate;
+}

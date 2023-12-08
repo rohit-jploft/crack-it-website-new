@@ -287,7 +287,7 @@ const Chat = () => {
                                 {/* <h6>{format(message?.createdAt)}</h6> */}
                                 {message?.sender?._id !== userId && <img
                                   src={
-                                    message?.sender.profilePhoto
+                                    message?.sender?.profilePhoto
                                       ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
                                       : DefaultAvatar
                                   }
@@ -330,7 +330,7 @@ const Chat = () => {
                                 {message?.sender?._id !== userId && (
                                   <img
                                     src={
-                                      message?.sender.profilePhoto
+                                      message?.sender?.profilePhoto
                                         ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
                                         : DefaultAvatar
                                     }
@@ -409,7 +409,7 @@ const Chat = () => {
                                 {message?.sender?._id !== userId && (
                                   <img
                                     src={
-                                      message?.sender.profilePhoto
+                                      message?.sender?.profilePhoto
                                         ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
                                         : DefaultAvatar
                                     }
