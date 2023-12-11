@@ -34,22 +34,28 @@ const Forgotpassword = () => {
   const navigate = useNavigate();
   const [dailCode, setDialCode] = useState("+91");
   const [disableButton, setDisableButton]= useState(false)
-  const { setPhoneForOtp, phoneForOtp } = useContext(UserContext);
+  const { setPhoneForOtp, phoneForOtp, emailForOtp, setEmailForOtp } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      // phone: "",
+      email:""
     },
     validationSchema: Yup.object().shape({
-      phone: Yup.string()
-        // .matches(
-        //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
-        //   "Phone number must be exactly 10 digits"
-        // )
-        .required("Phone number is required"),
+      // phone: Yup.string()
+      //   // .matches(
+      //   //   /^[0-9]{10}$/, // You can adjust the regular expression to match your desired format
+      //   //   "Phone number must be exactly 10 digits"
+      //   // )
+      //   .required("Phone number is required"),
+      email: Yup.string()
+      .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
+      .email("Invalid email format")
+      .required("Email is required"),
     }),
     onSubmit: async (values) => {
-      const { phone } = values;
-      const res = await ForgotPasswordSendOtp(phone);
+      // const { phone } = values;
+      const { email } = values;
+      const res = await ForgotPasswordSendOtp(email, "EMAIL");
       console.log(res, "response signup");
       if (res.response && res.response.data.data) {
         toast.error(res.response.data.data.message, {
@@ -57,13 +63,18 @@ const Forgotpassword = () => {
         });
       }
       if (res && res?.message && res?.success) {
-        setPhoneForOtp(phone);
+        setEmailForOtp(email);
+        setDisableButton(true)
+        setTimeout(() => {
+          setDisableButton(false)
+        },3500 )
         toast.success("OTP Sent successfully")
         navigate('/otp')
+      
         // props.close(false);
       }
       if (!res?.success && res?.status === 200)
-        toast(res.message, { type: "error" , autoClose:1000});
+        toast(res.message, { type: "error" , autoClose:500});
         setDisableButton(true)
         setTimeout(() => {
           setDisableButton(false)
@@ -113,23 +124,23 @@ const Forgotpassword = () => {
                 />
                     <div className="phone-number-fils"> */}
                 <div>
-                  {/* <TextInput
-                    name="phone"
+                  <TextInput
+                    name="email"
                     type="text"
                     handleChange={(e) => {
                       const inputValue = e.target.value;
                             // Custom validation: Allow only numbers and limit to 10 digits.
-                          const regex = /^\d{0,10}$/;
-                          if (regex.test(inputValue)) {
-                            formik.setFieldValue("phone", inputValue);
-                          }
+                          // const regex = /^\d{0,10}$/;
+                          // if (regex.test(inputValue)) {
+                            formik.setFieldValue("email", inputValue);
+                          // }
                     }}
-                    label="Phone *"
-                    value={formik.values.phone}
-                    error={formik.touched.phone && Boolean(formik.errors.phone)}
-                    helperText={formik.touched.phone && formik.errors.phone}
-                  /> */}
-                  <PhoneInput
+                    label="Email *"
+                    value={formik.values.email}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
+                  />
+                  {/* <PhoneInput
                     name="phone"
                     label="Phone Number *"
                     autoCorrect="off"
@@ -148,7 +159,7 @@ const Forgotpassword = () => {
                     }}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
-                  />
+                  /> */}
                 </div>
               </div>
               <button type="submit" disabled={disableButton} className="form-btn">

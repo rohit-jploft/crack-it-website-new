@@ -3,6 +3,8 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [phoneForOtp, setPhoneForOtp] = useState();
+  const [emailForOtp, setEmailForOtp] = useState();
+  const [typeForOtp, setTypeForOtp] = useState()
   const [resetToken, setResetToken] = useState();
   const [profileData, setProfileData] = useState();
   const [walletAmount, setWalletAmount] = useState();
@@ -24,7 +26,11 @@ export const UserProvider = ({ children }) => {
         isExpertVerified,
         setExpertVerified,
         profileSetupData,
-        setProfileSetupData,preEditExpertData, setPreEditExpertData
+        emailForOtp,
+        setEmailForOtp,
+        setProfileSetupData,
+        preEditExpertData,
+        setPreEditExpertData,
       }}
     >
       {children}

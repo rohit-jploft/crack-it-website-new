@@ -13,7 +13,14 @@ import Axios from "axios";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import { toast } from "react-toastify";
 
-const AvatarModel = ({ show, handleClose, id, onlySet, setAvatarSvg }) => {
+const AvatarModel = ({
+  show,
+  handleClose,
+  id,
+  onlySet,
+  setAvatarSvg,
+  setIsDone,
+}) => {
   const [avatars, setAvatars] = useState([
     { avatar: Avatar1, id: 0, name: "avatar1.svg" },
     { avatar: Avatar2, id: 1, name: "avatar2.svg" },
@@ -29,28 +36,27 @@ const AvatarModel = ({ show, handleClose, id, onlySet, setAvatarSvg }) => {
   const [selectedAvatarName, setSelectedAvatarName] = useState("");
 
   const setAvatarInDb = async () => {
-   if(!onlySet){
-    const userId = localStorage.getItem("userId");
-    const res = await Axios.put(`${BASE_URL}auth/user/set/avatar/${id ? id : userId}`, {
-      avatar: selectedAvatarName,
-    });
-    console.log(res)
-    if (
-      res &&
-      res.data &&
-      res.data.success &&
-      res.data.status === 200
-    ) {
-      toast.success("Profile Avatar set successfully");
-      handleClose();
-      window.location.reload()
+    if (!onlySet) {
+      const userId = localStorage.getItem("userId");
+      const res = await Axios.put(
+        `${BASE_URL}auth/user/set/avatar/${id ? id : userId}`,
+        {
+          avatar: selectedAvatarName,
+        }
+      );
+      console.log(res);
+      if (res && res.data && res.data.success && res.data.status === 200) {
+        toast.success("Profile Avatar set successfully");
+        handleClose();
+        if (setIsDone) setIsDone(true);
+        // window.location.reload()
+      } else {
+        toast.error("Something went wrong");
+      }
     } else {
-      toast.error("Something went wrong");
+      setAvatarSvg(selectedAvatarName);
+      handleClose();
     }
-   } else {
-    setAvatarSvg(selectedAvatarName)
-    handleClose();
-   }
   };
   return (
     <Modal className="filter-mddl" show={show} onHide={handleClose}>

@@ -59,6 +59,7 @@ const EditExpertProfile = () => {
   const [profilePic, setProfilePic] = useState();
   const [recievedPic, setRecievedPic] = useState();
   const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
+  const [isDone, setIsDone] = useState(false)
   const {
     profileSetupData,
     setProfileSetupData,
@@ -234,7 +235,8 @@ const EditExpertProfile = () => {
   useEffect(() => {
     getUserData();
     getJobCateList();
-  }, [profilePicUploadDone]);
+    setIsDone(false)
+  }, [profilePicUploadDone, isDone]);
   useEffect(() => {
     // setStoreSkills([]);    /.tushasr
     getSubCateList();
@@ -259,7 +261,7 @@ const EditExpertProfile = () => {
         className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <AvatarModel show={open} handleClose={() => setOpen(false)} />
+        <AvatarModel show={open} handleClose={() => setOpen(false)}  setIsDone={(value) => setIsDone(value)}/>
         <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form

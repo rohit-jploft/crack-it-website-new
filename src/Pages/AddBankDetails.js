@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const validationSchema = Yup.object({
-  accountName: Yup.string().required("Account Name is required"),
+  accountName: Yup.string().required("Account Holder Name is required"),
   accountNo: Yup.number()
     .typeError("Account Number must be a number")
     .required("Account Number is required"),

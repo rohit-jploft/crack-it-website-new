@@ -339,7 +339,7 @@ const RequestCateg = () => {
                           onClick={() => setDuration(k.duration)}
                           style={{ cursor: "pointer" }}
                         >
-                          {k.hour} hour
+                          {k.hour === 0.5 ? k.duration : k.hour} {k.hour === 0.5 ? "Minutes" : "Hour"}
                         </div>
                       );
                     })}

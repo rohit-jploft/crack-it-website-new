@@ -13,13 +13,16 @@ import TextInput from "../components/InputField";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const OTP = () => {
-  const { setPhoneForOtp, phoneForOtp, resetToken, setResetToken } =
+  const { setPhoneForOtp, phoneForOtp, resetToken, setResetToken ,emailForOtp} =
     useContext(UserContext);
     const [disableButton, setDisableButton]= useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!phoneForOtp) {
+    // if (!phoneForOtp || !emailForOtp) {
+    //   navigate("/forgotpassword");
+    // }
+    if(!emailForOtp){
       navigate("/forgotpassword");
     }
   }, []);
@@ -31,12 +34,16 @@ const OTP = () => {
       otp: Yup.number().required("otp is required")
     }),
     onSubmit: async (values) => {
-      const res = await forgotPasswordVerifyOtp(phoneForOtp, values.otp);
+      const res = await forgotPasswordVerifyOtp(emailForOtp, values.otp, "EMAIL");
       console.log(res);
       if (res && res.status === 203) {
         toast.error(res.message, {
           autoClose: 800,
         });
+        setDisableButton(true)
+        setTimeout(() => {
+          setDisableButton(false)
+        },1500 )
       }
       if (res && res?.message && res?.success && res?.status === 200) {
         setResetToken(res.data.token);

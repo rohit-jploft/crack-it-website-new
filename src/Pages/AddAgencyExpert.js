@@ -94,6 +94,7 @@ const AddAgencyExpert = () => {
   const [recievedPic, setRecievedPic] = useState();
   const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
   const [avatarSvg, setAvatarSvg] = useState("");
+  const [isDone, setIsDone] = useState(false)
   const {
     profileSetupData,
     setProfileSetupData,
@@ -315,8 +316,9 @@ const AddAgencyExpert = () => {
     if (expertUserId) {
       setProfilePicUploadDone(false);
       getUserData();
+      setIsDone(false)
     }
-  }, [profilePicUploadDone]);
+  }, [profilePicUploadDone, isDone]);
   useEffect(() => {
     // getUserData();
     getJobCateList();
@@ -386,6 +388,7 @@ const AddAgencyExpert = () => {
           id={expertUserId}
           onlySet={expertUserId ? false : true}
           setAvatarSvg={(value) => setAvatarSvg(value)}
+          setIsDone={(value) => setIsDone(value)}
         />
         <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
@@ -524,6 +527,7 @@ const AddAgencyExpert = () => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
+                    inputStyle={{backgroundColor:expertUserId ? "#E5E4E2":"#fff"}}
                     value={
                       expertUserId
                         ? `+${formik.values.phone}`

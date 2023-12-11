@@ -39,11 +39,11 @@ export const createUser = async (data, dailCode) => {
 };
 
 // FORGOT PASSWORD STEP 1
-export const ForgotPasswordSendOtp = async (phone) => {
+export const ForgotPasswordSendOtp = async (email, type) => {
   try {
     const res = await Axios.post(
       `${BASE_URL}auth/user/forgot-password/send-otp`,
-      { mobile: phone, countryCode: "+91" }
+      { email: email, countryCode: "+91", type }
     );
     console.log(res);
     return res.data;
@@ -52,11 +52,11 @@ export const ForgotPasswordSendOtp = async (phone) => {
   }
 };
 // step 2
-export const forgotPasswordVerifyOtp = async (phone, otp) => {
+export const forgotPasswordVerifyOtp = async (email, otp, type) => {
   try {
     const res = await Axios.post(
       `${BASE_URL}auth/user/forgot-password/verify-otp`,
-      { mobile: phone, countryCode: "+91", otp: otp }
+      { email: email, countryCode: "+91", otp: otp , type}
     );
     console.log(res);
     return res.data;

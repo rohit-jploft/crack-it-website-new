@@ -149,6 +149,9 @@ const AgencyExpertBooking = () => {
                             JobCategory={meet.jobCategory.title}
                             day={getDayName(new Date(meet.date).getDay())}
                             expertName={`${meet.expert.firstName} ${meet.expert.lastName} `}
+                            userName={`${meet?.user?.firstName} ${meet?.user?.lastName} `}
+                            expertPic={meet?.expert?.profilePhoto}
+                            userPic={meet?.user?.profilePhoto}
                             startTime={getTimeFromTimestamps(meet.startTime)}
                             endTime={getTimeFromTimestamps(meet.endTime)}
                             experience={meet.expertData.experience}
@@ -173,6 +176,18 @@ const AgencyExpertBooking = () => {
                         </div>
                       );
                     })}
+                      {meetingData?.length === 0 && (
+                       <div
+                       style={{
+                         display: "flex",
+                         justifyContent: "center",
+                         alignItems: "center",
+                       }}
+                       className="no_chat"
+                     >
+                       You have no meetings
+                     </div>
+                    )}
                   </Tab>
                 );
               })}

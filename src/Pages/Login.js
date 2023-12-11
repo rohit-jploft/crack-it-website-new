@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const [created, setCreated] = useState(false);
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
+  const [disableButton, setDisableButton] = useState(false)
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -64,9 +65,17 @@ const Login = () => {
             },
             autoClose: 500,
           });
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          }, 1500);
           setCreated(false);
         } else {
-          toast.error("User not found");
+          toast.error("User not found", {autoClose:500});
+          setDisableButton(true)
+          setTimeout(() => {
+            setDisableButton(false)
+          }, 1500);
         }
       }
       if (res?.data && res?.data?.type === "error") {
@@ -80,7 +89,7 @@ const Login = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-          <div className="brand-logo">
+        <div className="brand-logo" onClick={() => navigate("/")} style={{cursor:"pointer"}}>
             <img src={Logo} alt="Logo" />
           </div>
           <div className="login-form form_sect">
@@ -119,7 +128,7 @@ const Login = () => {
                 Forgot password?
               </div>
 
-              <button className="form-btn" type="submit">
+              <button className="form-btn" type="submit" disabled={disableButton}>
                 LOGIN
               </button>
 

@@ -59,6 +59,7 @@ const Signup = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [dailCode, setDialCode] = useState();
+  const [disbaleSignUpButton, setDisbaleSignUpButton] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -92,8 +93,12 @@ const Signup = (props) => {
       console.log(res, "response signup");
       if (res.response && res.response.data) {
         toast.error(res.response.data.message, {
-          autoClose: 800,
+          autoClose: 500,
         });
+        setDisbaleSignUpButton(true);
+        setTimeout(() => {
+          setDisbaleSignUpButton(false);
+        }, 1500);
       }
       if (res && res?.data && res.data?.userId) {
         toast.success(res.message, {
@@ -101,12 +106,16 @@ const Signup = (props) => {
             setCreated(false);
             navigate("/login");
           },
-          autoClose: 800,
+          autoClose: 500,
         });
         // props.close(false);
       }
       if (res?.type === "error" && res?.status === 200)
-        toast(res.message, { type: "error" });
+        toast(res.message, { type: "error", autoClose:500});
+      setDisbaleSignUpButton(true);
+      setTimeout(() => {
+        setDisbaleSignUpButton(false);
+      }, 1500);
       setCreated(false);
     },
   });
@@ -125,7 +134,11 @@ const Signup = (props) => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-          <div className="brand-logo">
+          <div
+            className="brand-logo"
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
             <img src={Logo} alt="Logo" />
           </div>
           <div className="signup-form form_sect">
@@ -210,14 +223,16 @@ const Signup = (props) => {
                         textAlign: "left",
                         marginLeft: "9px",
                         fontSize: "13px",
-                        marginBottom: Boolean(formik.errors.phone) ? "15px" :"-4px",
+                        marginBottom: Boolean(formik.errors.phone)
+                          ? "15px"
+                          : "-4px",
                         marginTop: "3px",
                       }}
                     >
                       <span>{formik.touched.phone && formik.errors.phone}</span>
                     </div>
                   )}
-                 
+
                   {/* <PhoneInput
                   country={'in'}
                   className="country-selector"
@@ -331,31 +346,37 @@ const Signup = (props) => {
 
                   {/* <span style={{ color: "red", fontSize: "10px", marginTop:'-7px' }}>error</span> */}
                 </div>
-                <div class="checkbox_div" style={{display:"flex", flexDirection:"column"}}>
-                 <div> <input
-                    type="checkbox"
-                    name="termAndConditions"
-                    id="3"
-                    value={formik.values.termAndConditions}
-                    onChange={formik.handleChange}
-                  />
-                  <label for="">
+                <div
+                  class="checkbox_div"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <div>
                     {" "}
-                    By signing up, you're agree to our{" "}
-                    <span
-                      style={{ cursor: "pointer" }}
-                      onClick={() => navigate("/terms-conditions")}
-                    >
-                      Terms & Conditions
-                    </span>{" "}
-                    and{" "}
-                    <span
-                      style={{ cursor: "pointer" }}
-                      onClick={() => navigate("/privacy-policy")}
-                    >
-                      Privacy Policy
-                    </span>
-                  </label></div>
+                    <input
+                      type="checkbox"
+                      name="termAndConditions"
+                      id="3"
+                      value={formik.values.termAndConditions}
+                      onChange={formik.handleChange}
+                    />
+                    <label for="">
+                      {" "}
+                      By signing up, you're agree to our{" "}
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => navigate("/terms-conditions")}
+                      >
+                        Terms & Conditions
+                      </span>{" "}
+                      and{" "}
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => navigate("/privacy-policy")}
+                      >
+                        Privacy Policy
+                      </span>
+                    </label>
+                  </div>
                   {formik.touched.termAndConditions &&
                     Boolean(formik.errors.termAndConditions) && (
                       <div
@@ -377,7 +398,11 @@ const Signup = (props) => {
                 </div>
                 <div className="row">
                   <div className="col-md-6">
-                    <button type="submit" className="form-btn">
+                    <button
+                      type="submit"
+                      className="form-btn"
+                      disabled={disbaleSignUpButton}
+                    >
                       SIGN UP
                     </button>
                   </div>
@@ -390,7 +415,7 @@ const Signup = (props) => {
               </div>
 
               <p className="para-btm">
-                I have an account? <Link to="/Login">Login</Link>
+                You have an account ? <Link to="/Login">Login</Link>
               </p>
             </form>
           </div>

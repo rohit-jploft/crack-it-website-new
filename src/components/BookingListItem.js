@@ -80,7 +80,7 @@ const BookingListItem = ({
         <br />
         {startTime} - {endTime}
       </div>
-      {!isThisExpert && (
+      {!isThisExpert && !isThisAgency && (
         <div className="profile-detail">
           <div>
             {expertPic && (
@@ -95,6 +95,18 @@ const BookingListItem = ({
         </div>
       )}
       {isThisExpert && (
+        <div className="profile-detail">
+          <div>
+            {userPic && <img src={`${AVATAR_BASE_URL}${userPic}`} alt="img" />}
+            {!userPic && <img src={Bookingimg} alt="img" />}
+          </div>
+          <div>
+            <h4>{userName}</h4>
+            {/* <p>{JobCategory}</p> */}
+          </div>
+        </div>
+      )}
+      {isThisAgency && (
         <div className="profile-detail">
           <div>
             {userPic && <img src={`${AVATAR_BASE_URL}${userPic}`} alt="img" />}
@@ -155,9 +167,13 @@ const BookingListItem = ({
             Rate
           </button>
         )}
-        {isExpertRated && status === "COMPLETED" && (
+        {isExpertRated && isThisUser && status === "COMPLETED" && (
           <button className="btn_success">{status}</button>
         )}
+        {isExpertRated ||
+          (isThisAgency && status === "COMPLETED" && (
+            <button className="btn_success">{status}</button>
+          ))}
         {!isThisExpert && status === "ACCEPTED" && (
           <button
             className="btn_border"

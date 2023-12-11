@@ -10,14 +10,15 @@ import Star from "./../Images/star.svg";
 import { useContext, useEffect, useState } from "react";
 import { createBooking, listExpert } from "../data/booking";
 import { BookingContext } from "../context/bookingContext";
-import { Rating as RatingComponent } from "@mui/material";
+import { Rating as RatingComponent,  } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Chip from '@mui/material/Chip';
 import { Button, Modal } from "react-bootstrap";
 import MultiRangeSlider from "../components/MultiRangeSlider";
 import MultiRangeSliderExp from "../components/MultiRangeSliderExp";
 import Loader from "../components/Loader";
+import { AVATAR_BASE_URL } from "../constant";
 const Experts = () => {
   const { jobCategory, getReqData, time } = useContext(BookingContext);
   const navigate = useNavigate();
@@ -296,6 +297,7 @@ const Experts = () => {
                         <th width="1%"></th>
                         <th width="15%">Name</th>
                         <th width="24%">Expertise</th>
+                        <th width="24%">Expert Type</th>
                         <th width="15%">Experience</th>
                         <th width="15%">Price/hr</th>
                         <th width="15%">Rating</th>
@@ -314,7 +316,7 @@ const Experts = () => {
                             <td>
                               <img
                                 className="prof-img"
-                                src={Bookingimg}
+                                src={expert && expert?.user && expert?.user?.profilePhoto ? `${AVATAR_BASE_URL}${expert?.user?.profilePhoto}` :Bookingimg }
                                 alt="img"
                               />
                             </td>
@@ -322,11 +324,12 @@ const Experts = () => {
                               {expert?.user?.firstName} {expert?.user?.lastName}
                             </td>
                             <td>{expert?.jobCategory?.title}</td>
+                            <td>{expert && expert.user && expert?.user?.agency ? <Chip label="Agency" variant="outlined" /> :  <Chip label="Individual" variant="outlined" />}</td>
                             <td>{expert?.experience} year</td>
                             <td>${expert?.price}/hr</td>
                             <td>
                               <img className="star-img" src={Star} alt="img" />{" "}
-                              {parseFloat(expert?.rating).toFixed(2)}
+                              {expert?.rating}
                             </td>
                             <td>
                               {/* <Link to={`/ExpertsProfile/${expert?.user?._id}`}> */}

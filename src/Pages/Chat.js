@@ -2,16 +2,18 @@ import "./../style.css";
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
 import Send from "./../Images/send.svg";
 import Bookingimg from "./../Images/booking-img.svg";
 import Bookingimg2 from "./../Images/booking-img2.svg";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import {
   getConversation,
   getConvoMessage,
   searchConvoApi,
   sendMessage,
 } from "../data/chat";
+import EmojiIcon from "../Images/emojiIcon.png";
 import { useEffect, useState, useRef } from "react";
 import { format, render, cancel, register } from "timeago.js";
 import Socket from "../data/socket";
@@ -29,6 +31,7 @@ const Chat = () => {
     convoId || null
   );
   const [newMessage, setNewMessage] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
   const [convoData, setConvoData] = useState(null);
   const [latestMsg, setLatestMsg] = useState("");
   const [lastestMsgTime, setLatestMsgTime] = useState("");
@@ -114,6 +117,7 @@ const Chat = () => {
       content: messageText,
       chat: selectedConversation,
     };
+    if (showEmoji) setShowEmoji(false);
     if (file) newMessage.audio = file;
     const sentMsg = await sendMessage(
       selectedConversation,
@@ -285,19 +289,21 @@ const Chat = () => {
                                 }}
                               >
                                 {/* <h6>{format(message?.createdAt)}</h6> */}
-                                {message?.sender?._id !== userId && <img
-                                  src={
-                                    message?.sender?.profilePhoto
-                                      ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
-                                      : DefaultAvatar
-                                  }
-                                  alt="img"
-                                  style={{
-                                    width: "50px",
-                                    height: "50px",
-                                    margin: "2px",
-                                  }}
-                                />}
+                                {message?.sender?._id !== userId && (
+                                  <img
+                                    src={
+                                      message?.sender?.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${message?.sender?.profilePhoto}`
+                                        : DefaultAvatar
+                                    }
+                                    alt="img"
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      margin: "2px",
+                                    }}
+                                  />
+                                )}
                                 <img
                                   alt="image"
                                   src={imgurl}
@@ -311,7 +317,7 @@ const Chat = () => {
                                     width: "200px",
                                     height: "130px",
                                     borderRadius: 0,
-                                    border:"2px solid green"
+                                    border: "2px solid green",
                                   }}
                                 />
                               </li>
@@ -459,6 +465,30 @@ const Chat = () => {
                     {selectedConversation && (
                       <div class="message-input">
                         <div class="wrap">
+                          <img
+                            src={EmojiIcon}
+                            style={{
+                              width: "35px",
+                              height: "35px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setShowEmoji(!showEmoji)}
+                          />
+                          {showEmoji && (
+                            <div
+                              style={{
+                                marginBottom: "500px",
+                                position: "absolute",
+                              }}
+                            >
+                              <Picker
+                                data={data}
+                                onEmojiSelect={(e) => {
+                                  setNewMessage(`${newMessage}${e.native}`);
+                                }}
+                              />
+                            </div>
+                          )}
                           <input
                             type="text"
                             value={file ? file.name : newMessage}
@@ -466,6 +496,7 @@ const Chat = () => {
                             onKeyPress={(e) => {
                               if (e.key === "Enter")
                                 handleSendMessage(newMessage);
+                              if (showEmoji) setShowEmoji(false);
                             }}
                             placeholder="Write your message..."
                           />

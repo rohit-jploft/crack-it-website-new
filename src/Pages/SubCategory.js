@@ -27,7 +27,7 @@ const SubCategory = () => {
   } = useContext(BookingContext);
   const { profileSetupData, setProfileSetupData } = useContext(UserContext);
   const [subCategoryData, setSubCategoryData] = useState();
-  const [disableButton, setDisableButton]= useState(false)
+  const [disableButton, setDisableButton] = useState(false);
   const [skills, setSkills] = useState();
   const [search, setSearch] = useState("");
   console.log(jobCategory);
@@ -35,7 +35,7 @@ const SubCategory = () => {
     const data = await getCategoryList(parent);
     console.log(data);
     setSubCategoryData(data.data);
-    setSubCategory(data.data[0]._id)
+    setSubCategory(data.data[0]._id);
   };
   const getSkillsData = async (parent, search) => {
     const data = await getCategoryList(parent, search);
@@ -121,7 +121,7 @@ const SubCategory = () => {
     const user = localStorage.getItem("userId");
     const role = localStorage.getItem("role");
     const data = {
-      agency:user,
+      agency: user,
       description: profileSetupData?.description,
 
       languages: profileSetupData?.languages,
@@ -161,7 +161,7 @@ const SubCategory = () => {
                 <div className="search-box">
                   <input
                     type="text"
-                    placeholder="Search here..."
+                    placeholder="Search skills..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -196,6 +196,19 @@ const SubCategory = () => {
                                 </div>
                               );
                             })}
+                            {skills && skills.length === 0 && (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width:"100%"
+                                }}
+                                // className="no_chat"
+                              >
+                                No results
+                              </div>
+                            )}
                           </div>
                         </Tab>
                       );
@@ -232,13 +245,18 @@ const SubCategory = () => {
                     disabled={disableButton}
                     onClick={() => {
                       const isThisExpert = isExpert();
-                      if (storeSkills.length > 0 && !isThisExpert && !isThisAgency) {
+                      if (
+                        storeSkills.length > 0 &&
+                        !isThisExpert &&
+                        !isThisAgency
+                      ) {
                         navigate("/RequestCateg");
                       }
                       if (storeSkills.length === 0) {
-                        toast.error("please select atleast one skill", {autoClose:1000});
+                        toast.error("please select atleast one skill", {
+                          autoClose: 1000,
+                        });
                       }
-                      
 
                       if (isThisExpert) {
                         setupExpertProfileData();
@@ -246,10 +264,10 @@ const SubCategory = () => {
                       if (isThisAgency) {
                         setupAgencyprofileData();
                       }
-                      setDisableButton(true)
+                      setDisableButton(true);
                       setTimeout(() => {
-                        setDisableButton(false)
-                      },1500 )
+                        setDisableButton(false);
+                      }, 1500);
                     }}
                   >
                     CONTINUE

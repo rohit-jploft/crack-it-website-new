@@ -25,6 +25,7 @@ const Rating = () => {
   const [expertData, setExpertData] = useState();
   const [rateValue, setRateValue] = useState(0);
   const [comment, setComment] = useState("");
+  const [disableButton, setDisableButton] = useState();
 
   const getRatingProfileData = async () => {
     try {
@@ -67,7 +68,11 @@ const Rating = () => {
       console.log(data, "rating response");
     } catch (error) {
       console.log(error);
-      return toast.error(error.message);
+       toast.error(error.message, {autoClose:500});
+       setDisableButton(true)
+       setTimeout(() => {
+        setDisableButton(false)
+       }, 1500);
     }
   };
   return (
@@ -134,6 +139,7 @@ const Rating = () => {
                   <Button
                     className="btn_continue"
                     onClick={() => submitReview()}
+                    disabled={disableButton}
                   >
                     SUBMIT REVIEW
                   </Button>

@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { isAgency, isExpert } from "../utils/authHelper";
 import { UserContext } from "../context/userContext";
+import { BASE_URL } from "../constant";
 const JobCategory = () => {
   const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState([]);
@@ -72,7 +73,7 @@ const JobCategory = () => {
                         onClick={() => setJobCategory(item._id)}
                       >
                         <div className="categ-img">
-                          <img src={Dataeng} alt="img" />
+                          <img src={`${BASE_URL}${item?.image}`} alt="img" style={{width:"80px", height:"90px"}}/>
                         </div>
                         <p>{item.title}</p>
                       </div>

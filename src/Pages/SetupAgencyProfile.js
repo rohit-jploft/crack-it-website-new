@@ -49,7 +49,7 @@ const SetupAgencyProfile = () => {
       phone: "",
       description: "",
       experience: "",
-      languages: [],
+      languages: ["US English"],
     },
     onSubmit: (values) => {
       // Handle form submission here
@@ -170,6 +170,7 @@ const SetupAgencyProfile = () => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
+                    inputStyle={{backgroundColor:"#E5E4E2"}}
                     style={{outerWidth:"100%"}}
                     value={`+${userData?.phone}`}
                     // value={formik.values.phone}
@@ -251,11 +252,13 @@ const SetupAgencyProfile = () => {
                               <input
                                 type="checkbox"
                                 id=""
+                                required
                                 name="languages"
                                 checked={formik.values.languages.includes(lang)}
                                 onChange={(e) => handleCheckboxChange(e, lang)}
                               />
                               <label for="">{lang}</label>
+
                             </div>
                           );
                         }

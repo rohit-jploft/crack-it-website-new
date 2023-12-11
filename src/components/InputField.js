@@ -13,8 +13,11 @@ const TextInput = ({
   error,
   helperText,
   readonly,
-  max
- 
+  max,
+ step,
+ pattern,
+ style,
+ autoComplete
 }) => {
   const handleKeyPress = (e) => {
     // Get the pressed key
@@ -35,11 +38,18 @@ const TextInput = ({
       </label>
       <input
         type={type}
+        step={type === 'number' ? step : null}
+        pattern={type === 'number' ? pattern : null}
         maxLength={max}
         name={name}
         value={value}
+        style={{...style, backgroundColor:readonly ? "#E5E4E2" : "white", paddingRight: setShowPassword ? "40px" : "0px"}}
         onKeyPress={handleKeyPress}
         onChange={handleChange}
+        onPaste={(e) =>{
+          e.preventDefault()
+          return true
+        }}
         class="form-control"
         id="exampleFormControlInput1"
         placeholder={placeholder}
@@ -47,7 +57,6 @@ const TextInput = ({
         
         readOnly={readonly}
         
-        style={{ paddingRight: setShowPassword ? "40px" : "0px" }}
       />
       {setShowPassword && (
         <img

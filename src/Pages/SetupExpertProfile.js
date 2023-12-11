@@ -47,6 +47,8 @@ const SetupExpertProfile = () => {
   const { open, setOpen } = useContext(ModelContext);
   const [dailCode, setDialCode] = useState();
   const [avatarSvg, setAvatarSvg] = useState("");
+  const [isDone, setIsDone] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -56,7 +58,7 @@ const SetupExpertProfile = () => {
       description: "",
       experience: "",
       price: "",
-      languages: [],
+      languages: ["US English"],
     },
     onSubmit: (values) => {
       // Handle form submission here
@@ -99,7 +101,8 @@ const SetupExpertProfile = () => {
   };
   useEffect(() => {
     getUserData();
-  }, []);
+    setIsDone(false)
+  }, [isDone]);
   return (
     <>
       <section className="main_sect">
@@ -113,6 +116,7 @@ const SetupExpertProfile = () => {
             id={expertUserId}
             onlySet={expertUserId ? false : true}
             setAvatarSvg={(value) => setAvatarSvg(value)}
+            setIsDone={(value) => setIsDone(value)}
           />
           <div className="signup-form form_sect">
             <form
@@ -207,6 +211,7 @@ const SetupExpertProfile = () => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
+                    inputStyle={{backgroundColor:"#E5E4E2"}}
                     style={{ outerWidth: "100%" }}
                     value={`+${userData?.phone}`}
                     // value={formik.values.phone}
@@ -223,7 +228,11 @@ const SetupExpertProfile = () => {
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
-                      {formik.touched.phone && Boolean(formik.errors.phone) && <span style={{color:"red", fontSize:"14px"}}>{formik.touched.phone && formik.errors.phone}</span>}
+                  {formik.touched.phone && Boolean(formik.errors.phone) && (
+                    <span style={{ color: "red", fontSize: "14px" }}>
+                      {formik.touched.phone && formik.errors.phone}
+                    </span>
+                  )}
                 </div>
 
                 <div className="col-md-12">
@@ -241,7 +250,7 @@ const SetupExpertProfile = () => {
                       placeholder=""
                       rows={3}
                     />
-                    
+
                     {formik.touched.description &&
                       Boolean(formik.errors.description) && (
                         <div
@@ -267,14 +276,17 @@ const SetupExpertProfile = () => {
                       label="Price *"
                       name="price"
                       type="number"
+                      step="0.01"
+                      
+                      pattern="\d+(\.\d{1,2})?"
                       value={formik.values.price}
                       handleChange={(e) => {
                         const inputValue = e.target.value;
                         // Custom validation: Allow only numbers and limit to 10 digits.
-                        const regex = /^(?!.*e)\d{0,5}$/;
-                        if (regex.test(inputValue)) {
+                        // const regex = /^(?!.*e)\d{0,5}$/;
+                        // if (regex.test(inputValue)) {
                           formik.setFieldValue("price", inputValue);
-                        }
+                        // }
                       }}
                       error={
                         formik.touched.price && Boolean(formik.errors.price)
