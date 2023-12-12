@@ -46,10 +46,10 @@ const TextInput = ({
         style={{...style, backgroundColor:readonly ? "#E5E4E2" : "white", paddingRight: setShowPassword ? "40px" : "0px"}}
         onKeyPress={handleKeyPress}
         onChange={handleChange}
-        onPaste={(e) =>{
-          e.preventDefault()
-          return true
-        }}
+        // onPaste={(e) =>{
+        //   e.preventDefault()
+        //   return true
+        // }}
         class="form-control"
         id="exampleFormControlInput1"
         placeholder={placeholder}
