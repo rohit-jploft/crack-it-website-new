@@ -118,10 +118,10 @@ const BookingListItem = ({
           </div>
         </div>
       )}
-      <div className="experience">
+     {!isThisUser &&  <div className="experience">
         <p>Experience</p>
         <h4>{experience} year</h4>
-      </div>
+      </div>}
       <div className="action">
         {cancelButton && status !== "REQUESTED" && (
           <button
@@ -170,10 +170,12 @@ const BookingListItem = ({
         {isExpertRated && isThisUser && status === "COMPLETED" && (
           <button className="btn_success">{status}</button>
         )}
-        {isExpertRated ||
-          (isThisAgency && status === "COMPLETED" && (
-            <button className="btn_success">{status}</button>
-          ))}
+        {isThisAgency && status === "COMPLETED" && (
+          <button className="btn_success">{status}</button>
+        )}
+        {isThisExpert && status === "COMPLETED" && (
+          <button className="btn_success">{status}</button>
+        )}
         {!isThisExpert && status === "ACCEPTED" && (
           <button
             className="btn_border"

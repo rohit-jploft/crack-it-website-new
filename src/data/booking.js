@@ -1,12 +1,12 @@
 import Axios from "axios";
 import { BASE_URL } from "../constant";
 
-export const getAllmeetings = async (tabStatus) => {
+export const getAllmeetings = async (tabStatus, limit) => {
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role");
   try {
     const res = await Axios.get(
-      `${BASE_URL}booking/get-all?tabStatus=${tabStatus}&userId=${userId}&role=${role}`
+      `${BASE_URL}booking/get-all?tabStatus=${tabStatus}&userId=${userId}&role=${role}&limit=${limit}`
     );
     return res.data;
   } catch (error) {

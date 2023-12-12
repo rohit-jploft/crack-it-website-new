@@ -46,15 +46,18 @@ const MyBookings = () => {
   const [bookingCancelId, setBookingCancelId] = useState();
   const [bookingDeclineId, setBookingDeclineId] = useState();
   const [cancelDone, setCancelDone] = useState(false);
+  const [limit, setLimit] = useState(10)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [meetingData, setMeetingData] = useState([]);
+  const [totalCount, setTotalCount] = useState([]);
 
   const [key, setKey] = useState(tabKey ? tabKey : "Upcoming");
   const getData = async () => {
-    const res = await getAllmeetings(key);
+    const res = await getAllmeetings(key, limit);
     console.log(res, "meetings");
     setMeetingData(res.data);
+    setTotalCount(res?.pagination?.totalCount)
   };
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const MyBookings = () => {
   useEffect(() => {
     setCancelDone(false);
     getData();
-  }, [key, cancelDone]);
+  }, [key, cancelDone, limit]);
 
   const cancelBooking = async (bookingId) => {
     const role = localStorage.getItem("role");
@@ -220,6 +223,14 @@ const MyBookings = () => {
                        You have no meetings
                      </div>
                     )}
+                    {limit < totalCount && <div  style={{
+                         display: "flex",
+                         justifyContent: "center",
+                         alignItems: "center",
+                         cursor:"pointer"
+                       }} onClick={() => setLimit(limit+10)}>
+                        <span style={{textDecoration:"underline", color:"grey"}}>Load more</span>
+                    </div>}
                   </Tab>
                 );
               })}

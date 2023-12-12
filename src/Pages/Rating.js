@@ -46,26 +46,30 @@ const Rating = () => {
   const submitReview = async () => {
     const loggedUserId = localStorage.getItem("userId");
     try {
-      const data = await Axios.post(`${BASE_URL}rating/create`, {
-        expert: expertId,
-        ratedBy: loggedUserId,
-        rating: rateValue,
-        bookingId:ratingBookingId,
-        comment: comment,
-      });
-      if (
-        data &&
-        data.data &&
-        data.data.data &&
-        data.data.data &&
-        data.data.success &&
-        data.data.status === 200
-      ) {
-        toast.success("Expert rated successfully", { autoClose: 600 });
-        setRatingBookingId("")
-        navigate("/myBookings");
+      if(rateValue){
+        const data = await Axios.post(`${BASE_URL}rating/create`, {
+          expert: expertId,
+          ratedBy: loggedUserId,
+          rating: rateValue,
+          bookingId:ratingBookingId,
+          comment: comment,
+        });
+        if (
+          data &&
+          data.data &&
+          data.data.data &&
+          data.data.data &&
+          data.data.success &&
+          data.data.status === 200
+        ) {
+          toast.success("Expert rated successfully", { autoClose: 600 });
+          setRatingBookingId("")
+          navigate("/myBookings");
+        }
+        console.log(data, "rating response");
+      } else {
+        toast.error("Please rate the expert on a scale of 1 to 5.");
       }
-      console.log(data, "rating response");
     } catch (error) {
       console.log(error);
        toast.error(error.message, {autoClose:500});
