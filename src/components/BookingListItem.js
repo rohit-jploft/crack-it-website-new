@@ -118,7 +118,7 @@ const BookingListItem = ({
           </div>
         </div>
       )}
-     {!isThisUser &&  <div className="experience">
+     {isThisUser &&  <div className="experience">
         <p>Experience</p>
         <h4>{experience} year</h4>
       </div>}

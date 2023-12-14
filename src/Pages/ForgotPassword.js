@@ -14,6 +14,7 @@ import { ForgotPasswordSendOtp } from "../data/user";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../context/userContext";
+import Loader from "../components/Loader";
 
 const phoneOrEmailSchema = Yup.string().test('phoneOrEmail', 'Invalid phone or email', (value) => {
   if (!value) return true; // Allow empty input
@@ -33,6 +34,7 @@ const phoneOrEmailSchema = Yup.string().test('phoneOrEmail', 'Invalid phone or e
 const Forgotpassword = () => {
   const navigate = useNavigate();
   const [dailCode, setDialCode] = useState("+91");
+  const [isLoading, setIsLoading] = useState(false)
   const [disableButton, setDisableButton]= useState(false)
   const { setPhoneForOtp, phoneForOtp, emailForOtp, setEmailForOtp } = useContext(UserContext);
   const formik = useFormik({
@@ -54,10 +56,12 @@ const Forgotpassword = () => {
     }),
     onSubmit: async (values) => {
       // const { phone } = values;
+      setIsLoading(true)
       const { email } = values;
       const res = await ForgotPasswordSendOtp(email, "EMAIL");
       console.log(res, "response signup");
       if (res.response && res.response.data.data) {
+        setIsLoading(false)
         toast.error(res.response.data.data.message, {
           autoClose: 800,
         });
@@ -65,8 +69,11 @@ const Forgotpassword = () => {
       if (res && res?.message && res?.success) {
         setEmailForOtp(email);
         setDisableButton(true)
+        setIsLoading(false)
+
         setTimeout(() => {
           setDisableButton(false)
+
         },3500 )
         toast.success("OTP Sent successfully")
         navigate('/otp')
@@ -76,6 +83,8 @@ const Forgotpassword = () => {
       if (!res?.success && res?.status === 200)
         toast(res.message, { type: "error" , autoClose:500});
         setDisableButton(true)
+        setIsLoading(false)
+        
         setTimeout(() => {
           setDisableButton(false)
         },1500 )
@@ -86,6 +95,7 @@ const Forgotpassword = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
+          <Loader open={isLoading}/>
           <div className="brand-logo">
             <img src={Logo} alt="Logo" />
           </div>

@@ -27,6 +27,7 @@ const MyProfile = () => {
   const [show, setShow] = useState(false);
   const [userdata, setUserData] = useState(false);
   const [profilePic, setProfilePic] = useState();
+  const [isDone, setIsDone] = useState(false)
   const [showLogOutModal, setShowLogoutModal] = useState(false);
   const [recievedPic, setRecievedPic] = useState();
   const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
@@ -79,7 +80,8 @@ const MyProfile = () => {
   };
   useEffect(() => {
     getUserData();
-  }, [profilePicUploadDone]);
+    setIsDone(false)
+  }, [profilePicUploadDone, isDone]);
   // set profile pic functions
   const fileInputRef = useRef(null);
   const handleIconClick = () => {
@@ -92,7 +94,7 @@ const MyProfile = () => {
       <Header />
       <ToastContainer />
       <section className="">
-        <AvatarModel show={open} handleClose={() => setOpen(false)} />
+        <AvatarModel show={open} handleClose={() => setOpen(false)} setIsDone={(value) => setIsDone(value)}/>
         <Container>
           <div className="main-content">
             <div className="job-categ">

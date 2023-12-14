@@ -15,12 +15,17 @@ import * as Yup from "yup";
 import { createWithDrawalReq, getAllBankDetails } from "../data/wallet";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DeleteIcon from "../Images/deleteIcon.png";
+import { deleteBank } from "../data/bank";
+import { formatEarnings } from "../helper/helper";
 
 const WithdrawAmount = () => {
   const navigate = useNavigate();
 
   const { walletAmount, setWalletAmount } = useContext(UserContext);
-
+  const [showBankDeleteConfirm, setShowBankDeleteConfirm] = useState(false);
+  const [selectedDeleteId, setSeletedDeleteId] = useState("");
+  const [isBankDeleted, setIsBankDeleted] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose2 = () => {
     setShow(false);
@@ -40,16 +45,28 @@ const WithdrawAmount = () => {
   };
   useEffect(() => {
     getBanksData();
-  }, []);
+    setIsBankDeleted(false)
+  }, [isBankDeleted]);
   const createWithdrawReq = async (obj) => {
     const userId = localStorage.getItem("userId");
     const data = await createWithDrawalReq({ ...obj, user: userId });
     console.log(data);
     if (data && data?.data && data?.status === 200 && data?.success) {
       handleShow2(); // navigate("/withdraw-amount");
-    } 
-    if(data.status === 202 && !data.success){
-        toast.error(data.message);
+    }
+    if (data.status === 202 && !data.success) {
+      toast.error(data.message);
+    }
+  };
+  const deleteBankAccount = async (id) => {
+    const res = await deleteBank(id);
+    console.log(res);
+    if (res && res?.status === 200 && res.success) {
+      setIsBankDeleted(true);
+      toast.success("Bank deleted successfully");
+    } else {
+      toast.error("Somwthing went wrong");
+      setIsBankDeleted(true);
     }
   };
   const formik = useFormik({
@@ -68,7 +85,7 @@ const WithdrawAmount = () => {
   });
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <Header />
       <section className="">
         <Container>
@@ -118,7 +135,7 @@ const WithdrawAmount = () => {
                               Bank Name <b>{bank?.bankName}</b>
                             </p>
                             <p>
-                            Account Holder Name <b>{bank?.accountName}</b>
+                              Account Holder Name <b>{bank?.accountName}</b>
                             </p>
                             <p>
                               Account Number <b>{bank?.accountNo}</b>
@@ -127,19 +144,38 @@ const WithdrawAmount = () => {
                               IFSC Code <b>{bank?.ifscCode}</b>
                             </p>
                           </div>
-                          <label className="radio-button">
-                            <input
-                              type="radio"
-                              class="radio-button__input"
-                              id="choice1-1"
-                              name="bank"
-                              checked={formik.values.bank === bank._id}
-                              onChange={() =>
-                                formik.setFieldValue("bank", bank._id)
-                              }
+                          <div
+                            style={{
+                              flexDirection: "row",
+                              height: "50%",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            {" "}
+                            <img
+                              src={DeleteIcon}
+                              height="30px"
+                              width="30px"
+                              style={{ marginRight: "30px", cursor: "pointer" }}
+                              onClick={() => {
+                                setShowBankDeleteConfirm(true);
+                                setSeletedDeleteId(bank?._id);
+                              }}
                             />
-                            <span className="radio-button__control"></span>
-                          </label>
+                            <label className="radio-button">
+                              <input
+                                type="radio"
+                                class="radio-button__input"
+                                id="choice1-1"
+                                name="bank"
+                                checked={formik.values.bank === bank._id}
+                                onChange={() =>
+                                  formik.setFieldValue("bank", bank._id)
+                                }
+                              />
+                              <span className="radio-button__control"></span>
+                            </label>
+                          </div>
                         </div>
                       );
                     })}
@@ -174,19 +210,38 @@ const WithdrawAmount = () => {
                             <img className="upi-img" src={Upi} alt="img" />
                             {item?.upiId}
                           </div>
-                          <label className="radio-button">
-                            <input
-                              type="radio"
-                              class="radio-button__input"
-                              id="choice1-1"
-                              name="bank"
-                              checked={formik.values.bank === item._id}
-                              onChange={() =>
-                                formik.setFieldValue("bank", item._id)
-                              }
-                            />
-                            <span className="radio-button__control"></span>
-                          </label>
+                          <div
+                            style={{
+                              flexDirection: "row",
+                              height: "50%",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            {" "}
+                            <img
+                              src={DeleteIcon}
+                              height="30px"
+                              width="30px"
+                              style={{ marginRight: "30px", cursor: "pointer" }}
+                              onClick={() => {
+                                setShowBankDeleteConfirm(true);
+                                setSeletedDeleteId(item?._id);
+                              }}
+                            />{" "}
+                            <label className="radio-button">
+                              <input
+                                type="radio"
+                                class="radio-button__input"
+                                id="choice1-1"
+                                name="bank"
+                                checked={formik.values.bank === item._id}
+                                onChange={() =>
+                                  formik.setFieldValue("bank", item._id)
+                                }
+                              />
+                              <span className="radio-button__control"></span>
+                            </label>
+                          </div>
                         </div>
                       );
                     })}
@@ -206,7 +261,7 @@ const WithdrawAmount = () => {
                     )}
                   </div>
                   <div className="expert-price pt-0 pb-0">
-                    <h4>${formik?.values?.amount}</h4>
+                    <h4>{formik?.values?.amount && "$"}{formik?.values?.amount && formatEarnings(formik?.values?.amount)}</h4>
                   </div>
                   <div className="">
                     <Button type="submit" className="btn-pay">
@@ -227,6 +282,38 @@ const WithdrawAmount = () => {
           <Modal.Title>
             Your withdraw request submitted successfully!
           </Modal.Title>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showBankDeleteConfirm}
+        onHide={() => {
+          setShowBankDeleteConfirm(false);
+        }}
+        className="cancel_modal"
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          {/* <img src={DeleteIcon} alt="img" height="30px" width="30px"/> */}
+          <Modal.Title>
+            Are you sure you want the Delete bank account
+          </Modal.Title>
+          <Button
+            className="no-btn"
+            onClick={() => {
+              setShowBankDeleteConfirm(false);
+            }}
+          >
+            No
+          </Button>
+          <Button
+            className="yes-btn"
+            onClick={() => {
+              deleteBankAccount(selectedDeleteId);
+              setShowBankDeleteConfirm(false);
+            }}
+          >
+            Yes
+          </Button>
         </Modal.Body>
       </Modal>
     </>

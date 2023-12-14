@@ -7,6 +7,8 @@ import Bookingimg from "./../Images/booking-img.svg";
 import Bookingimg2 from "./../Images/booking-img2.svg";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import PdfICon from "../Images/pdf_icon.png";
+import MusicIcon from "../Images/audio.png";
 import {
   getConversation,
   getConvoMessage,
@@ -465,6 +467,39 @@ const Chat = () => {
                     {selectedConversation && (
                       <div class="message-input">
                         <div class="wrap">
+                          {file && (
+                            <p className="img-name">
+                              <span>
+                                <img
+                                  src={
+                                    file.type === "application/pdf"
+                                      ? PdfICon
+                                      : file.type.split("/")[0] === "audio"
+                                      ? MusicIcon
+                                      : `${URL.createObjectURL(file)}`
+                                  }
+                                  style={{
+                                    width: "50px",
+                                    height: "40px",
+                                    marginTop: "-4px",
+                                  }}
+                                  alt=""
+                                  title=""
+                                  class="img-small"
+                                />
+                                {file?.name}
+                              </span>{" "}
+                              <button onClick={() => setFile()}>
+                                <img
+                                  src="   https://cdn-icons-png.flaticon.com/512/660/660252.png "
+                                  style={{ width: "22px" }}
+                                  alt=""
+                                  title=""
+                                  class="img-small"
+                                />
+                              </button>
+                            </p>
+                          )}
                           <img
                             src={EmojiIcon}
                             style={{
@@ -491,7 +526,7 @@ const Chat = () => {
                           )}
                           <input
                             type="text"
-                            value={file ? file.name : newMessage}
+                            value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyPress={(e) => {
                               if (e.key === "Enter")

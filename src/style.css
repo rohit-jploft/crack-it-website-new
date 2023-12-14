@@ -2218,6 +2218,7 @@ td a {
   line-height: 20px;
   border-radius: 15px 15px 0px 15px;
   padding: 17px 20px;
+  text-align: left;
   margin-bottom: 7px;
 }
 #frame .content .messages ul li.replies h6 {
@@ -2465,7 +2466,7 @@ td a {
   padding: 14px 15px;
 }
 .action button {
-  width: 85px !important;
+  width: 105px !important;
   height: 35px !important;
   font-size: 14px;
 }
@@ -2511,6 +2512,16 @@ button.navbar-toggler {
 }
 
 @media(max-width: 767px){
+  .info-content {
+    display: block;
+}
+.info-detail, .payment-info {
+  width: 100%;
+  margin-top: 10px;
+}
+.main-content .bookings_tabs {
+  justify-content: space-between;
+}
 .header-right a .btn_login, .header-right .btn_signup {
     width: auto !important;
     padding:  5px 15px;
@@ -3384,7 +3395,7 @@ button.navbar-toggler {
     height: 180px;
 }
 .categ-detail {
-    width: 110px;
+    width: 100%;
 }
 .job-categ h3 {
     font-size: 20px;
@@ -3455,7 +3466,9 @@ input[type='number'] {
   font-size: 18px;
   text-align: center;
 }
-
+.react-tel-input {
+  margin-bottom: 25px;
+}
 .react-tel-input .form-control{
   height: 60px !important;
   border-radius: 8px !important;
@@ -3476,4 +3489,22 @@ input[type='number'] {
   height: 98% !important; 
   top: 1px;
   left: 1px;
+}
+
+.img-name{
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  top: -41px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  background-color: #fff;
+}
+.img-name button{
+  padding: 0;
+  border: 0;
+  background-color: transparent;
 }
