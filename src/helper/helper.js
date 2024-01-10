@@ -87,23 +87,33 @@ export function getCurrentDate() {
 export function addMinutesToDate(date, minutesToAdd) {
   return new Date(date.getTime() + minutesToAdd * 60000);
 }
-export const convertDateStampToTimeZone =  (dateStamp, timeZone) => {
-  console.log(dateStamp, timeZone, "inputs")
+export const convertDateStampToTimeZone = (dateStamp, timeZone) => {
+  console.log(dateStamp, timeZone, "inputs");
   const time = timeZoneList.find((t) => t.symbol === timeZone.toString());
   const date = new Date(dateStamp.toString());
-  console.log(date, "offSetTime")
-  console.log(time, "offSetTime")
-  const modifiedDateStamp =  addMinutesToDate(date, time.offsetMinutes);
+  console.log(date, "offSetTime");
+  console.log(time, "offSetTime");
+  const modifiedDateStamp = addMinutesToDate(date, time.offsetMinutes);
 
   return new Date(modifiedDateStamp);
 };
 export function isDateTodayOrAbove(inputDate) {
   // Get the current date in UTC (year-month-date format)
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split("T")[0];
 
   // Convert the inputDate to a UTC date string
-  const inputUTCDate = new Date(inputDate).toISOString().split('T')[0];
+  const inputUTCDate = new Date(inputDate).toISOString().split("T")[0];
 
   // Compare the input date with the current date
   return inputUTCDate >= currentDate;
+}
+export function isDateToday(inputDate) {
+  const today = new Date();
+  const selectedDate = new Date(inputDate);
+
+  // Set hours, minutes, seconds, and milliseconds to 0 for both dates
+  today.setHours(0, 0, 0, 0);
+  selectedDate.setHours(0, 0, 0, 0);
+
+  return selectedDate.getTime() === today.getTime();
 }

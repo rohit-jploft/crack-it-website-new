@@ -97,7 +97,7 @@ const Resetpassword = () => {
                   name="confirmPassword"
                   value={formik.values.confirmPassword}
                   handleChange={formik.handleChange}
-                  label="Password *"
+                  label="Confirm Password *"
                   showPassword={showConfirmPassword}
                   setShowPassword={(value) => setShowConfirmPassword(value)}
                   error={

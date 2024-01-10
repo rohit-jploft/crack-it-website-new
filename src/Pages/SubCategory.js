@@ -202,7 +202,7 @@ const SubCategory = () => {
                                   display: "flex",
                                   justifyContent: "center",
                                   alignItems: "center",
-                                  width:"100%"
+                                  width: "100%",
                                 }}
                                 // className="no_chat"
                               >
@@ -252,17 +252,33 @@ const SubCategory = () => {
                       ) {
                         navigate("/RequestCateg");
                       }
-                      if (storeSkills.length === 0) {
+                      if (
+                        !isThisExpert &&
+                        !isThisAgency &&
+                        storeSkills.length === 0
+                      ) {
                         toast.error("please select atleast one skill", {
                           autoClose: 1000,
                         });
                       }
 
                       if (isThisExpert) {
-                        setupExpertProfileData();
+                        if (storeSkills.length === 0) {
+                          toast.error("please select atleast one skill", {
+                            autoClose: 1000,
+                          });
+                        } else {
+                          setupExpertProfileData();
+                        }
                       }
                       if (isThisAgency) {
-                        setupAgencyprofileData();
+                        if (storeSkills.length === 0) {
+                          toast.error("please select atleast one skill", {
+                            autoClose: 1000,
+                          });
+                        } else {
+                          setupAgencyprofileData();
+                        }
                       }
                       setDisableButton(true);
                       setTimeout(() => {

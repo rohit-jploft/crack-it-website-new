@@ -233,10 +233,15 @@ const ExpertsProfile = () => {
         open={showLogOutModal}
         handleClose={() => setShowLogoutModal(false)}
         logOut={() => {
+          const role = localStorage.getItem("role")
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
-          navigate("/login");
+          if(role==='AGENCY'){
+            navigate("/agency/login");
+          } else {
+            navigate("/login");
+          }
         }}
       />
       <Modal show={show} onHide={handleClose1} className="cancel_modal">

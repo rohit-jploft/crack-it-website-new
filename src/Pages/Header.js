@@ -306,9 +306,15 @@ const Header = () => {
         open={showLogOutModal}
         handleClose={() => setShowLogoutModal(false)}
         logOut={() => {
+          const role = localStorage.getItem("role")
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          navigate("/login");
+          localStorage.removeItem("role");
+          if(role==='AGENCY'){
+            navigate("/agency/login");
+          } else {
+            navigate("/login");
+          }
         }}
       />
     </>

@@ -70,7 +70,7 @@ const AvatarModel = ({
                 className={`img-img ${
                   selectedAvatar === avatar.id ? "active" : ""
                 }`}
-                key={index}
+                key={avatar?.id}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   setSelectedAvatar(avatar.id);

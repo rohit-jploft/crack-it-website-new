@@ -13,7 +13,12 @@ import { getCategoryList } from "../data/booking";
 import { durationList } from "../helper/duration";
 import { ToastContainer, toast } from "react-toastify";
 import { getAllTimeZones } from "../data/timeZone";
-import { getCurrentDate, isDateTodayOrAbove } from "../helper/helper";
+import {
+  getCurrentDate,
+  isDateToday,
+  isDateTodayOrAbove,
+} from "../helper/helper";
+import moment from "moment";
 const RequestCateg = () => {
   const [key, setKey] = useState();
   const [disableButton, setDisableButton] = useState(false);
@@ -37,6 +42,20 @@ const RequestCateg = () => {
     getReqData,
   } = useContext(BookingContext);
   const [subCategoryData, setSubCategoryData] = useState();
+  const [currentTime, setCurrentTime] = useState(moment().format("HH:mm"));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = moment(); // Current time using moment
+      const formattedTime = now.format("HH:mm"); // Format as HH:mm
+      console.log(formattedTime, "formattedTime");
+      setCurrentTime(formattedTime);
+    }, 60000); // Update every second
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
+  }, []); // Run only once on component mount
+  console.log(currentTime, "currentTime");
   const [skills, setSkills] = useState();
   const [timeZoneData, setTimeZoneData] = useState();
   const [error, setErrors] = useState({
@@ -113,18 +132,7 @@ const RequestCateg = () => {
       setStoreSkills(newArr);
     }
   }
-  const getCurrentTime = () => {
-    const curr = new Date();
-    let hour = curr.getHours();
-    let minute = curr.getMinutes();
 
-    // Adding leading zero manually if needed
-    hour = hour < 10 ? `0${hour}` : hour;
-    minute = minute < 10 ? `0${minute}` : minute;
-
-    return `${hour}:${minute}`;
-  };
-  // const minTime = getCurrentTime()
   return (
     <>
       <Header />
@@ -269,7 +277,7 @@ const RequestCateg = () => {
                           onChange={(e) => setTime(e.target.value)}
                           className="form-control"
                           id="exampleFormControlInput1"
-                          placeholder=""
+                          placeholder="Select time"
                           // min={minTime}
                         />
                         {/* <img class="visible-icon" src={Time3} alt=""></img> */}
@@ -339,7 +347,8 @@ const RequestCateg = () => {
                           onClick={() => setDuration(k.duration)}
                           style={{ cursor: "pointer" }}
                         >
-                          {k.hour === 0.5 ? k.duration : k.hour} {k.hour === 0.5 ? "Minutes" : "Hour"}
+                          {k.hour === 0.5 ? k.duration : k.hour}{" "}
+                          {k.hour === 0.5 ? "Minutes" : "Hour"}
                         </div>
                       );
                     })}
@@ -369,11 +378,31 @@ const RequestCateg = () => {
                       error.skills ||
                       error.subCategory ||
                       error.time ||
-                      error.timeZone || disableButton
+                      error.timeZone ||
+                      disableButton
                     }
                     onClick={() => {
+                      // if (time < getCurrentTime()) {
+                      //   toast(
+                      //     "please dont select the previous past time for the meeting",
+                      //     { type: "error", autoClose: 1000 }
+                      //   );
+                      // } else {
                       if (isDateTodayOrAbove(date)) {
-                        navigate("/Experts");
+                        console.log(time, "time");
+                        console.log(currentTime, "currentTime");
+                        if (isDateToday(date)) {
+                          if (time > currentTime) {
+                            navigate("/Experts");
+                          } else {
+                            toast(
+                              "please dont select the previous time for the meeting",
+                              { type: "error", autoClose: 1000 }
+                            );
+                          }
+                        } else {
+                          navigate("/Experts");
+                        }
                       } else {
                         toast(
                           "please dont select the previous date for the meeting",

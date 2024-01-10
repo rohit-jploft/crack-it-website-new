@@ -43,9 +43,10 @@ const validationSchema = Yup.object().shape({
     .min(100, "Description should minimum length of 100")
     .required("Description is required"),
   price: Yup.number().required("price is required"),
-  languages: Yup.array(
-    Yup.string().required("Atleast one language is required")
-  ),
+  languages: Yup.array()
+    .of(Yup.string()) // Assuming your languages are represented as strings
+    .min(1, "At least one language is required") // Ensure at least one checkbox is checked
+    .required("At least one language is required"),
 });
 const EditExpertProfile = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const EditExpertProfile = () => {
   const [profilePic, setProfilePic] = useState();
   const [recievedPic, setRecievedPic] = useState();
   const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState(false);
   const {
     profileSetupData,
     setProfileSetupData,
@@ -235,7 +236,7 @@ const EditExpertProfile = () => {
   useEffect(() => {
     getUserData();
     getJobCateList();
-    setIsDone(false)
+    setIsDone(false);
   }, [profilePicUploadDone, isDone]);
   useEffect(() => {
     // setStoreSkills([]);    /.tushasr
@@ -261,7 +262,11 @@ const EditExpertProfile = () => {
         className="main_sect main_sect_inner"
         style={{ display: "flex", justifyContent: "center" }}
       >
-        <AvatarModel show={open} handleClose={() => setOpen(false)}  setIsDone={(value) => setIsDone(value)}/>
+        <AvatarModel
+          show={open}
+          handleClose={() => setOpen(false)}
+          setIsDone={(value) => setIsDone(value)}
+        />
         <div className="content-left content_inner">
           <div className="signup-form form_sect add_expert_form">
             <form
@@ -433,9 +438,9 @@ const EditExpertProfile = () => {
                       name="jobCategory"
                       value={formik.values.jobCategory}
                       onChange={(e) => {
-                        setStoreSkills([])
+                        setStoreSkills([]);
 
-                        formik.handleChange(e)
+                        formik.handleChange(e);
                       }}
                       className="form-control"
                       id=""
@@ -592,40 +597,24 @@ const EditExpertProfile = () => {
                           );
                         }
                       )}
-                      {formik.touched.languages &&
-                        Boolean(formik.errors.languages) && (
-                          <div
-                            style={{
-                              color: "red",
-                              textAlign: "left",
-                              marginLeft: "9px",
-                              fontSize: "13px",
-                              marginBottom: "-4px",
-                              marginTop: "3px",
-                            }}
-                          >
-                            {formik.touched.languages && (
-                              <span>{formik.errors.languages}</span>
-                            )}
-                          </div>
-                        )}
-                      {/* <div>
-                        <input type="checkbox" id="" name="" value="" />
-                        <label for=""> US English</label>
-                      </div>
-                      <div>
-                        <input type="checkbox" id="" name="" value="" />
-                        <label for=""> German</label>
-                      </div>
-                      <div>
-                        <input type="checkbox" id="" name="" value="" />
-                        <label for=""> Italian</label>
-                      </div>
-                      <div>
-                        <input type="checkbox" id="" name="" value="" />
-                        <label for=""> French</label>
-                      </div> */}
                     </div>
+                    {formik.touched.languages &&
+                      Boolean(formik.errors.languages) && (
+                        <div
+                          style={{
+                            color: "red",
+                            textAlign: "left",
+                            marginLeft: "9px",
+                            fontSize: "13px",
+                            marginBottom: "-4px",
+                            marginTop: "3px",
+                          }}
+                        >
+                          {formik.touched.languages && (
+                            <span>{formik.errors.languages}</span>
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>

@@ -37,7 +37,8 @@ if (isThisExpert) {
 
 const MyBookings = () => {
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
-  const [tabArray, setTabArray] = useState(["Requested", "Upcoming", "Past"]);
+  const userRole = localStorage.getItem("role");
+  const [tabArray, setTabArray] = useState(userRole==="USER" ? ["Requested", "Upcoming", "Past"] : ["New", "Upcoming", "Past"]);
   const navigate = useNavigate();
   const { tabKey } = useParams();
   const [show, setShow] = useState(false);
@@ -54,7 +55,7 @@ const MyBookings = () => {
 
   const [key, setKey] = useState(tabKey ? tabKey : "Upcoming");
   const getData = async () => {
-    const res = await getAllmeetings(key, limit);
+    const res = await getAllmeetings(key==="New" ? "Requested" : key, limit);
     console.log(res, "meetings");
     setMeetingData(res.data);
     setTotalCount(res?.pagination?.totalCount)
@@ -62,7 +63,7 @@ const MyBookings = () => {
 
   useEffect(() => {
     if (isThisExpert) {
-      setTabArray(["Requested", "Upcoming", "Past"]);
+      setTabArray(["New", "Upcoming", "Past"]);
     }
   }, []);
   useEffect(() => {

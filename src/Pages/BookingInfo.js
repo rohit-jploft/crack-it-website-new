@@ -7,7 +7,11 @@ import Bookingimg2 from "./../Images/default_avatar.png";
 import Time2 from "./../Images/time2.svg";
 import Message2 from "./../Images/message2.svg";
 import { getSingleBookingDetail } from "../data/booking";
-import { convertDateStampToTimeZone, getDateFromTimeStamps, getTimeFromTimestamps } from "../helper/helper";
+import {
+  convertDateStampToTimeZone,
+  getDateFromTimeStamps,
+  getTimeFromTimestamps,
+} from "../helper/helper";
 import TextInput from "../components/InputField";
 import Axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
@@ -15,6 +19,7 @@ import { AVATAR_BASE_URL, BASE_URL, STRIPE_PUBLIC_KEY } from "../constant";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PaymentContext } from "../context/paymentContext";
+import { getWallet } from "../data/wallet";
 import { Button, Modal } from "react-bootstrap";
 
 import {
@@ -23,8 +28,10 @@ import {
   FormControlLabel,
   RadioGroup,
   Radio,
+  Card,
 } from "@mui/material";
 import { isExpert } from "../utils/authHelper";
+import Loader from "../components/Loader";
 
 const BookingInfo = () => {
   const { bookingId } = useParams();
@@ -39,8 +46,10 @@ const BookingInfo = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentAmount, setPaymentAmount] = useState();
   const [walletPaymentDone, setWalletPaymentDone] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [walletAmount, setWalletAmount] = useState();
   const isThisExpert = isExpert();
-  
+
   const getBookingData = async () => {
     const data = await getSingleBookingDetail(bookingId);
     console.log(data, "bookingData");
@@ -50,7 +59,7 @@ const BookingInfo = () => {
     getBookingData();
     setPromoApplied(false);
     setPromoRemoved(false);
-    setWalletPaymentDone(false)
+    setWalletPaymentDone(false);
   }, [promoApplied, promoRemoved, bookingId, walletPaymentDone]);
 
   const applyPromoCode = async () => {
@@ -118,7 +127,9 @@ const BookingInfo = () => {
       if (result.error) {
         console.log(result.error);
       }
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       return error;
     }
   };
@@ -126,35 +137,104 @@ const BookingInfo = () => {
   const userId = localStorage.getItem("userId");
 
   const paymentProceed = async () => {
+    const stripe = await loadStripe(STRIPE_PUBLIC_KEY);
+
+    setIsLoading(true);
     if (paymentMethod === "STRIPE" && paymentAmount) {
+      setShowPaymentMethodModel(false);
       makePayment(paymentAmount, bookingId);
     }
     if (paymentMethod === "WALLET" && paymentAmount) {
+      setShowPaymentMethodModel(false);
       const payWallet = await Axios.put(`${BASE_URL}payment/wallet`, {
         bookingId: bookingId,
         amount: paymentAmount,
         userId: userId,
       });
-      if(payWallet && payWallet.data.success && payWallet.data.data){
-        toast.success("Payment successfull")
-        setShowPaymentMethodModel(false)
-        setWalletPaymentDone(true)
-      } else if(payWallet && !payWallet.data.success){
-        setShowPaymentMethodModel(false)
-        toast.error(payWallet?.data?.message, {autoClose:300})
-      }
-      else {
-        toast.error("Something went wrong")
-      }
-      console.log(payWallet, "response after payment through wallet")
+      console.log(payWallet.data, "payWallet");
+      setTimeout(
+        () => {
+          setIsLoading(false);
+
+          if (
+            payWallet &&
+            payWallet.data.success &&
+            payWallet.data.data &&
+            payWallet.data.data?.id
+          ) {
+            console.log("wallet api done");
+            setBookingIdAfterPayment(payWallet.data.data?.bookingId);
+            localStorage.setItem(
+              "bookingIdAfterPayment",
+              payWallet.data.data?.bookingId
+            );
+            localStorage.setItem("sessionId", payWallet.data.data?.id);
+            localStorage.setItem(
+              "walletTransactionId",
+              payWallet.data.data?.walletTransactionId
+            );
+            const result = stripe.redirectToCheckout({
+              sessionId: payWallet?.data?.data?.id,
+            });
+
+            if (result.error) {
+              console.log(result.error);
+            }
+
+            setWalletPaymentDone(true);
+            setIsLoading(false);
+          } else if (
+            payWallet &&
+            payWallet.data.success &&
+            payWallet.data.data &&
+            !payWallet.data.data?.id
+          ) {
+            setWalletPaymentDone(true);
+            setIsLoading(false);
+            toast.success("Payment successfull");
+          } else if (payWallet && !payWallet.data.success) {
+            setIsLoading(false);
+            toast.error(payWallet?.data?.message, { autoClose: 300 });
+          } else {
+            setIsLoading(false);
+            toast.error("Something went wrong");
+          }
+          console.log(payWallet, "response after payment through wallet");
+          setIsLoading(false);
+        },
+        payWallet ? 2000 : 3000
+      );
     }
   };
-  console.log(bookingData?.booking?.booking?.startTime, "startTime")
+  // console.log(bookingData?.booking?.booking?.startTime, "startTime");
+
+  // wallet data
+  const getWalletData = async () => {
+    const data = await getWallet();
+    setWalletAmount(data?.data?.wallet?.amount);
+  };
+
+  useEffect(() => {
+    if (
+      (showPaymentMethodModel || !showPaymentMethodModel) &&
+      paymentMethod === "WALLET"
+    ) {
+      getWalletData();
+    }
+  }, [paymentMethod, showPaymentMethodModel]);
   return (
     <>
       <Header />
       <ToastContainer />
       <section className="">
+        <Loader
+          open={isLoading}
+          title={
+            paymentMethod === "WALLET"
+              ? "Processing Payment through Wallet.."
+              : "Processing Payment"
+          }
+        />
         <Container>
           <div className="main-content">
             <div class="content-head">
@@ -184,22 +264,46 @@ const BookingInfo = () => {
                 {isThisExpert && <h6>Service Taker Info</h6>}
                 <div className="profile-detail">
                   <div>
-                   {!isThisExpert &&  <img src={bookingData?.booking?.booking?.expert?.profilePhoto ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.expert?.profilePhoto}` : Bookingimg2} alt="img" />}
-                   {isThisExpert &&  <img src={bookingData?.booking?.booking?.expert?.profilePhoto ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.user?.profilePhoto}` : Bookingimg2} alt="img" />}
+                    {!isThisExpert && (
+                      <img
+                        src={
+                          bookingData?.booking?.booking?.expert?.profilePhoto
+                            ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.expert?.profilePhoto}`
+                            : Bookingimg2
+                        }
+                        alt="img"
+                      />
+                    )}
+                    {isThisExpert && (
+                      <img
+                        src={
+                          bookingData?.booking?.booking?.user?.profilePhoto
+                            ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.user?.profilePhoto}`
+                            : Bookingimg2
+                        }
+                        alt="img"
+                      />
+                    )}
                   </div>
                   <div>
-                   {!isThisExpert && <h4>
-                      {bookingData?.booking?.booking?.expert?.firstName}{" "}
-                      {bookingData?.booking?.booking?.expert?.lastName}
-                    </h4>}
-                   {isThisExpert && <h4>
-                      {bookingData?.booking?.booking?.user?.firstName}{" "}
-                      {bookingData?.booking?.booking?.user?.lastName}
-                    </h4>}
-                   {!isThisExpert && <p>
-                      {bookingData?.expertProfile?.jobCategory?.title} |{" "}
-                      {bookingData?.expertProfile?.experience} year
-                    </p>}
+                    {!isThisExpert && (
+                      <h4>
+                        {bookingData?.booking?.booking?.expert?.firstName}{" "}
+                        {bookingData?.booking?.booking?.expert?.lastName}
+                      </h4>
+                    )}
+                    {isThisExpert && (
+                      <h4>
+                        {bookingData?.booking?.booking?.user?.firstName}{" "}
+                        {bookingData?.booking?.booking?.user?.lastName}
+                      </h4>
+                    )}
+                    {!isThisExpert && (
+                      <p>
+                        {bookingData?.expertProfile?.jobCategory?.title} |{" "}
+                        {bookingData?.expertProfile?.experience} year
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -210,7 +314,11 @@ const BookingInfo = () => {
                       <img src={Time2} alt="img" />
                     </div>
                     <div>
-                      <h5>Date & Time{" "}{"("}{bookingData?.booking?.booking?.timeZone}{")"}</h5>
+                      <h5>
+                        Date & Time {"("}
+                        {bookingData?.booking?.booking?.timeZone}
+                        {")"}
+                      </h5>
                       <p>
                         {getDateFromTimeStamps(
                           bookingData?.booking?.booking?.date
@@ -368,10 +476,72 @@ const BookingInfo = () => {
                   />
                 </RadioGroup>
               </FormControl>
+              {paymentMethod === "WALLET" && (
+                <div
+                  style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    padding: "15px",
+                    backgroundColor: "#f9f9f9",
+                    margin: "10px 0",
+                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <h6 style={{ margin: "5px 0", color: "#666" }}>
+                        Wallet Amount:
+                      </h6>
+                      <span style={{ fontWeight: "bold", color: "#333" }}>
+                        ${walletAmount}
+                      </span>
+                    </div>
+                    {parseFloat(bookingData?.booking?.grandTotal) -
+                      walletAmount >=
+                      0 && (
+                      <div style={{ display: "flex" }}>
+                        <h6 style={{ margin: "5px 0", color: "#666" }}>
+                          Remaining Amount:
+                        </h6>
+                        <span style={{ fontWeight: "bold", color: "#333" }}>
+                          $
+                          {parseFloat(bookingData?.booking?.grandTotal) -
+                            walletAmount}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              {paymentMethod === "WALLET" &&
+                parseFloat(bookingData?.booking?.grandTotal) - walletAmount >
+                  0 && (
+                  <span style={{ width: "100%" }}>
+                    Note: Remaining wil be processed through Credit & Debit
+                    cards
+                  </span>
+                )}
             </div>
 
             <Button className="yes-btn" onClick={() => paymentProceed()}>
-              Pay
+              Pay{" "}
+              {paymentMethod === "WALLET"
+                ? `$${
+                    parseFloat(bookingData?.booking?.grandTotal) -
+                      walletAmount >=
+                    0
+                      ? parseFloat(bookingData?.booking?.grandTotal) -
+                        walletAmount
+                      : 0
+                  }`
+                : "$" + parseFloat(bookingData?.booking?.grandTotal)}
             </Button>
           </Modal.Body>
         </Modal>

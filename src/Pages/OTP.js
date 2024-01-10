@@ -69,7 +69,7 @@ const OTP = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-          <div className="brand-logo">
+        <div className="brand-logo" onClick={() => navigate("/")} style={{cursor:"pointer"}}>
             <img src={Logo} alt="Logo" />
           </div>
           <div className="login-form form_sect">
@@ -80,7 +80,7 @@ const OTP = () => {
               }}
             >
               <h2>Enter OTP</h2>
-              <p>6-digits code sent to your mobile number</p>
+              <p>6-digits code sent to your email address</p>
               <div class="input-field">
                 {/* <label for="exampleFormControlInput1" class="form-label">
                   Enter OTP

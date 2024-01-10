@@ -6,6 +6,7 @@ import Send from "./../Images/send.svg";
 import Bookingimg from "./../Images/booking-img.svg";
 import Bookingimg2 from "./../Images/booking-img2.svg";
 import data from "@emoji-mart/data";
+import ExpertImg from "./../Images/default_avatar.png";
 import Picker from "@emoji-mart/react";
 import PdfICon from "../Images/pdf_icon.png";
 import MusicIcon from "../Images/audio.png";
@@ -46,6 +47,8 @@ const Chat = () => {
   const [file, setFile] = useState();
   const [newMsgObj, setNewMsgObj] = useState();
   const scrollRef = useRef(null);
+  const emojiPickerRef = useRef(null);
+
   useEffect(() => {
     Socket.emit("addUser", localStorage.getItem("userId"));
     Socket.on("getUsers", (users) => {
@@ -152,6 +155,27 @@ const Chat = () => {
   const userId = localStorage.getItem("userId");
   console.log(isUser(), "isUser");
   const isThisUser = isUser();
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
+        setShowEmoji(false);
+      }
+    };
+
+    if (showEmoji) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showEmoji, emojiPickerRef]);
+
   return (
     <>
       <Header />
@@ -184,8 +208,14 @@ const Chat = () => {
                                     isUserNameDisplay(
                                       conversation?.participants[1]?._id
                                     )
-                                      ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
-                                      : `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                      ? conversation?.participants[0]
+                                          ?.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
+                                        : ExpertImg
+                                      : conversation?.participants[1]
+                                          ?.profilePhoto
+                                      ? `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                      : ExpertImg
                                   }
                                   alt="img"
                                 />
@@ -194,8 +224,14 @@ const Chat = () => {
                                     !isUserNameDisplay(
                                       conversation?.participants[1]?._id
                                     )
-                                      ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
-                                      : `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                      ? conversation?.participants[0]
+                                          ?.profilePhoto
+                                        ? `${AVATAR_BASE_URL}${conversation?.participants[0]?.profilePhoto}`
+                                        : ExpertImg
+                                      : conversation?.participants[1]
+                                          ?.profilePhoto
+                                      ? `${AVATAR_BASE_URL}${conversation?.participants[1]?.profilePhoto}`
+                                      : ExpertImg
                                   }
                                   alt="img"
                                   style={{ marginLeft: "-40px" }}
@@ -521,6 +557,7 @@ const Chat = () => {
                                 onEmojiSelect={(e) => {
                                   setNewMessage(`${newMessage}${e.native}`);
                                 }}
+                                ref={emojiPickerRef}
                               />
                             </div>
                           )}

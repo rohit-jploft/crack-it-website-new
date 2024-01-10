@@ -9,30 +9,39 @@ import "react-toastify/dist/ReactToastify.css";
 const CheckPayment = () => {
   const { bookingIdAfterPayment, setBookingIdAfterPayment } =
     useContext(PaymentContext);
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const checkAndVerifyPayment = async () => {
     const sessionId = localStorage.getItem("sessionId");
     const bookingIdAfterPayment = localStorage.getItem("bookingIdAfterPayment");
+    const walletTransactionId = localStorage.getItem("walletTransactionId");
+  
     const check = await Axios.put(`${BASE_URL}payment/intent/check`, {
       type: "session",
       id: sessionId,
       bookingId: bookingIdAfterPayment,
+      walletTransactionId: walletTransactionId ? walletTransactionId : null,
     });
-    console.log(check)
-    if(check.data.status === 200){
-        navigate("/Mybookings")
-        toast.success("Payment successfull")
+    console.log(check);
+    if (check.data.status === 200) {
+      // localStorage.removeItem("bookingIdAfterPayment");
+      // localStorage.removeItem("sessionId");
+      // localStorage.removeItem("walletTransactionId");
+      navigate("/Mybookings");
+      toast.success("Payment successfull");
     } else {
-        navigate("/Mybookings")
-        toast.error("Payment failed")
+      // localStorage.removeItem("bookingIdAfterPayment");
+      // localStorage.removeItem("sessionId");
+      // localStorage.removeItem("walletTransactionId");
+      navigate("/Mybookings");
+      toast.error("Payment failed");
     }
   };
   useEffect(() => {
-    checkAndVerifyPayment()
-  },[])
+    checkAndVerifyPayment();
+  }, []);
   return (
     <div className="payment_loader">
-        <ToastContainer/>
+      <ToastContainer />
       <h5>
         {" "}
         <CircularProgress color="success" />

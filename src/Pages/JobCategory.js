@@ -39,7 +39,6 @@ const JobCategory = () => {
       if (isThisExpert) {
         navigate("/setup-profile");
       }
-     
     }
     if (
       !profileSetupData?.description ||
@@ -49,7 +48,6 @@ const JobCategory = () => {
       if (isThisAgency) {
         navigate("/agency/setup-profile");
       }
-     
     }
   });
   return (
@@ -59,10 +57,29 @@ const JobCategory = () => {
       <section className="">
         <Container>
           <div className="main-content">
+            <h3 className="tile-slct">Select Your Job Category</h3>
+            <div className="row">
+              {categoryData?.map((item) => {
+                return (
+                  <div className="col-lg-3 col-md-4">
+                    <div
+                      class={`job-cate-card  ${
+                        jobCategory === item._id ? "active" : ""
+                      }`}
+                       onClick={() => setJobCategory(item._id)}
+                    >
+                      <div class="categ-img">
+                        <img src={`${BASE_URL}${item?.image}`} alt="img" />
+                      </div>
+                      <p>{item.title}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
             <div className="job-categ">
               <div>
-                <h3>Select Your Job Category</h3>
-                <div className="categories">
+                {/* <div className="categories">
                   {categoryData?.map((item) => {
                     return (
                       <div
@@ -79,7 +96,7 @@ const JobCategory = () => {
                       </div>
                     );
                   })}
-                </div>
+                </div> */}
                 <div className="text-center">
                   {/* <Link to="/subCategory"> */}
                   <button

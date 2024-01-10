@@ -27,8 +27,16 @@ import AvatarModel from "../components/AvatarModel";
 import PhoneInput from "react-phone-input-2";
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required("First Name is required"),
-  lastName: Yup.string().required("Last Name is required"),
+  firstName: Yup.string()
+    .matches(/^[A-Za-z]+$/, "First Name can only contain letters")
+    .min(3, "First Name must be at least 3 characters")
+    .max(20, "First Name must not exceed 20 characters")
+    .required("First Name is required"),
+  lastName: Yup.string()
+    .matches(/^[A-Za-z]+$/, "Last Name can only contain letters")
+    .min(3, "Last Name must be at least 3 characters")
+    .max(20, "Last Name must not exceed 20 characters")
+    .required("Last Name is required"),
   email: Yup.string()
     .email("Invalid email format")
     .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
@@ -51,9 +59,10 @@ const validationSchema = Yup.object().shape({
     .min(100, "Description should minimum length of 100")
     .required("Description is required"),
   price: Yup.number().required("price is required"),
-  languages: Yup.array(
-    Yup.string().required("Atleast one language is required")
-  ),
+  languages: Yup.array()
+    .of(Yup.string()) // Assuming your languages are represented as strings
+    .min(1, "At least one language is required") // Ensure at least one checkbox is checked
+    .required("At least one language is required"),
 });
 const validationSchemaWithOutPassword = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
@@ -75,9 +84,10 @@ const validationSchemaWithOutPassword = Yup.object().shape({
     .min(100, "Description should minimum length of 100")
     .required("Description is required"),
   price: Yup.number().required("price is required"),
-  languages: Yup.array(
-    Yup.string().required("Atleast one language is required")
-  ),
+  languages: Yup.array()
+    .of(Yup.string()) // Assuming your languages are represented as strings
+    .min(1, "At least one language is required") // Ensure at least one checkbox is checked
+    .required("At least one language is required"),
 });
 const AddAgencyExpert = () => {
   const { expertUserId } = useParams();
@@ -94,7 +104,7 @@ const AddAgencyExpert = () => {
   const [recievedPic, setRecievedPic] = useState();
   const [profilePicUploadDone, setProfilePicUploadDone] = useState(false);
   const [avatarSvg, setAvatarSvg] = useState("");
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState(false);
   const {
     profileSetupData,
     setProfileSetupData,
@@ -196,6 +206,7 @@ const AddAgencyExpert = () => {
             email: values.email,
             phone: values.phone,
             password: values.password,
+            countryCode: dailCode,
             description: values?.description,
             jobCategory: values?.jobCategory,
             price: values?.price,
@@ -316,7 +327,7 @@ const AddAgencyExpert = () => {
     if (expertUserId) {
       setProfilePicUploadDone(false);
       getUserData();
-      setIsDone(false)
+      setIsDone(false);
     }
   }, [profilePicUploadDone, isDone]);
   useEffect(() => {
@@ -527,7 +538,9 @@ const AddAgencyExpert = () => {
                     autoCorrect="off"
                     placeholder="Enter a Valid Phone Number"
                     country={"in"}
-                    inputStyle={{backgroundColor:expertUserId ? "#E5E4E2":"#fff"}}
+                    inputStyle={{
+                      backgroundColor: expertUserId ? "#E5E4E2" : "#fff",
+                    }}
                     value={
                       expertUserId
                         ? `+${formik.values.phone}`
@@ -619,9 +632,9 @@ const AddAgencyExpert = () => {
                       name="jobCategory"
                       value={formik.values.jobCategory}
                       onChange={(e) => {
-                        setStoreSkills([])
+                        setStoreSkills([]);
 
-                        formik.handleChange(e)
+                        formik.handleChange(e);
                       }}
                       className="form-control"
                       id=""
@@ -763,7 +776,7 @@ const AddAgencyExpert = () => {
                       {["US English", "German", "Italian", "French"].map(
                         (lang, index) => {
                           return (
-                            <div key={index}>
+                            <div key={index} style={{ display: "flex" }}>
                               <input
                                 type="checkbox"
                                 id=""
@@ -771,6 +784,10 @@ const AddAgencyExpert = () => {
                                 checked={formik?.values?.languages?.includes(
                                   lang
                                 )}
+                                style={{
+                                  width: "max-content",
+                                  marginRight: "6px",
+                                }}
                                 onChange={(e) => handleCheckboxChange(e, lang)}
                               />
                               <label for="">{lang}</label>
@@ -778,23 +795,7 @@ const AddAgencyExpert = () => {
                           );
                         }
                       )}
-                      {formik.touched.languages &&
-                        Boolean(formik.errors.languages) && (
-                          <div
-                            style={{
-                              color: "red",
-                              textAlign: "left",
-                              marginLeft: "9px",
-                              fontSize: "13px",
-                              marginBottom: "-4px",
-                              marginTop: "3px",
-                            }}
-                          >
-                            {formik.touched.languages && (
-                              <span>{formik.errors.languages}</span>
-                            )}
-                          </div>
-                        )}
+
                       {/* <div>
                         <input type="checkbox" id="" name="" value="" />
                         <label for=""> US English</label>
@@ -812,6 +813,23 @@ const AddAgencyExpert = () => {
                         <label for=""> French</label>
                       </div> */}
                     </div>
+                    {formik.touched.languages &&
+                      Boolean(formik.errors.languages) && (
+                        <div
+                          style={{
+                            color: "red",
+                            textAlign: "left",
+                            marginLeft: "9px",
+                            fontSize: "13px",
+                            marginBottom: "-4px",
+                            marginTop: "3px",
+                          }}
+                        >
+                          {formik.touched.languages && (
+                            <span>{formik.errors.languages}</span>
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>

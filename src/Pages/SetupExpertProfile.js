@@ -20,8 +20,14 @@ import PhoneInput from "react-phone-input-2";
 import { ModelContext } from "../context/ModelContext";
 import AvatarModel from "../components/AvatarModel";
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required("First Name is required"),
-  lastName: Yup.string().required("Last Name is required"),
+  firstName: Yup.string()
+  .required('First Name is required')
+  .min(3, 'First Name must be at least 3 characters')
+  .max(20, 'First Name must not exceed 20 characters'),
+lastName: Yup.string()
+  .required('Last Name is required')
+  .min(3, 'Last Name must be at least 3 characters')
+  .max(20, 'Last Name must not exceed 20 characters'),
   email: Yup.string()
     .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
     .email("Invalid email format")
@@ -36,9 +42,10 @@ const validationSchema = Yup.object().shape({
     .min(100, "Description should minimum length of 100")
     .required("Description is required"),
   price: Yup.number().required("price is required"),
-  languages: Yup.array(
-    Yup.string().required("Atleast one language is required")
-  ),
+  languages: Yup.array()
+    .of(Yup.string()) // Assuming your languages are represented as strings
+    .min(1, 'At least one language is required') // Ensure at least one checkbox is checked
+    .required('At least one language is required')
 });
 const SetupExpertProfile = () => {
   const navigate = useNavigate();

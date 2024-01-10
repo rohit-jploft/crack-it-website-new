@@ -43,9 +43,10 @@ const validationSchema = Yup.object().shape({
   description: Yup.string()
     .min(100, "Description should minimum length of 100")
     .required("Description is required"),
-  languages: Yup.array(
-    Yup.string().required("Atleast one language is required")
-  ),
+    languages: Yup.array()
+    .of(Yup.string()) // Assuming your languages are represented as strings
+    .min(1, 'At least one language is required') // Ensure at least one checkbox is checked
+    .required('At least one language is required')
 });
 const EditAgencyProfile = () => {
   const navigate = useNavigate();
@@ -553,23 +554,7 @@ const EditAgencyProfile = () => {
                           );
                         }
                       )}
-                      {formik.touched.languages &&
-                        Boolean(formik.errors.languages) && (
-                          <div
-                            style={{
-                              color: "red",
-                              textAlign: "left",
-                              marginLeft: "9px",
-                              fontSize: "13px",
-                              marginBottom: "-4px",
-                              marginTop: "3px",
-                            }}
-                          >
-                            {formik.touched.languages && (
-                              <span>{formik.errors.languages}</span>
-                            )}
-                          </div>
-                        )}
+                    
                       {/* <div>
                         <input type="checkbox" id="" name="" value="" />
                         <label for=""> US English</label>
@@ -587,6 +572,23 @@ const EditAgencyProfile = () => {
                         <label for=""> French</label>
                       </div> */}
                     </div>
+                    {formik.touched.languages &&
+                        Boolean(formik.errors.languages) && (
+                          <div
+                            style={{
+                              color: "red",
+                              textAlign: "left",
+                              marginLeft: "9px",
+                              fontSize: "13px",
+                              marginBottom: "-4px",
+                              marginTop: "3px",
+                            }}
+                          >
+                            {formik.touched.languages && (
+                              <span>{formik.errors.languages}</span>
+                            )}
+                          </div>
+                        )}
                   </div>
                 </div>
               </div>

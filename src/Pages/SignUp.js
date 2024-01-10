@@ -19,9 +19,13 @@ import PhoneInput from "react-phone-input-2";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
     .matches(/^[A-Za-z]+$/, "First Name can only contain letters")
+    .min(3, "First Name must be at least 3 characters")
+    .max(20, "First Name must not exceed 20 characters")
     .required("First Name is required"),
   lastName: Yup.string()
     .matches(/^[A-Za-z]+$/, "Last Name can only contain letters")
+    .min(3, "Last Name must be at least 3 characters")
+    .max(20, "Last Name must not exceed 20 characters")
     .required("Last Name is required"),
   email: Yup.string()
     .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
@@ -111,7 +115,7 @@ const Signup = (props) => {
         // props.close(false);
       }
       if (res?.type === "error" && res?.status === 200)
-        toast(res.message, { type: "error", autoClose:500});
+        toast(res.message, { type: "error", autoClose: 500 });
       setDisbaleSignUpButton(true);
       setTimeout(() => {
         setDisbaleSignUpButton(false);

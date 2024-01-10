@@ -79,7 +79,7 @@ const AgencyLogin = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-          <div className="brand-logo">
+          <div className="brand-logo" onClick={() => navigate("/")} style={{cursor:"pointer"}}>
             <img src={Logo} alt="Logo" />
           </div>
           <div className="login-form form_sect">

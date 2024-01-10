@@ -95,8 +95,8 @@ const Forgotpassword = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-          <Loader open={isLoading}/>
-          <div className="brand-logo">
+          <Loader open={isLoading} title={"Sending OTP ..."}/>
+          <div className="brand-logo" onClick={() => navigate("/")} style={{cursor:"pointer"}}>
             <img src={Logo} alt="Logo" />
           </div>
           <div className="login-form form_sect">

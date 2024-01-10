@@ -10,10 +10,10 @@ import Star from "./../Images/star.svg";
 import { useContext, useEffect, useState } from "react";
 import { createBooking, listExpert } from "../data/booking";
 import { BookingContext } from "../context/bookingContext";
-import { Rating as RatingComponent,  } from "@mui/material";
+import { Rating as RatingComponent } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Chip from '@mui/material/Chip';
+import Chip from "@mui/material/Chip";
 import { Button, Modal } from "react-bootstrap";
 import MultiRangeSlider from "../components/MultiRangeSlider";
 import MultiRangeSliderExp from "../components/MultiRangeSliderExp";
@@ -22,7 +22,7 @@ import { AVATAR_BASE_URL } from "../constant";
 const Experts = () => {
   const { jobCategory, getReqData, time } = useContext(BookingContext);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [priceminFilter1, setPriceMinFilter1] = useState(0);
   const [pricemaxFilter1, setPriceMaxFilter1] = useState(50);
   const [priceminFilter, setPriceMinFilter] = useState(0);
@@ -41,15 +41,19 @@ const Experts = () => {
   const [typeOfExpert, setTypeOfExpert] = useState("EXPERT,AGENCY");
   const [filterSubmitted, setFilterSubmitted] = useState(false);
   const getDataList = async () => {
-    console.log({
-       search,
-      jobCategory ,
-      minExperience,
-      maxExperience,
-      minPrice,
-      maxPrice,
-      rating,
-      typeOfExpert}, "query parameter")
+    console.log(
+      {
+        search,
+        jobCategory,
+        minExperience,
+        maxExperience,
+        minPrice,
+        maxPrice,
+        rating,
+        typeOfExpert,
+      },
+      "query parameter"
+    );
     const data = await listExpert(
       search,
       jobCategory ? jobCategory : "",
@@ -69,14 +73,14 @@ const Experts = () => {
     }
   }, [search, jobCategory]);
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     setFilterSubmitted(false);
     // setImmediate(() => {
-      getDataList();
+    getDataList();
     // })
-  setTimeout(() => {
-    setIsLoading(false)
-  }, 300)
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
   }, [search, jobCategory, filterSubmitted]);
   console.log(getReqData);
 
@@ -129,18 +133,17 @@ const Experts = () => {
     });
     setFilterSubmitted(true);
     handleClose();
-
   };
 
   console.log("pricemaxFilter", pricemaxFilter, priceminFilter);
-  console.log(typeOfExpert, "typeOfExpert")
+  console.log(typeOfExpert, "typeOfExpert");
   return (
     <>
       <ToastContainer />
       <Header />
       <section className="">
         <Container>
-          <Loader open={isLoading}/>
+          <Loader open={isLoading} title={"Searching experts"} />
           <div className="main-content">
             <div className="">
               <div>
@@ -237,7 +240,7 @@ const Experts = () => {
                           />
                         </div>
                         <div className="d-flex justify-content-between my-4">
-                          <div style={{cursor:"pointer"}}>
+                          <div style={{ cursor: "pointer" }}>
                             <label>
                               <input
                                 type="radio"
@@ -251,7 +254,7 @@ const Experts = () => {
                               Agency
                             </label>
                           </div>
-                          <div style={{cursor:"pointer"}}>
+                          <div style={{ cursor: "pointer" }}>
                             <label>
                               <input
                                 type="radio"
@@ -265,7 +268,7 @@ const Experts = () => {
                               Expert
                             </label>
                           </div>
-                          <div style={{cursor:"pointer"}}>
+                          <div style={{ cursor: "pointer" }}>
                             <label>
                               <input
                                 type="radio"
@@ -316,7 +319,13 @@ const Experts = () => {
                             <td>
                               <img
                                 className="prof-img"
-                                src={expert && expert?.user && expert?.user?.profilePhoto ? `${AVATAR_BASE_URL}${expert?.user?.profilePhoto}` :Bookingimg }
+                                src={
+                                  expert &&
+                                  expert?.user &&
+                                  expert?.user?.profilePhoto
+                                    ? `${AVATAR_BASE_URL}${expert?.user?.profilePhoto}`
+                                    : Bookingimg
+                                }
                                 alt="img"
                               />
                             </td>
@@ -324,7 +333,13 @@ const Experts = () => {
                               {expert?.user?.firstName} {expert?.user?.lastName}
                             </td>
                             <td>{expert?.jobCategory?.title}</td>
-                            <td>{expert && expert.user && expert?.user?.agency ? <Chip label="Agency" variant="outlined" /> :  <Chip label="Individual" variant="outlined" />}</td>
+                            <td>
+                              {expert && expert.user && expert?.user?.agency ? (
+                                <Chip label="Agency" variant="outlined" />
+                              ) : (
+                                <Chip label="Individual" variant="outlined" />
+                              )}
+                            </td>
                             <td>{expert?.experience} year</td>
                             <td>${expert?.price}/hr</td>
                             <td>
@@ -350,6 +365,19 @@ const Experts = () => {
                       })}
                     </tbody>
                   </Table>
+                  {data && data.length === 0 && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height:"200px"
+                      }}
+                      className="no_chat"
+                    >
+                      No Experts found
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
