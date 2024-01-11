@@ -5,6 +5,10 @@ import Header from "./Header";
 import Container from "react-bootstrap/Container";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import Register from "./../Images/register.svg";
+import Rstar from "./../Images/star-n.svg";
+import Manicon from "./../Images/man-icon.svg";
+import Femaleicon from "./../Images/female-icon.svg";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Time from "./../Images/time.svg";
@@ -13,7 +17,7 @@ import Bookingimg2 from "./../Images/booking-img2.svg";
 import Cancelicon from "./../Images/cancel-icon.svg";
 import { ToastContainer, toast } from "react-toastify";
 import BookingListItem from "../components/BookingListItem";
-import { getAllmeetings } from "../data/booking";
+import { getAllmeetings, getUserDashboardData } from "../data/booking";
 import {
   convertDateStampToTimeZone,
   getDayName,
@@ -28,6 +32,9 @@ import { subscribeToNotifications } from "../helper/notification";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { messaging } from "../firebase/firebase";
 import { getChatIdFromMeeting } from "../data/chat";
+import { Col, Row } from "react-bootstrap";
+
+import MyChartComponent from "../components/MyChartComponent";
 
 let tab = ["REQUESTED", "Upcoming", "Past"];
 const isThisExpert = isExpert();
@@ -38,33 +45,42 @@ if (isThisExpert) {
 const MyBookings = () => {
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
   const userRole = localStorage.getItem("role");
-  const [tabArray, setTabArray] = useState(userRole==="USER" ? ["Requested", "Upcoming", "Past"] : ["New", "Upcoming", "Past"]);
+  const [tabArray, setTabArray] = useState(
+    userRole === "USER"
+      ? ["Requested", "Upcoming", "Past"]
+      : ["New", "Upcoming", "Past"]
+  );
   const navigate = useNavigate();
   const { tabKey } = useParams();
   const [show, setShow] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
-  const [disableButton, setDisableButton]= useState(false)
+  const [disableButton, setDisableButton] = useState(false);
   const [bookingCancelId, setBookingCancelId] = useState();
   const [bookingDeclineId, setBookingDeclineId] = useState();
   const [cancelDone, setCancelDone] = useState(false);
-  const [limit, setLimit] = useState(10)
+  const [limit, setLimit] = useState(10);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [meetingData, setMeetingData] = useState([]);
   const [totalCount, setTotalCount] = useState([]);
+  const [dashboardData, setdaahboardData] = useState();
 
   const [key, setKey] = useState(tabKey ? tabKey : "Upcoming");
   const getData = async () => {
-    const res = await getAllmeetings(key==="New" ? "Requested" : key, limit);
+    const res = await getAllmeetings(key === "New" ? "Requested" : key, limit);
     console.log(res, "meetings");
     setMeetingData(res.data);
-    setTotalCount(res?.pagination?.totalCount)
+    setTotalCount(res?.pagination?.totalCount);
   };
 
   useEffect(() => {
     if (isThisExpert) {
       setTabArray(["New", "Upcoming", "Past"]);
     }
+    (async () => {
+      const res = await getUserDashboardData();
+      setdaahboardData(res.data);
+    })();
   }, []);
   useEffect(() => {
     setCancelDone(false);
@@ -130,17 +146,17 @@ const MyBookings = () => {
       }
       if (res && res.status === 200 && res.message) {
         if (res.success) {
-          toast.success(res.message, {autoClose:1500});
-          setDisableButton(true)
+          toast.success(res.message, { autoClose: 1500 });
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
-          },2000 )
+            setDisableButton(false);
+          }, 2000);
         } else {
-          toast.error(res.message, {autoClose:1500});
-          setDisableButton(true)
+          toast.error(res.message, { autoClose: 1500 });
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
-          },2000 )
+            setDisableButton(false);
+          }, 2000);
         }
         if (res && res?.data && res?.data?.chat) {
           navigate(`/chat/${res?.data?.chat}`);
@@ -148,6 +164,7 @@ const MyBookings = () => {
       }
     }
   };
+
   return (
     <>
       <Header />
@@ -155,6 +172,74 @@ const MyBookings = () => {
       <section className="">
         <Container>
           <div className="main-content">
+            <h2>Dashboard</h2>
+            <Row>
+              <Col md={8}>
+                <div className="graf">
+                  <MyChartComponent data={dashboardData?.monthlyMeetings} />
+                </div>
+              </Col>
+              <Col md={4}>
+                <div className="dash-box">
+                  <h2>{dashboardData?.totalUser}</h2>
+                  <p>Total Users this Month</p>
+                </div>
+                <div className="dash-box">
+                  <h2>{dashboardData?.totalMeeting}</h2>
+                  <p>Total Meeting this Month</p>
+                </div>
+                <div className="dash-box">
+                  <h2>{dashboardData?.totalExperts}</h2>
+                  <p>Total Experts</p>
+                </div>
+              </Col>
+            </Row>
+            <h2 className="section-title">
+              Our Top Experts <Link to="/">View all Experts</Link>
+            </h2>
+            <div className="box-experts mb-5">
+              <div className="experts-box">
+                <img className="img-fluid" src={Manicon} />
+                <h3>Jaxen C</h3>
+                <p>Databases Expert</p>
+                <span>
+                  <img src={Rstar} /> 4.5/5
+                </span>
+              </div>
+              <div className="experts-box">
+                <img className="img-fluid" src={Femaleicon} />
+                <h3>James M</h3>
+                <p>Databases Expert</p>
+                <span>
+                  <img src={Rstar} /> 4.5/5
+                </span>
+              </div>
+              <div className="experts-box">
+                <img className="img-fluid" src={Manicon} />
+                <h3>Jaxen C</h3>
+                <p>Databases Expert</p>
+                <span>
+                  <img src={Rstar} /> 4.5/5
+                </span>
+              </div>
+              <div className="experts-box">
+                <img className="img-fluid" src={Femaleicon} />
+                <h3>James M</h3>
+                <p>Databases Expert</p>
+                <span>
+                  <img src={Rstar} /> 4.5/5
+                </span>
+              </div>
+              <div className="experts-box">
+                <img className="img-fluid" src={Manicon} />
+                <h3>Jaxen C</h3>
+                <p>Databases Expert</p>
+                <span>
+                  <img src={Rstar} /> 4.5/5
+                </span>
+              </div>
+            </div>
+
             <h2>My Bookings</h2>
             <p>See your scheduled meetings from your calendar</p>
             <Tabs
@@ -188,7 +273,10 @@ const MyBookings = () => {
                             timeZone={meet.timeZone}
                             experience={meet?.expertData?.experience}
                             cancelled={meet.status === "CANCELLED"}
-                            cancelButton={meet.status === "REQUESTED" || meet.status === "CONFIRMED"}
+                            cancelButton={
+                              meet.status === "REQUESTED" ||
+                              meet.status === "CONFIRMED"
+                            }
                             status={meet.status}
                             expertPrimaryId={meet?.expert?._id}
                             onClickChat={() => clickChatRedirect(meet?._id)}
@@ -213,29 +301,37 @@ const MyBookings = () => {
                       );
                     })}
                     {meetingData?.length === 0 && (
-                       <div
-                       style={{
-                         display: "flex",
-                         justifyContent: "center",
-                         alignItems: "center",
-                       }}
-                       className="no_chat"
-                     >
-                       You have no meetings
-                     </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        className="no_chat"
+                      >
+                        You have no meetings
+                      </div>
                     )}
-                    {limit < totalCount && <div  style={{
-                         display: "flex",
-                         justifyContent: "center",
-                         alignItems: "center",
-                         cursor:"pointer"
-                       }} onClick={() => setLimit(limit+10)}>
-                        <span style={{textDecoration:"underline", color:"grey"}}>Load more</span>
-                    </div>}
+                    {limit < totalCount && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setLimit(limit + 10)}
+                      >
+                        <span
+                          style={{ textDecoration: "underline", color: "grey" }}
+                        >
+                          Load more
+                        </span>
+                      </div>
+                    )}
                   </Tab>
                 );
               })}
-              
             </Tabs>
           </div>
         </Container>

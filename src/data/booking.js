@@ -56,7 +56,16 @@ export const getCategoryList = async (parent, search = null) => {
   }
 };
 
-export const listExpert = async (search, jobCategory, minExperience, maxExperience, minPrice, maxPrice, rating, typeOfExpert) => {
+export const listExpert = async (
+  search,
+  jobCategory,
+  minExperience,
+  maxExperience,
+  minPrice,
+  maxPrice,
+  rating,
+  typeOfExpert
+) => {
   try {
     let url = `${BASE_URL}expert/get/all?`;
 
@@ -74,41 +83,53 @@ export const listExpert = async (search, jobCategory, minExperience, maxExperien
     if (typeOfExpert) {
       queryParams.typeOfExpert = typeOfExpert;
     }
-    if(minPrice){
+    if (minPrice) {
       queryParams.startPrice = minPrice;
       queryParams.endPrice = 250;
     }
-    if(maxPrice){
+    if (maxPrice) {
       queryParams.startPrice = 0;
       queryParams.endPrice = maxPrice;
     }
-    if(minExperience){
+    if (minExperience) {
       queryParams.minExperience = minExperience;
       queryParams.maxExperience = 50;
     }
-    if(maxExperience){
+    if (maxExperience) {
       queryParams.minExperience = 0;
       queryParams.maxExperience = maxExperience;
     }
-    
 
     const queryString = new URLSearchParams(queryParams).toString();
-    console.log(url+queryString, "url+ query")
-    const experts = await Axios.get(url+queryString);
+    console.log(url + queryString, "url+ query");
+    const experts = await Axios.get(url + queryString);
     return experts.data;
   } catch (error) {
     return error.message;
   }
 };
 
-
 export const createBooking = async (data) => {
   try {
-    console.log(data, "booing req data")
+    console.log(data, "booing req data");
     const res = await Axios.post(`${BASE_URL}booking/create`, { ...data });
     console.log(res);
     return res.data;
   } catch (error) {
     return error.message;
+  }
+};
+
+export const getUserDashboardData = async () => {
+  try {
+    const res = await Axios.get(`${BASE_URL}booking/dashboard/user`);
+    console.log(res, "user dashboard data");
+    return {
+      data: res?.data?.data,
+      type: "success",
+      message: "data fetched successfully",
+    };
+  } catch (error) {
+    return { type: "error", message: error.message };
   }
 };
