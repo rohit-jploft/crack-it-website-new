@@ -47,7 +47,6 @@ const Chat = () => {
   const [file, setFile] = useState();
   const [newMsgObj, setNewMsgObj] = useState();
   const scrollRef = useRef(null);
-  const emojiPickerRef = useRef(null);
 
   useEffect(() => {
     Socket.emit("addUser", localStorage.getItem("userId"));
@@ -155,32 +154,12 @@ const Chat = () => {
   const userId = localStorage.getItem("userId");
   console.log(isUser(), "isUser");
   const isThisUser = isUser();
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target)
-      ) {
-        setShowEmoji(false);
-      }
-    };
-
-    if (showEmoji) {
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [showEmoji, emojiPickerRef]);
 
   return (
     <>
       <Header />
-      <section className="">
-        <Container>
+      <section className="" onClick={() => setShowEmoji(false)}>
+        <Container onClick={() => setShowEmoji(false)}>
           {conversations.length > 0 ? (
             <div className="main-content chat-screen">
               <div className="chat_field">
@@ -543,7 +522,10 @@ const Chat = () => {
                               height: "35px",
                               cursor: "pointer",
                             }}
-                            onClick={() => setShowEmoji(!showEmoji)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowEmoji(!showEmoji);
+                            }}
                           />
                           {showEmoji && (
                             <div
@@ -551,13 +533,15 @@ const Chat = () => {
                                 marginBottom: "500px",
                                 position: "absolute",
                               }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
                             >
                               <Picker
                                 data={data}
                                 onEmojiSelect={(e) => {
                                   setNewMessage(`${newMessage}${e.native}`);
                                 }}
-                                ref={emojiPickerRef}
                               />
                             </div>
                           )}

@@ -173,7 +173,7 @@ const SetupAgencyProfile = () => {
                     country={"in"}
                     inputStyle={{backgroundColor:"#E5E4E2"}}
                     style={{outerWidth:"100%"}}
-                    value={`+${userData?.phone}`}
+                    value={`${userData?.countryCode}${userData?.phone}`}
                     // value={formik.values.phone}
                     onChange={(phone, e) => {
                       console.log('phone', phone);

@@ -354,7 +354,7 @@ const Signup = (props) => {
                   class="checkbox_div"
                   style={{ display: "flex", flexDirection: "column" }}
                 >
-                  <div>
+                  <div style={{display:"flex"}}>
                     {" "}
                     <input
                       type="checkbox"

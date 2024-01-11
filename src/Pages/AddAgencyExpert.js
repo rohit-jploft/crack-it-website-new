@@ -16,7 +16,7 @@ import Axios from "axios";
 import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
-import ExpertImage from "../Images/expert-img.svg";
+import ExpertImage from "../Images/default_avatar.png";
 import { getCategoryList } from "../data/booking";
 import { ToastContainer, toast } from "react-toastify";
 import { updateExpertProfile } from "../data/experts";
