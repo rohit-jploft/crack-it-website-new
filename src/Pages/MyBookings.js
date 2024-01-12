@@ -63,7 +63,13 @@ const MyBookings = () => {
   const handleShow = () => setShow(true);
   const [meetingData, setMeetingData] = useState([]);
   const [totalCount, setTotalCount] = useState([]);
-  const [dashboardData, setdaahboardData] = useState();
+  const [dashboardData, setdaahboardData] = useState({
+    totalUser: 0,
+    totalMeeting: 0,
+    totalExperts: 0,
+    monthlyMeetings: [],
+  });
+  const [expertList, setExpertList] = useState([]);
 
   const [key, setKey] = useState(tabKey ? tabKey : "Upcoming");
   const getData = async () => {
@@ -73,12 +79,20 @@ const MyBookings = () => {
     setTotalCount(res?.pagination?.totalCount);
   };
 
+  const getRatedExpert = async () => {
+    const res = await Axios.get(
+      `${BASE_URL}expert/rating/get/all?limit=5&page=0`
+    );
+    console.log("rated expert", res);
+    setExpertList(res?.data?.data);
+  };
   useEffect(() => {
     if (isThisExpert) {
       setTabArray(["New", "Upcoming", "Past"]);
     }
     (async () => {
       const res = await getUserDashboardData();
+      await getRatedExpert();
       setdaahboardData(res.data);
     })();
   }, []);
@@ -164,7 +178,8 @@ const MyBookings = () => {
       }
     }
   };
-
+  console.log(typeof dashboardData?.monthlyMeetings, "arrType");
+  const isThisUser = localStorage.getItem("role");
   return (
     <>
       <Header />
@@ -172,73 +187,53 @@ const MyBookings = () => {
       <section className="">
         <Container>
           <div className="main-content">
-            <h2>Dashboard</h2>
-            <Row>
-              <Col md={8}>
-                <div className="graf">
-                  <MyChartComponent data={dashboardData?.monthlyMeetings} />
-                </div>
-              </Col>
-              <Col md={4}>
-                <div className="dash-box">
-                  <h2>{dashboardData?.totalUser}</h2>
-                  <p>Total Users this Month</p>
-                </div>
-                <div className="dash-box">
-                  <h2>{dashboardData?.totalMeeting}</h2>
-                  <p>Total Meeting this Month</p>
-                </div>
-                <div className="dash-box">
-                  <h2>{dashboardData?.totalExperts}</h2>
-                  <p>Total Experts</p>
-                </div>
-              </Col>
-            </Row>
-            <h2 className="section-title">
-              Our Top Experts <Link to="/">View all Experts</Link>
-            </h2>
-            <div className="box-experts mb-5">
-              <div className="experts-box">
-                <img className="img-fluid" src={Manicon} />
-                <h3>Jaxen C</h3>
-                <p>Databases Expert</p>
-                <span>
-                  <img src={Rstar} /> 4.5/5
-                </span>
+            {isThisUser === "USER" && <h2>Dashboard</h2>}
+            {isThisUser === "USER" && (
+              <Row>
+                <Col md={8}>
+                  <div className="graf">
+                    <MyChartComponent data={dashboardData?.monthlyMeetings} />
+                  </div>
+                </Col>
+                <Col md={4}>
+                  <div className="dash-box">
+                    <h2>{dashboardData?.totalUser}</h2>
+                    <p>Total Users this Month</p>
+                  </div>
+                  <div className="dash-box">
+                    <h2>{dashboardData?.totalMeeting}</h2>
+                    <p>Total Meeting this Month</p>
+                  </div>
+                  <div className="dash-box">
+                    <h2>{dashboardData?.totalExperts}</h2>
+                    <p>Total Experts</p>
+                  </div>
+                </Col>
+              </Row>
+            )}
+            {isThisUser === "USER" && (
+              <h2 className="section-title">
+                Our Top Experts{" "}
+                <Link to="/view/all/experts">View all Experts</Link>
+              </h2>
+            )}
+            {isThisUser === "USER" && (
+              <div className="box-experts mb-5">
+                {expertList.length > 0 &&
+                  expertList.map((exp) => {
+                    return (
+                      <div className="experts-box">
+                        <img className="img-fluid" src={Manicon} />
+                        <h3>{`${exp.user.firstName} ${exp.user.lastName}`}</h3>
+                        <p>{exp.jobCategory.title}</p>
+                        <span>
+                          <img src={Rstar} /> {exp.rating}/5
+                        </span>
+                      </div>
+                    );
+                  })}
               </div>
-              <div className="experts-box">
-                <img className="img-fluid" src={Femaleicon} />
-                <h3>James M</h3>
-                <p>Databases Expert</p>
-                <span>
-                  <img src={Rstar} /> 4.5/5
-                </span>
-              </div>
-              <div className="experts-box">
-                <img className="img-fluid" src={Manicon} />
-                <h3>Jaxen C</h3>
-                <p>Databases Expert</p>
-                <span>
-                  <img src={Rstar} /> 4.5/5
-                </span>
-              </div>
-              <div className="experts-box">
-                <img className="img-fluid" src={Femaleicon} />
-                <h3>James M</h3>
-                <p>Databases Expert</p>
-                <span>
-                  <img src={Rstar} /> 4.5/5
-                </span>
-              </div>
-              <div className="experts-box">
-                <img className="img-fluid" src={Manicon} />
-                <h3>Jaxen C</h3>
-                <p>Databases Expert</p>
-                <span>
-                  <img src={Rstar} /> 4.5/5
-                </span>
-              </div>
-            </div>
+            )}
 
             <h2>My Bookings</h2>
             <p>See your scheduled meetings from your calendar</p>

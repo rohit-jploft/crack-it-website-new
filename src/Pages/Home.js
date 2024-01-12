@@ -26,7 +26,7 @@ import Tech1 from "./../Images/tech1.svg";
 import Tech2 from "./../Images/tech2.svg";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import closeButton from "../Images/closeButton.svg";
 import { CloseIcon } from "@mui/icons-material";
 import * as Yup from "yup";
@@ -46,9 +46,13 @@ import { BASE_URL } from "../constant";
 import { ToastContainer, toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import { Button, Col, Modal, Row } from "react-bootstrap";
+import WebTour from "../components/Webtour";
+
 const Home = () => {
+  const [showtour, setShowTour] = useState(true);
   const [showContactForm, setShowContactForm] = useState(false);
   const [dailCode, setDialCode] = useState(false);
+  const [categoriesData, setCategoriesdata] = useState([]);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -153,7 +157,25 @@ const Home = () => {
       },
     ],
   };
+  useEffect(() => {
+    document.body.style.overflow = showtour ? "hidden" : "visible";
+    if (showtour) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    // Optionally, clean up the style when the component unmounts
+    return () => {
+      document.body.style.overflow = "visible";
+    };
+  }, [showtour]);
 
+  const getAllCatDataWithExpert = async () => {
+    const res = await Axios.get(`${BASE_URL}category/home/get/all`);
+    console.log(res, "cate");
+    setCategoriesdata(res?.data?.data);
+  };
+  useEffect(() => {
+    getAllCatDataWithExpert();
+  }, []);
   return (
     <Fragment>
       <ToastContainer />
@@ -171,11 +193,11 @@ const Home = () => {
               {/* <Link to="/">
                 <img src={Notification} alt="Logo" />
               </Link> */}
-              <Link to="/agency/login">
+              {/* <Link to="/agency/login">
                 <button className="btn_login">AGENCY LOGIN</button>
-              </Link>
+              </Link> */}
               <Link to="/Login">
-                <button className="btn_login">LOGIN</button>
+                <button className="btn_login login-bbtn">LOGIN</button>
               </Link>
               <Link to="/Signup">
                 <button className="btn_signup">SIGN UP</button>
@@ -214,125 +236,34 @@ const Home = () => {
             <h2>Categories</h2>
           </div>
           <Row className="justify-content-center">
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Blockchain</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
+            {categoriesData.length > 0 &&
+              categoriesData.map((cat) => {
+                return (
+                  <Col lg={3} md={4} sm={6}>
+                    <div className="categorie-box">
+                      <h3>{cat.category.title}</h3>
+                      <div className="d-flex justify-content-between gap-3">
+                        <p>
+                          <i>
+                            <img src={Rstar} />
+                          </i>{" "}
+                          {cat.averageRating}/5
+                        </p>
+                        <p>{cat.noOfExpert} Experts</p>
+                      </div>
+                    </div>
+                  </Col>
+                );
+              })}
+            {categoriesData.length > 8 && (
+              <Col lg={12} md={12}>
+                <div className="view-all-btn text-center">
+                  <button class="btn_signup w-auto px-4">
+                    View All Categories
+                  </button>
                 </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>AI Services</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>DevOps</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Java, Python</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Node.js</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Microsoft Power BI</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Full Stack</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={3} md={4} sm={6}>
-              <div className="categorie-box">
-                <h3>Ruby Developers</h3>
-                <div className="d-flex justify-content-between gap-3">
-                  <p>
-                    <i>
-                      <img src={Rstar} />
-                    </i>{" "}
-                    4.5/5
-                  </p>
-                  <p>1853 Experts</p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={12} md={12}>
-              <div className="view-all-btn text-center">
-                <button class="btn_signup w-auto px-4">
-                  View All Categories
-                </button>
-              </div>
-            </Col>
+              </Col>
+            )}
           </Row>
         </Container>
       </section>
@@ -878,6 +809,15 @@ const Home = () => {
       {/* {showContactForm && ( */}
 
       {/* )} */}
+      {showtour && (
+        <WebTour
+          setShowTour={setShowTour}
+          title={"Login For User"}
+          body={
+            "If you are a fresher or experienced, struggling to CRACK the interview, <br />No Worries. we have a team of experienced professionals."
+          }
+        />
+      )}
     </Fragment>
   );
 };

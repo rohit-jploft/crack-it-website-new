@@ -310,11 +310,11 @@ const Header = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
-          if(role==='AGENCY'){
-            navigate("/agency/login");
-          } else {
+          // if(role==='AGENCY'){
+            // navigate("/agency/login");
+          // } else {
             navigate("/login");
-          }
+          // }
         }}
       />
     </>

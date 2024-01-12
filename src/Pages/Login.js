@@ -18,14 +18,17 @@ import TextInput from "../components/InputField";
 import { UserContext } from "../context/userContext";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email").required("Email is required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email")
+    .required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
 const Login = () => {
   const [created, setCreated] = useState(false);
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
-  const [disableButton, setDisableButton] = useState(false)
+  const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -43,38 +46,49 @@ const Login = () => {
         password: formik.values.password,
       });
       if (res?.data && res.data?.data?.token) {
-
         if (
           res.data.data.user.role === "EXPERT" ||
-          res.data.data.user.role === "USER"
+          res.data.data.user.role === "USER" ||
+          res.data.data.user.role === "AGENCY"
         ) {
           localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("userId", res.data.data.user._id);
           localStorage.setItem("role", res.data.data.user.role);
-            console.log(res.data.data.user, "logged usrer")
+          console.log(res.data.data.user, "logged usrer");
           setExpertVerified(res.data.data.user.isExpertProfileVerified);
           toast.success(res?.data?.message, {
             onClose: () => {
-                if(res.data.data.user.role === "EXPERT" && !res.data.data.user.isExpertProfileVerified ){
-                    navigate("/setup-profile")
+              if (
+                res.data.data.user.role === "EXPERT" &&
+                !res.data.data.user.isExpertProfileVerified
+              ) {
+                navigate("/setup-profile");
+              } else {
+                if (res.data.data.user.role === "AGENCY") {
+                  if (!res.data.data.user.isExpertProfileVerified) {
+                    navigate("/agency/setup-profile");
+                  } else {
+                    navigate("/agency/experts/all");
+                  }
                 } else {
-                    navigate("/mybookings")
-                    window.location.reload()
-                    // return <Navigate to="/mybookings"/>
+                  navigate("/mybookings");
+                  window.location.reload();
                 }
+                // return <Navigate to="/mybookings"/>
+              }
             },
             autoClose: 500,
           });
-          setDisableButton(true)
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
+            setDisableButton(false);
           }, 1500);
           setCreated(false);
         } else {
-          toast.error("User not found", {autoClose:500});
-          setDisableButton(true)
+          toast.error("User not found", { autoClose: 500 });
+          setDisableButton(true);
           setTimeout(() => {
-            setDisableButton(false)
+            setDisableButton(false);
           }, 1500);
         }
       }
@@ -89,7 +103,11 @@ const Login = () => {
       <ToastContainer />
       <section className="main_sect">
         <div className="content-left">
-        <div className="brand-logo" onClick={() => navigate("/")} style={{cursor:"pointer"}}>
+          <div
+            className="brand-logo"
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
             <img src={Logo} alt="Logo" />
           </div>
           <div className="login-form form_sect">
@@ -128,7 +146,11 @@ const Login = () => {
                 Forgot password?
               </div>
 
-              <button className="form-btn" type="submit" disabled={disableButton}>
+              <button
+                className="form-btn"
+                type="submit"
+                disabled={disableButton}
+              >
                 LOGIN
               </button>
 

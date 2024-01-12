@@ -41,7 +41,8 @@ const ChartComponent = ({ data }) => {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: data?.map((item) => `${item.month}-${item.year}`),
+      categories:
+        data?.length > 0 && data.map((item) => `${item?.month}-${item?.year}`),
     },
 
     fill: {
@@ -53,17 +54,19 @@ const ChartComponent = ({ data }) => {
   const chartseries = [
     {
       name: "Your Result",
-      data: data?.map((item) => item.count),
+      data: data?.length > 0 && data?.map((item) => item?.count),
     },
   ];
   return (
     <>
-      <Chart
-        options={chartoption}
-        series={chartseries}
-        type="bar"
-        width="100%"
-      />
+      {data.length > 0 && (
+        <Chart
+          options={chartoption}
+          series={chartseries}
+          type="bar"
+          width="100%"
+        />
+      )}
     </>
   );
 };

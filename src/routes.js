@@ -38,6 +38,7 @@ import SetupAgencyProfile from "./Pages/SetupAgencyProfile";
 import CheckPayment from "./Pages/CheckPayment";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsAndConditions from "./Pages/TermsConditions";
+import ViewAllExperts from "./Pages/ViewAllExperts";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -118,6 +119,10 @@ function AppRoutes() {
     {
       path: "/mybookings",
       element: isAuthenticateds ? <MyBookings />:<Navigate to="/login" /> ,
+    },
+    {
+      path: "/view/all/experts",
+      element: isAuthenticateds ? <ViewAllExperts />:<Navigate to="/login" /> ,
     },
     {
       path: "/rate/expert/:expertId",
