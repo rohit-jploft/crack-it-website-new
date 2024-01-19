@@ -19,6 +19,7 @@ import MultiRangeSlider from "../components/MultiRangeSlider";
 import MultiRangeSliderExp from "../components/MultiRangeSliderExp";
 import Loader from "../components/Loader";
 import { AVATAR_BASE_URL } from "../constant";
+import JoyRideComponent from "../components/JoyRide";
 const Experts = () => {
   const { jobCategory, getReqData, time } = useContext(BookingContext);
   const navigate = useNavigate();
@@ -384,6 +385,17 @@ const Experts = () => {
           </div>
         </Container>
       </section>
+        <JoyRideComponent
+          steps={[
+            {
+              disableBeacon: true,
+              target: ".btn_request",
+              content:
+                "Request For Call",
+            },
+          ]}
+        />
+     
     </>
   );
 };

@@ -15,6 +15,7 @@ import { UserContext } from "../context/userContext";
 import Axios from "axios";
 import { BASE_URL } from "../constant";
 import { isDateTodayOrAbove } from "../helper/helper";
+import JoyRideComponent from "../components/JoyRide";
 const SubCategory = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState();
@@ -295,6 +296,18 @@ const SubCategory = () => {
         </Container>
       </section>
       <ToastContainer />
+      {!isThisAgency && !isThisExpert && (
+        <JoyRideComponent
+          steps={[
+            {
+              disableBeacon: true,
+              target: ".btn_continue",
+              content:
+                "Search & Select Category Or Sub Category",
+            },
+          ]}
+        />
+      )}
     </>
   );
 };

@@ -26,6 +26,7 @@ import { AVATAR_BASE_URL, BASE_URL } from "../constant";
 import pdfIcon from "../Images/pdf_icon.png";
 import { Button } from "react-bootstrap";
 import DefaultAvatar from "../Images/default_avatar.png";
+import JoyRideComponent from "../components/JoyRide";
 const Chat = () => {
   const navigate = useNavigate();
   const { convoId } = useParams();
@@ -589,6 +590,15 @@ const Chat = () => {
           )}
         </Container>
       </section>
+      <JoyRideComponent
+        steps={[
+          {
+            disableBeacon: true,
+            target: ".message-input",
+            content: "Send Message Here",
+          },
+        ]}
+      />
     </>
   );
 };

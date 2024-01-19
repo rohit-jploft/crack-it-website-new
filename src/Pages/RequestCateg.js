@@ -19,6 +19,7 @@ import {
   isDateTodayOrAbove,
 } from "../helper/helper";
 import moment from "moment";
+import JoyRideComponent from "../components/JoyRide";
 const RequestCateg = () => {
   const [key, setKey] = useState();
   const [disableButton, setDisableButton] = useState(false);
@@ -424,6 +425,17 @@ const RequestCateg = () => {
           </div>
         </Container>
       </section>
+        <JoyRideComponent
+          steps={[
+            {
+              disableBeacon: true,
+              target: ".btn_continue",
+              content:
+                "Fill Details And The Click On Submit Button For Request",
+            },
+          ]}
+        />
+    
     </>
   );
 };

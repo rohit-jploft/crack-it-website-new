@@ -37,7 +37,6 @@ export const createUser = async (data, dailCode) => {
     return error;
   }
 };
-
 // FORGOT PASSWORD STEP 1
 export const ForgotPasswordSendOtp = async (email, type) => {
   try {
@@ -98,7 +97,6 @@ export const suspendAccount = async (userId, isDeleted) => {
     return error;
   }
 };
-
 export const resetPasswordApi = async (password, token) => {
   if (token) {
     const res = await Axios.post(
@@ -114,7 +112,6 @@ export const resetPasswordApi = async (password, token) => {
   }
   return { message: "Token is missing" };
 };
-
 export const setProfilePicture = async (userId, profilePic) => {
   const newFormData = new FormData();
   if (profilePic) {

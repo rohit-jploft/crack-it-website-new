@@ -47,6 +47,7 @@ import { ToastContainer, toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import WebTour from "../components/Webtour";
+import JoyRideComponent from "../components/JoyRide";
 
 const Home = () => {
   const [showtour, setShowTour] = useState(true);
@@ -157,16 +158,16 @@ const Home = () => {
       },
     ],
   };
-  useEffect(() => {
-    document.body.style.overflow = showtour ? "hidden" : "visible";
-    if (showtour) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    // Optionally, clean up the style when the component unmounts
-    return () => {
-      document.body.style.overflow = "visible";
-    };
-  }, [showtour]);
+  // useEffect(() => {
+  //   document.body.style.overflow = showtour ? "hidden" : "visible";
+  //   if (showtour) {
+  //     window.scrollTo({ top: 0, behavior: "smooth" });
+  //   }
+  //   // Optionally, clean up the style when the component unmounts
+  //   return () => {
+  //     document.body.style.overflow = "visible";
+  //   };
+  // }, [showtour]);
 
   const getAllCatDataWithExpert = async () => {
     const res = await Axios.get(`${BASE_URL}category/home/get/all`);
@@ -176,6 +177,8 @@ const Home = () => {
   useEffect(() => {
     getAllCatDataWithExpert();
   }, []);
+
+ 
   return (
     <Fragment>
       <ToastContainer />
@@ -235,7 +238,7 @@ const Home = () => {
           <div className="section-heading text-center">
             <h2>Categories</h2>
           </div>
-          <Row className="justify-content-center">
+          <Row className="">
             {categoriesData.length > 0 &&
               categoriesData.map((cat) => {
                 return (
@@ -809,7 +812,7 @@ const Home = () => {
       {/* {showContactForm && ( */}
 
       {/* )} */}
-      {showtour && (
+      {/* {showtour && (
         <WebTour
           setShowTour={setShowTour}
           title={"Login For User"}
@@ -817,7 +820,10 @@ const Home = () => {
             "If you are a fresher or experienced, struggling to CRACK the interview, <br />No Worries. we have a team of experienced professionals."
           }
         />
-      )}
+      )} */}
+      {
+        <JoyRideComponent steps={[{disableBeacon:true,target:".btn_login", content:"If you are a fresher or experienced, struggling to CRACK the interview, No Worries. we have a team of experienced professionals."}]}/>
+      }
     </Fragment>
   );
 };

@@ -32,11 +32,16 @@ import {
 } from "@mui/material";
 import { isExpert } from "../utils/authHelper";
 import Loader from "../components/Loader";
-
+import { useNavigate } from "react-router-dom";
+import { BookingContext } from "../context/bookingContext";
 const BookingInfo = () => {
   const { bookingId } = useParams();
+  const navigate = useNavigate();
   const { bookingIdAfterPayment, setBookingIdAfterPayment } =
     useContext(PaymentContext);
+
+  const { ticketRaiseBookingId, setTicketRaiseBookingId } =
+    useContext(BookingContext);
   const [showPaymentMethodModel, setShowPaymentMethodModel] = useState(false);
   const [bookingData, setBookingData] = useState();
   const [promoCode, setPromoCode] = useState("");
@@ -442,6 +447,28 @@ const BookingInfo = () => {
                   </div>
                 )}
             </div>
+            {bookingData?.booking?.booking?.status === "CANCELLED" && (
+              <div className="raise_issue_bottom_div">
+                <div className="left_div_text">
+                  <h5>Cancel reason</h5>
+                  <span>
+                    {bookingData?.booking?.booking?.cancellationReason}
+                  </span>
+                </div>
+                <div className="right_div_button">
+                  <button
+                    type="submit"
+                    className="raise_issue_button"
+                    onClick={() => {
+                      setTicketRaiseBookingId(bookingId);
+                      navigate("/raise/issue");
+                    }}
+                  >
+                    Raise Issue
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </Container>
         <Modal

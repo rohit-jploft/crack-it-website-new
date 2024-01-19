@@ -13,9 +13,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { isAgency, isExpert } from "../utils/authHelper";
 import { UserContext } from "../context/userContext";
 import { BASE_URL } from "../constant";
+import WebTour from "../components/Webtour";
+import categoryArrowImage from "../Images/Arrows/categoryArrow.svg";
+import JoyRideComponent from "../components/JoyRide";
 const JobCategory = () => {
   const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState([]);
+  const [showtour, setShowTour] = useState(true);
   const { jobCategory, setJobCategory } = useContext(BookingContext);
   const { profileSetupData } = useContext(UserContext);
   const getData = async () => {
@@ -66,7 +70,7 @@ const JobCategory = () => {
                       class={`job-cate-card  ${
                         jobCategory === item._id ? "active" : ""
                       }`}
-                       onClick={() => setJobCategory(item._id)}
+                      onClick={() => setJobCategory(item._id)}
                     >
                       <div class="categ-img">
                         <img src={`${BASE_URL}${item?.image}`} alt="img" />
@@ -117,6 +121,18 @@ const JobCategory = () => {
           </div>
         </Container>
       </section>
+      {!isThisAgency && !isThisExpert && (
+        <JoyRideComponent
+          steps={[
+            {
+              disableBeacon: true,
+              target: ".row",
+              content:
+                "Select Category & Continue",
+            },
+          ]}
+        />
+      )}
     </>
   );
 };

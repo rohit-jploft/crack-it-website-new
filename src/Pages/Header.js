@@ -141,7 +141,7 @@ const Header = () => {
             <Nav className="ms-auto">
               {isTheUser && (
                 <Nav.Link href="/JobCategory" className="button_user">
-                  <button className="btn_login">BOOK NOW</button>
+                  <button className="btn_login" style={{zIndex:999, position:"relative"}}>BOOK NOW</button>
                 </Nav.Link>
               )}
               <NavDropdown
@@ -275,6 +275,10 @@ const Header = () => {
                 <NavDropdown.Item href="/Chat">
                   <img src={Message1} alt="" />
                   Chats
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/ticket/view/all">
+                  <img src={Message1} alt="" />
+                  All Tickets
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/change-password">
                   <img src={Changepassword} alt="" />

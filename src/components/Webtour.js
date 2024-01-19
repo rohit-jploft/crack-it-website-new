@@ -1,22 +1,25 @@
-import React from 'react';
-import arrow from '../Images/loginArrow.svg';
-import ArrowLeft from './../Images/Arrow_Left.svg';
+import React from "react";
+import arrow from "../Images/loginArrow.svg";
+import ArrowLeft from "./../Images/Arrow_Left.svg";
 
-const WebTour = ({ setShowTour , title, body}) => {
+const WebTour = ({ setShowTour, title, body, arrowImage }) => {
   return (
     <div>
       <div className="firstStepper">
         <div className="text-center imagess">
-          <img src={arrow} />
+          <img src={arrowImage ? arrowImage : arrow} />
         </div>
-        <h5>Login For User</h5>
+        <h5>{title}</h5>
         <p>
-        If you are a fresher or experienced, struggling to CRACK the interview, No Worries. we have a team of experienced professionals.
+          If you are a fresher or experienced, struggling to CRACK the
+          interview, <br />
+          No Worries. we have a team of experienced professionals.
         </p>
 
         <div className="text-end pe-5">
           <button
-            className="btn_getstrated mt-0 "
+            className="btn_getstrated mt-0"
+            style={{ marginBottom: "20px" }}
             onClick={() => {
               setShowTour(false);
             }}

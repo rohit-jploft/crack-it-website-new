@@ -3,6 +3,7 @@ export const BookingContext = createContext();
 
 export const BookingProvider = ({ children }) => {
   const [jobCategory, setJobCategory] = useState();
+  const [ticketRaiseBookingId, setTicketRaiseBookingId] = useState("");
   const [jobDescription, setJobDescription] = useState();
   const [subCategory, setSubCategory] = useState();
   const [duration, setDuration] = useState();
@@ -44,6 +45,8 @@ export const BookingProvider = ({ children }) => {
         jobDescription,
         setJobDescription,
         getReqData,
+        ticketRaiseBookingId,
+        setTicketRaiseBookingId,
       }}
     >
       {children}

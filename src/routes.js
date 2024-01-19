@@ -39,6 +39,8 @@ import CheckPayment from "./Pages/CheckPayment";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsAndConditions from "./Pages/TermsConditions";
 import ViewAllExperts from "./Pages/ViewAllExperts";
+import RaiseIssue from "./Pages/RaiseIssue";
+import AllTickets from "./Pages/AllTcikets";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -61,7 +63,7 @@ function AppRoutes() {
     },
     {
       path: "/refer/signup/:referedBy",
-      element: isAuthenticateds ? <Signup />:<Navigate to="/login" /> ,
+      element: isAuthenticateds ? <Navigate to="/login" /> : <Signup /> ,
     },
     {
       path: "/agency/login",
@@ -82,6 +84,14 @@ function AppRoutes() {
     {
       path: "/JobCategory",
       element: isAuthenticateds ? <JobCategory />:<Navigate to="/login" /> ,
+    },
+    {
+      path: "/raise/issue",
+      element: isAuthenticateds ? <RaiseIssue />:<Navigate to="/login" /> ,
+    },
+    {
+      path: "/ticket/view/all",
+      element: isAuthenticateds ? <AllTickets />:<Navigate to="/login" /> ,
     },
  
     {

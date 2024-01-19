@@ -132,7 +132,7 @@ const ViewAllExperts = () => {
                       })}
                     </tbody>
                   </Table>
-                  {totalCount < limit && (
+                  {totalCount >= limit && (
                     <div
                       onClick={() => setLimit(limit + 10)}
                       style={{

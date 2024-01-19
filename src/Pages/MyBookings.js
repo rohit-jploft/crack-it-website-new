@@ -35,6 +35,8 @@ import { getChatIdFromMeeting } from "../data/chat";
 import { Col, Row } from "react-bootstrap";
 
 import MyChartComponent from "../components/MyChartComponent";
+import CancelPopUp from "../components/CancelPopUp";
+import JoyRideComponent from "../components/JoyRide";
 
 let tab = ["REQUESTED", "Upcoming", "Past"];
 const isThisExpert = isExpert();
@@ -44,6 +46,9 @@ if (isThisExpert) {
 
 const MyBookings = () => {
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
+  const [showtour, setShowTour] = useState(true);
+  const [cancelReason, setReason] = useState("");
+
   const userRole = localStorage.getItem("role");
   const [tabArray, setTabArray] = useState(
     userRole === "USER"
@@ -63,6 +68,7 @@ const MyBookings = () => {
   const handleShow = () => setShow(true);
   const [meetingData, setMeetingData] = useState([]);
   const [totalCount, setTotalCount] = useState([]);
+  const [showCancelReasonPopUp, setShowCancelReasonPopUp] = useState(false);
   const [dashboardData, setdaahboardData] = useState({
     totalUser: 0,
     totalMeeting: 0,
@@ -101,10 +107,12 @@ const MyBookings = () => {
     getData();
   }, [key, cancelDone, limit]);
 
-  const cancelBooking = async (bookingId) => {
+  const cancelBooking = async (bookingId, reason) => {
     const role = localStorage.getItem("role");
+    console.log(reason, "reason");
     const cancel = await Axios.put(
-      `${BASE_URL}booking/cancel/${bookingId}?role=${role}`
+      `${BASE_URL}booking/cancel/${bookingId}?role=${role}`,
+      { reason }
     );
     console.log(cancel);
     if (cancel && cancel?.data?.status === 200) {
@@ -180,9 +188,11 @@ const MyBookings = () => {
   };
   console.log(typeof dashboardData?.monthlyMeetings, "arrType");
   const isThisUser = localStorage.getItem("role");
+
   return (
     <>
       <Header />
+
       <ToastContainer />
       <section className="">
         <Container>
@@ -348,7 +358,10 @@ const MyBookings = () => {
           </Button>
           <Button
             className="yes-btn"
-            onClick={() => cancelBooking(bookingCancelId)}
+            onClick={() => {
+              setShowCancelReasonPopUp(true);
+              handleClose();
+            }}
           >
             Yes
           </Button>
@@ -381,6 +394,24 @@ const MyBookings = () => {
           </Button>
         </Modal.Body>
       </Modal>
+      <CancelPopUp
+        show={showCancelReasonPopUp}
+        cancelBooking={(reason) => cancelBooking(bookingCancelId, reason)}
+        setReason={(value) => setReason(value)}
+        handleClose={() => setShowCancelReasonPopUp(false)}
+      />
+      {
+      isThisUser === "USER" &&  <JoyRideComponent
+          steps={[
+            {
+              disableBeacon: true,
+              target: ".btn_login",
+              content:
+                "Book Meeting With Expert",
+            },
+          ]}
+        />
+      }
     </>
   );
 };

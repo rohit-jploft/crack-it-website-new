@@ -124,9 +124,7 @@ const Wallet = () => {
                                         <td>
                                           {getDateFromTimeStamps(createdAt)}
                                         </td>
-                                        <td>
-                                          {title}
-                                        </td>
+                                        <td>{title}</td>
                                         <td>
                                           <div className="status_success">
                                             {status}
@@ -261,72 +259,85 @@ const Wallet = () => {
                               <th width="1%"></th>
                               <th width="15%">Name</th>
                               <th width="15%">Title</th>
+                              <th width="15%">Method</th>
                               <th width="24%">Date</th>
                               <th width="15%">Status</th>
                               <th width="15%">Amount</th>
                             </tr>
                           </thead>
                         )}
-                       {walletData &&
+                      {walletData &&
                         walletData.transactions &&
-                        walletData.transactions.length > 0 && (<tbody>
-                        {walletData?.transactions?.map((transaction) => {
-                          const {
-                            amount,
-                            status,
-                            type,
-                            title,
-                            user,
-                            otherUser,
-                            createdAt,
-                          } = transaction;
-                          return (
-                            <tr>
-                              <td>
-                                <img
-                                  className="wallet-img"
-                                  src={Walletimg}
-                                  alt="img"
-                                />
-                              </td>
-                              <td className="Wname">
-                                {otherUser?.firstName} {otherUser?.lastName}
-                              </td>
-                              <td>{title}</td>
-                              <td>{getDateFromTimeStamps(createdAt)}</td>
-                            
-                              <td>
-                                <div className="status_success">{status}</div>
-                              </td>
-                              <td>
-                                <span
-                                  className={`${
-                                    type === "CREDIT" ? "C" : "D"
-                                  }amount`}
-                                >
-                                  {amount}
-                                </span>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>)}
-                      {walletData && walletData.transactions &&
-                      walletData.transactions.length === 0 && (
-                        <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span>No transactions</span>
-                      </div>
-                      )
-                       
-                    }
+                        walletData.transactions.length > 0 && (
+                          <tbody>
+                            {walletData?.transactions?.map((transaction) => {
+                              const {
+                                amount,
+                                status,
+                                type,
+                                title,
+                                user,
+                                paymentMethod,
+                                otherUser,
+                                createdAt,
+                              } = transaction;
+                              return (
+                                <tr>
+                                  <td>
+                                    <img
+                                      className="wallet-img"
+                                      src={Walletimg}
+                                      alt="img"
+                                    />
+                                  </td>
+                                  <td className="Wname">
+                                    {otherUser?.firstName} {otherUser?.lastName}
+                                  </td>
+                                  <td>{title}</td>
+                                  <td>{paymentMethod}</td>
+                                  <td>{getDateFromTimeStamps(createdAt)}</td>
+
+                                  <td>
+                                    <div
+                                      className={
+                                        status === "success"
+                                          ? `status_success`
+                                          : status === "pending"
+                                          ? "status_pending"
+                                          : "status_failed"
+                                      }
+                                    >
+                                      {status}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span
+                                      className={`${
+                                        type === "CREDIT" ? "C" : "D"
+                                      }amount`}
+                                    >
+                                      {amount}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        )}
+                      {walletData &&
+                        walletData.transactions &&
+                        walletData.transactions.length === 0 && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span>No transactions</span>
+                          </div>
+                        )}
                     </Table>
-                    
                   )}
                 </div>
               </div>
