@@ -48,6 +48,7 @@ const MyBookings = () => {
   const { isExpertVerified, setExpertVerified } = useContext(UserContext);
   const [showtour, setShowTour] = useState(true);
   const [cancelReason, setReason] = useState("");
+  const [comment, setComment] = useState("");
 
   const userRole = localStorage.getItem("role");
   const [tabArray, setTabArray] = useState(
@@ -107,12 +108,12 @@ const MyBookings = () => {
     getData();
   }, [key, cancelDone, limit]);
 
-  const cancelBooking = async (bookingId, reason) => {
+  const cancelBooking = async (bookingId, reason, comment) => {
     const role = localStorage.getItem("role");
     console.log(reason, "reason");
     const cancel = await Axios.put(
       `${BASE_URL}booking/cancel/${bookingId}?role=${role}`,
-      { reason }
+      { reason, comment }
     );
     console.log(cancel);
     if (cancel && cancel?.data?.status === 200) {
@@ -396,22 +397,24 @@ const MyBookings = () => {
       </Modal>
       <CancelPopUp
         show={showCancelReasonPopUp}
-        cancelBooking={(reason) => cancelBooking(bookingCancelId, reason)}
+        cancelBooking={(reason, comment) =>
+          cancelBooking(bookingCancelId, reason, comment)
+        }
         setReason={(value) => setReason(value)}
         handleClose={() => setShowCancelReasonPopUp(false)}
+        setComment={(value) => setComment(value)}
       />
-      {
-      isThisUser === "USER" &&  <JoyRideComponent
+      {isThisUser === "USER" && (
+        <JoyRideComponent
           steps={[
             {
               disableBeacon: true,
               target: ".btn_login",
-              content:
-                "Book Meeting With Expert",
+              content: "Book Meeting With Expert",
             },
           ]}
         />
-      }
+      )}
     </>
   );
 };

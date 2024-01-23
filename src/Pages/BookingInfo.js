@@ -211,9 +211,21 @@ const BookingInfo = () => {
       );
     }
   };
-  // console.log(bookingData?.booking?.booking?.startTime, "startTime");
 
-  // wallet data
+  const proceedWhenAmountIsZero = async () => {
+    setIsLoading(true);
+    const res = await Axios.put(`${BASE_URL}payment/booking/zero/${bookingId}`);
+    console.log(res, "zero amount")
+    if(res && res?.data && res.data.success){
+      toast.success("Booking has been confirmed")
+      setWalletPaymentDone(false)
+      setIsLoading(true);
+    } else {
+      toast.error(res?.data?.message)
+      setIsLoading(false);
+    }
+  };
+ 
   const getWalletData = async () => {
     const data = await getWallet();
     setWalletAmount(data?.data?.wallet?.amount);
@@ -438,8 +450,12 @@ const BookingInfo = () => {
                         //   bookingData?.booking?.grandTotal,
                         //   bookingId
                         // );
-                        setPaymentAmount(bookingData?.booking?.grandTotal);
-                        setShowPaymentMethodModel(true);
+                        if (bookingData?.booking?.grandTotal == 0) {
+                          proceedWhenAmountIsZero()
+                        } else {
+                          setPaymentAmount(bookingData?.booking?.grandTotal);
+                          setShowPaymentMethodModel(true);
+                        }
                       }}
                     >
                       Pay & Proceed
@@ -451,9 +467,7 @@ const BookingInfo = () => {
               <div className="raise_issue_bottom_div">
                 <div className="left_div_text">
                   <h5>Cancel reason</h5>
-                  <span>
-                    {bookingData?.booking?.booking?.cancellationReason}
-                  </span>
+                  <span>{bookingData?.cancel?.reason?.reason}</span>
                 </div>
                 <div className="right_div_button">
                   <button
@@ -464,7 +478,7 @@ const BookingInfo = () => {
                       navigate("/raise/issue");
                     }}
                   >
-                    Raise Issue
+                    {" Raise Issue"}
                   </button>
                 </div>
               </div>

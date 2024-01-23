@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextInput from "../components/InputField";
@@ -13,13 +13,20 @@ import { toast, ToastContainer } from "react-toastify";
 
 const RaiseIssue = () => {
   const navigate = useNavigate();
+  const [reasonList, setReasonList] = useState([]);
   const { ticketRaiseBookingId, setTicketRaiseBookingId } =
     useContext(BookingContext);
 
+  const getAllReasons = async () => {
+    const res = await axios.get(`${BASE_URL}ticket/reason/get-all`);
+    console.log(res, "reason");
+    setReasonList(res?.data?.data);
+  };
   useEffect(() => {
     if (!ticketRaiseBookingId) {
       navigate("/mybookings/Past");
     }
+    getAllReasons();
   }, []);
   const formik = useFormik({
     initialValues: {
@@ -109,13 +116,11 @@ const RaiseIssue = () => {
                     value={formik.values.reason}
                     onChange={formik.handleChange}
                   >
-                    <option value="Don't need it right now">
-                      Don't need it right now
-                    </option>
-                    <option value="Its too Costly">Its too Costly</option>
-                    <option value="Waiting time too much">
-                      Waiting time too much
-                    </option>
+                    {reasonList.length > 0 &&
+                      reasonList.map((obj) => {
+                        return <option value={obj?._id}>{obj?.reason}</option>;
+                      })}
+              
                   </select>
                   {formik.touched.reason && formik.errors.reason ? (
                     <div

@@ -42,7 +42,7 @@ const AllTickets = () => {
                 return (
                   <TicketListItem
                     key={index}
-                    reason={ticket?.reason}
+                    reason={ticket?.reason?.reason}
                     query={ticket?.query}
                     status={ticket?.status}
                     ticketNo={ticket?.ticketNo}
