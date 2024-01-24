@@ -36,6 +36,7 @@ const BookingListItem = ({
   const isThisExpert = isExpert();
   const isThisAgency = isAgency();
   const isThisUser = isUser();
+  
   const makePayment = async (amount, meetingId) => {
     const stripe = await loadStripe(STRIPE_PUBLIC_KEY);
 
@@ -153,7 +154,7 @@ const BookingListItem = ({
             </button>
           )}
         {isThisExpert && status === "ACCEPTED" && (
-          <button className="btn_pending">{"Payment Pending"}</button>
+          <button className="btn_pending">{"Accepted"}</button>
         )}
         {isThisUser && status === "COMPLETED" && !isExpertRated && (
           <button
