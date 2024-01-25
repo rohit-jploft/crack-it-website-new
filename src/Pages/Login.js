@@ -18,6 +18,7 @@ import { BASE_URL } from "../constant";
 import TextInput from "../components/InputField";
 import { UserContext } from "../context/userContext";
 import WebTour from "../components/Webtour";
+import JoyRideComponent from "../components/JoyRide";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -30,7 +31,12 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const [created, setCreated] = useState(false);
   const [showtour, setShowTour] = useState(true);
-  const { isExpertVerified, setExpertVerified } = useContext(UserContext);
+  const {
+    isExpertVerified,
+    setExpertVerified,
+    setIsFirstBookingDone,
+    setIsNewAccount,
+  } = useContext(UserContext);
   const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
@@ -59,6 +65,7 @@ const Login = () => {
           localStorage.setItem("role", res.data.data.user.role);
           console.log(res.data.data.user, "logged usrer");
           setExpertVerified(res.data.data.user.isExpertProfileVerified);
+          localStorage.setItem("showBookingGuide",res.data.data.user.showBookingGuide )
           toast.success(res?.data?.message, {
             onClose: () => {
               if (
@@ -169,6 +176,8 @@ const Login = () => {
           <img src={RightBg} alt="bg" />
         </div>
       </section>
+       
+     
     </>
   );
 };

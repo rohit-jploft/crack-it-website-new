@@ -88,6 +88,11 @@ const MyProfile = () => {
     // Trigger the file input when the icon is clicked
     fileInputRef.current.click();
   };
+  const logoutFun = async () => {
+    const userId = localStorage.getItem("userId");
+    const log = await Axios.put(`${BASE_URL}auth/user/logout/${userId}`);
+
+  };
 
   return (
     <>
@@ -206,6 +211,8 @@ const MyProfile = () => {
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
+          localStorage.removeItem("isFirstBookingDone");
+          logoutFun()
           if(role==='AGENCY'){
             navigate("/agency/login");
           } else {

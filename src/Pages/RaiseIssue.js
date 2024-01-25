@@ -32,24 +32,26 @@ const RaiseIssue = () => {
     initialValues: {
       reason: "",
       query: "",
-      doc: null,
+      doc: {},
     },
     validationSchema: Yup.object({
       reason: Yup.string().required("Reason is Required"),
       query: Yup.string().required("query is Required"),
       doc: Yup.mixed()
-        .required("Supporting document is Required")
         .test(
           "fileSize",
           "File too large",
-          (value) => value && value.size <= 1024 * 1024 * 4
+          (value) => !value || (value && value.size <= 1024 * 1024 * 4)
         )
         .test(
           "fileFormat",
           "Unsupported Format",
           (value) =>
-            value &&
-            ["application/pdf", "image/jpeg", "image/png"].includes(value.type)
+            !value ||
+            (value &&
+              ["application/pdf", "image/jpeg", "image/png"].includes(
+                value.type
+              ))
         ),
     }),
     onSubmit: async (values) => {
@@ -120,7 +122,6 @@ const RaiseIssue = () => {
                       reasonList.map((obj) => {
                         return <option value={obj?._id}>{obj?.reason}</option>;
                       })}
-              
                   </select>
                   {formik.touched.reason && formik.errors.reason ? (
                     <div

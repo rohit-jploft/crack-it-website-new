@@ -38,6 +38,7 @@ const SubCategory = () => {
     setSubCategoryData(data.data);
     setSubCategory(data.data[0]._id);
   };
+  const showBookingGuide = localStorage.getItem("showBookingGuide");
   const getSkillsData = async (parent, search) => {
     const data = await getCategoryList(parent, search);
     console.log(data);
@@ -296,7 +297,7 @@ const SubCategory = () => {
         </Container>
       </section>
       <ToastContainer />
-      {!isThisAgency && !isThisExpert && (
+      {!isThisAgency && !isThisExpert && showBookingGuide=='true' &&  (
         <JoyRideComponent
           steps={[
             {

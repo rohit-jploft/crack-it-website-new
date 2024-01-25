@@ -45,6 +45,8 @@ const RequestCateg = () => {
   const [subCategoryData, setSubCategoryData] = useState();
   const [currentTime, setCurrentTime] = useState(moment().format("HH:mm"));
 
+  const showBookingGuide = localStorage.getItem("showBookingGuide");
+
   useEffect(() => {
     const interval = setInterval(() => {
       const now = moment(); // Current time using moment
@@ -425,7 +427,7 @@ const RequestCateg = () => {
           </div>
         </Container>
       </section>
-        <JoyRideComponent
+       {showBookingGuide == 'true' && <JoyRideComponent
           steps={[
             {
               disableBeacon: true,
@@ -434,7 +436,7 @@ const RequestCateg = () => {
                 "Fill Details And The Click On Submit Button For Request",
             },
           ]}
-        />
+        />}
     
     </>
   );

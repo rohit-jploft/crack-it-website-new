@@ -821,9 +821,7 @@ const Home = () => {
           }
         />
       )} */}
-      {
-        <JoyRideComponent steps={[{disableBeacon:true,target:".btn_login", content:"If you are a fresher or experienced, struggling to CRACK the interview, No Worries. we have a team of experienced professionals."}]}/>
-      }
+    
     </Fragment>
   );
 };

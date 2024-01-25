@@ -41,6 +41,7 @@ import TermsAndConditions from "./Pages/TermsConditions";
 import ViewAllExperts from "./Pages/ViewAllExperts";
 import RaiseIssue from "./Pages/RaiseIssue";
 import AllTickets from "./Pages/AllTcikets";
+import UserDashboard from "./Pages/Dashboard";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -60,6 +61,10 @@ function AppRoutes() {
     {
       path: "/refer/earn",
       element: isAuthenticateds ? <ReferAndEarn />:<Navigate to="/login" /> ,
+    },
+    {
+      path: "/user/dashboard",
+      element: isAuthenticateds ? <UserDashboard />:<Navigate to="/login" /> ,
     },
     {
       path: "/refer/signup/:referedBy",

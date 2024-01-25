@@ -37,6 +37,7 @@ import { Col, Row } from "react-bootstrap";
 import MyChartComponent from "../components/MyChartComponent";
 import CancelPopUp from "../components/CancelPopUp";
 import JoyRideComponent from "../components/JoyRide";
+import Loader from "../components/Loader";
 
 let tab = ["REQUESTED", "Upcoming", "Past"];
 const isThisExpert = isExpert();
@@ -45,7 +46,7 @@ if (isThisExpert) {
 }
 
 const MyBookings = () => {
-  const { isExpertVerified, setExpertVerified } = useContext(UserContext);
+  const { isExpertVerified, setExpertVerified, setIsFirstBookingDone  } = useContext(UserContext);
   const [showtour, setShowTour] = useState(true);
   const [cancelReason, setReason] = useState("");
   const [comment, setComment] = useState("");
@@ -59,6 +60,7 @@ const MyBookings = () => {
   const navigate = useNavigate();
   const { tabKey } = useParams();
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
   const [bookingCancelId, setBookingCancelId] = useState();
@@ -86,23 +88,13 @@ const MyBookings = () => {
     setTotalCount(res?.pagination?.totalCount);
   };
 
-  const getRatedExpert = async () => {
-    const res = await Axios.get(
-      `${BASE_URL}expert/rating/get/all?limit=5&page=0`
-    );
-    console.log("rated expert", res);
-    setExpertList(res?.data?.data);
-  };
+
   useEffect(() => {
     if (isThisExpert) {
       setTabArray(["New", "Upcoming", "Past"]);
     }
-    (async () => {
-      const res = await getUserDashboardData();
-      await getRatedExpert();
-      setdaahboardData(res.data);
-    })();
   }, []);
+  const showBookingGuide = localStorage.getItem("showBookingGuide");
   useEffect(() => {
     setCancelDone(false);
     getData();
@@ -127,12 +119,16 @@ const MyBookings = () => {
     }
   };
   const AcceptBooking = async (bookingId) => {
+    setIsLoading(true)
     const accept = await Axios.put(`${BASE_URL}booking/accept/${bookingId}`);
     console.log(accept);
     if (accept && accept?.data?.status === 200) {
       toast.success(accept.data.message);
       setCancelDone(true);
       handleClose();
+      setIsLoading(false)
+    } else {
+      setIsLoading(false)
     }
   };
   const declineBooking = async (bookingId) => {
@@ -190,15 +186,18 @@ const MyBookings = () => {
   console.log(typeof dashboardData?.monthlyMeetings, "arrType");
   const isThisUser = localStorage.getItem("role");
 
+  
+
   return (
     <>
       <Header />
 
       <ToastContainer />
+      <Loader open={isLoading} title={"Accepting Request....."} handleClose={() => setIsLoading(false)}/>
       <section className="">
         <Container>
           <div className="main-content">
-            {isThisUser === "USER" && <h2>Dashboard</h2>}
+            {/* {isThisUser === "USER" && <h2>Dashboard</h2>}
             {isThisUser === "USER" && (
               <Row>
                 <Col md={8}>
@@ -244,7 +243,7 @@ const MyBookings = () => {
                     );
                   })}
               </div>
-            )}
+            )} */}
 
             <h2>My Bookings</h2>
             <p>See your scheduled meetings from your calendar</p>
@@ -404,7 +403,9 @@ const MyBookings = () => {
         handleClose={() => setShowCancelReasonPopUp(false)}
         setComment={(value) => setComment(value)}
       />
-      {isThisUser === "USER" && (
+
+      
+      {(isThisUser === "USER" && showBookingGuide=='true' )&& (
         <JoyRideComponent
           steps={[
             {

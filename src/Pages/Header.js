@@ -122,6 +122,11 @@ const Header = () => {
     }
     // if(type)
   };
+  const logoutFun = async () => {
+    const userId = localStorage.getItem("userId");
+    const log = await Axios.put(`${BASE_URL}auth/user/logout/${userId}`);
+
+  };
 
   return (
     <>
@@ -141,7 +146,12 @@ const Header = () => {
             <Nav className="ms-auto">
               {isTheUser && (
                 <Nav.Link href="/JobCategory" className="button_user">
-                  <button className="btn_login" style={{zIndex:999, position:"relative"}}>BOOK NOW</button>
+                  <button
+                    className="btn_login"
+                    style={{ zIndex: 999, position: "relative" }}
+                  >
+                    BOOK NOW
+                  </button>
                 </Nav.Link>
               )}
               <NavDropdown
@@ -256,6 +266,12 @@ const Header = () => {
                     Profile
                   </NavDropdown.Item>
                 )}
+                {role === "USER" && (
+                  <NavDropdown.Item href="/user/dashboard">
+                    <img src={Bookings} alt="" />
+                    Dashboard
+                  </NavDropdown.Item>
+                )}
                 {role === "AGENCY" && (
                   <NavDropdown.Item href="/agency/experts/all">
                     <img src={Profile} alt="" />
@@ -310,14 +326,16 @@ const Header = () => {
         open={showLogOutModal}
         handleClose={() => setShowLogoutModal(false)}
         logOut={() => {
-          const role = localStorage.getItem("role")
+          const role = localStorage.getItem("role");
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
+          localStorage.removeItem("isFirstBookingDone");
           // if(role==='AGENCY'){
-            // navigate("/agency/login");
+            logoutFun()
+          // navigate("/agency/login");
           // } else {
-            navigate("/login");
+          navigate("/login");
           // }
         }}
       />

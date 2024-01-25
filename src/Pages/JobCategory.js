@@ -32,7 +32,7 @@ const JobCategory = () => {
   }, []);
   const isThisExpert = isExpert();
   const isThisAgency = isAgency();
-
+  const showBookingGuide = localStorage.getItem("showBookingGuide");
   useEffect(() => {
     if (
       !profileSetupData?.description ||
@@ -121,7 +121,7 @@ const JobCategory = () => {
           </div>
         </Container>
       </section>
-      {!isThisAgency && !isThisExpert && (
+      {!isThisAgency && !isThisExpert && showBookingGuide=='true' && (
         <JoyRideComponent
           steps={[
             {

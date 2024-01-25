@@ -219,7 +219,8 @@ const BookingInfo = () => {
     if(res && res?.data && res.data.success){
       toast.success("Booking has been confirmed")
       setWalletPaymentDone(false)
-      setIsLoading(true);
+      setIsLoading(false);
+      window.location.reload()
     } else {
       toast.error(res?.data?.message)
       setIsLoading(false);

@@ -21,21 +21,29 @@ import Loader from "../components/Loader";
 import { AVATAR_BASE_URL } from "../constant";
 import JoyRideComponent from "../components/JoyRide";
 const Experts = () => {
-  const { jobCategory, getReqData, time } = useContext(BookingContext);
+  const {
+    jobCategory,
+    getReqData,
+    time,
+    listExpertRequested,
+    setListExpertRequested,
+  } = useContext(BookingContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isReqLoadingDone, setIsReqLoadingDone] = useState(false);
   const [priceminFilter1, setPriceMinFilter1] = useState(0);
   const [pricemaxFilter1, setPriceMaxFilter1] = useState(50);
   const [priceminFilter, setPriceMinFilter] = useState(0);
   const [pricemaxFilter, setPriceMaxFilter] = useState(250);
+
   const [data, setData] = useState();
   const [search, setSearch] = useState();
 
   // filter states
-  const [minPrice, setMinPrice] = useState(0);
+  const [minPrice, setMinPrice] = useState();
   const [disableButton, setDisableButton] = useState(false);
   const [reqSent, setReqSent] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(250);
+  const [maxPrice, setMaxPrice] = useState();
   const [minExperience, setMinExperience] = useState(0);
   const [maxExperience, setMaxExperience] = useState(50);
   const [rating, setRating] = useState(0);
@@ -85,7 +93,10 @@ const Experts = () => {
   }, [search, jobCategory, filterSubmitted]);
   console.log(getReqData);
 
+  const showBookingGuide = localStorage.getItem("showBookingGuide");
+
   const onBookingExperts = async (e, ExuserId) => {
+    setIsReqLoadingDone(true);
     e.preventDefault();
 
     const loggedUserId = localStorage.getItem("userId");
@@ -103,6 +114,16 @@ const Experts = () => {
             setDisableButton(false);
           }, 2000);
           setReqSent(true);
+          setIsReqLoadingDone(false);
+          setListExpertRequested([
+            ...listExpertRequested,
+            {
+              expertId: ExuserId.toString(),
+              requested: true,
+            },
+          ]);
+          localStorage.removeItem("showBookingGuide")
+          localStorage.setItem("showBookingGuide", false)
         }
         if (result && result.status === 203 && result.type === "error") {
           toast(result.message, { type: "error", autoClose: 1500 });
@@ -110,11 +131,13 @@ const Experts = () => {
           setTimeout(() => {
             setDisableButton(false);
           }, 2000);
+          setIsReqLoadingDone(false);
         }
         console.log(result);
       })
       .catch((err) => {
         console.log(err);
+        setIsReqLoadingDone(false);
       });
   };
 
@@ -138,6 +161,14 @@ const Experts = () => {
 
   console.log("pricemaxFilter", pricemaxFilter, priceminFilter);
   console.log(typeOfExpert, "typeOfExpert");
+  function isExpertRequested(expertId) {
+    const expert = listExpertRequested.find(
+      (item) => item.expertId === expertId
+    );
+
+    // Check if expert is found and requested is true
+    return expert && expert.requested === true;
+  }
   return (
     <>
       <ToastContainer />
@@ -145,6 +176,7 @@ const Experts = () => {
       <section className="">
         <Container>
           <Loader open={isLoading} title={"Searching experts"} />
+          <Loader open={isReqLoadingDone} title={"Sending Booking Request"} />
           <div className="main-content">
             <div className="">
               <div>
@@ -308,14 +340,15 @@ const Experts = () => {
                         <th width="15%"></th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {data?.map((expert) => {
+                    <tbody className="showGuide">
+                      {data?.map((expert, index) => {
                         return (
                           <tr
                             style={{ cursor: "pointer" }}
                             onClick={() =>
                               navigate(`/expert/profile/${expert?.user?._id}`)
                             }
+                            className="row-expert"
                           >
                             <td>
                               <img
@@ -350,14 +383,23 @@ const Experts = () => {
                             <td>
                               {/* <Link to={`/ExpertsProfile/${expert?.user?._id}`}> */}
                               <button
-                                className="btn_request"
-                                disabled={disableButton}
+                                className={`btn_request forGuide${index}`}
+                                disabled={disableButton || isExpertRequested(expert?.user?._id)}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   onBookingExperts(e, expert?.user?._id);
                                 }}
+                                style={{
+                                  backgroundColor: isExpertRequested(
+                                    expert?.user?._id
+                                  )
+                                    ? "grey"
+                                    : "#01d866",
+                                }}
                               >
-                                Request
+                                {isExpertRequested(expert?.user?._id)
+                                  ? "Requested"
+                                  : "Request"}
                               </button>
                               {/* </Link> */}
                             </td>
@@ -372,7 +414,7 @@ const Experts = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height:"200px"
+                        height: "200px",
                       }}
                       className="no_chat"
                     >
@@ -385,17 +427,17 @@ const Experts = () => {
           </div>
         </Container>
       </section>
+      {showBookingGuide && (
         <JoyRideComponent
           steps={[
             {
               disableBeacon: true,
-              target: ".btn_request",
-              content:
-                "Request For Call",
+              target: ".showGuide",
+              content: "Request For Call",
             },
           ]}
         />
-     
+      )}
     </>
   );
 };
