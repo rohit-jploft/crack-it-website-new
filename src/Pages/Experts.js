@@ -20,6 +20,7 @@ import MultiRangeSliderExp from "../components/MultiRangeSliderExp";
 import Loader from "../components/Loader";
 import { AVATAR_BASE_URL } from "../constant";
 import JoyRideComponent from "../components/JoyRide";
+import { isAgency, isExpert } from "../utils/authHelper";
 const Experts = () => {
   const {
     jobCategory,
@@ -93,6 +94,8 @@ const Experts = () => {
   }, [search, jobCategory, filterSubmitted]);
   console.log(getReqData);
 
+  const isThisExpert = isExpert();
+  const isThisAgency = isAgency();
   const showBookingGuide = localStorage.getItem("showBookingGuide");
 
   const onBookingExperts = async (e, ExuserId) => {
@@ -214,6 +217,8 @@ const Experts = () => {
                             min={0}
                             max={250}
                             onChange={({ min, max }) => {
+                              console.log(min, "min")
+                              console.log(max, "max")
                               setMinPrice(min);
                               setMaxPrice(max);
                               setPriceMinFilter(min);
@@ -225,19 +230,6 @@ const Experts = () => {
                             priceminFilter={priceminFilter}
                           />
                         </div>
-
-                        {/* <div class="star-rating mb-5">
-                                      <input type="radio" id="5-stars" name="rating" value="5" />
-                                      <label for="5-stars" class="star">&#9733;</label>
-                                      <input type="radio" id="4-stars" name="rating" value="4" />
-                                      <label for="4-stars" class="star">&#9733;</label>
-                                      <input type="radio" id="3-stars" name="rating" value="3" />
-                                      <label for="3-stars" class="star">&#9733;</label>
-                                      <input type="radio" id="2-stars" name="rating" value="2" />
-                                      <label for="2-stars" class="star">&#9733;</label>
-                                      <input type="radio" id="1-star" name="rating" value="1" />
-                                      <label for="1-star" class="star">&#9733;</label>
-                                    </div> */}
                         <div
                           style={{
                             display: "flex",
@@ -369,7 +361,7 @@ const Experts = () => {
                             <td>{expert?.jobCategory?.title}</td>
                             <td>
                               {expert && expert.user && expert?.user?.agency ? (
-                                <Chip label="Agency" variant="outlined" />
+                                <Chip label={`${expert?.agency?.agencyName}(Agency)`} variant="outlined" />
                               ) : (
                                 <Chip label="Individual" variant="outlined" />
                               )}
@@ -427,7 +419,7 @@ const Experts = () => {
           </div>
         </Container>
       </section>
-      {showBookingGuide && (
+      {!isThisAgency && !isThisExpert && showBookingGuide=='true' && (
         <JoyRideComponent
           steps={[
             {

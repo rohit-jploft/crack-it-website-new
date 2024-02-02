@@ -42,6 +42,7 @@ import ViewAllExperts from "./Pages/ViewAllExperts";
 import RaiseIssue from "./Pages/RaiseIssue";
 import AllTickets from "./Pages/AllTcikets";
 import UserDashboard from "./Pages/Dashboard";
+import ReBookingComponent from "./components/RebookingComponent";
 
 function AppRoutes() {
   const isAuthenticateds = isAuthenticated();
@@ -110,6 +111,10 @@ function AppRoutes() {
     {
       path: "/experts",
       element: isAuthenticateds ? <Experts />:<Navigate to="/login" /> ,
+    },
+    {
+      path: "rebooking/experts/:bookingId",
+      element: isAuthenticateds ? <ReBookingComponent />:<Navigate to="/login" /> ,
     },
     {
       path: "/agency/experts/all",

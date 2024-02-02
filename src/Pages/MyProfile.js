@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ModelContext } from "../context/ModelContext";
 import AvatarModel from "../components/AvatarModel";
 import LogoutModal from "../components/LogoutModal";
+import EditPencilIcon from "../Images/editPencilIcon3.svg"
 
 const MyProfile = () => {
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ const MyProfile = () => {
                       style={{ display: "none" }}
                     /> */}
                       <img
-                        src="/static/media/edit.0543f4f52dca0cf68ddf82ec128fb432.svg"
+                        src={EditPencilIcon}
                         alt="img"
                       />
                     </button>
@@ -209,10 +210,11 @@ const MyProfile = () => {
         logOut={() => {
           const role = localStorage.getItem("role")
           localStorage.removeItem("token");
+          logoutFun()
+
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
           localStorage.removeItem("isFirstBookingDone");
-          logoutFun()
           if(role==='AGENCY'){
             navigate("/agency/login");
           } else {

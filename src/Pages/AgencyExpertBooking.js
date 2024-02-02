@@ -159,6 +159,7 @@ const AgencyExpertBooking = () => {
                             cancelButton={meet.status === "REQUESTED"}
                             status={meet.status}
                             onClickChat={() => clickChatRedirect(meet?._id)}
+                            bookingUniqueId={meet?.bookingId}
                             onClickCancel={() => {
                               setBookingCancelId(meet?._id);
                               handleShow();

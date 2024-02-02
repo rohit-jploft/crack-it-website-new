@@ -55,7 +55,6 @@ const MultiRangeSlider = ({
 
   useEffect(() => {}, [min, max]);
 
-  console.log("minss", priceminFilter, pricemaxFilter);
   return (
     <div className="container">
       <input

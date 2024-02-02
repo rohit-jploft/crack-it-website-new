@@ -103,7 +103,7 @@ const ExpertsProfile = () => {
                   <div>
                     <h3>
                       <img className="star-img" src={Star} alt="img" />
-                      {profileData?.rating}
+                      {profileData?.noOfRatingsGiven}
                     </h3>
                     <p>Star Level</p>
                   </div>

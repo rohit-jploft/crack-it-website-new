@@ -53,6 +53,10 @@ const WithdrawAmount = () => {
     console.log(data);
     if (data && data?.data && data?.status === 200 && data?.success) {
       handleShow2(); // navigate("/withdraw-amount");
+      setTimeout(() => {
+        setShow(false)
+        navigate("/wallet")
+      }, 3000)
     }
     if (data.status === 202 && !data.success) {
       toast.error(data.message);

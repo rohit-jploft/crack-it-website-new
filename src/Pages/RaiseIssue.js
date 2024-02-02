@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextInput from "../components/InputField";
@@ -12,15 +12,20 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 const RaiseIssue = () => {
+  const fileInputRef = useRef(null);
+
   const navigate = useNavigate();
+  const [file, setFile] = useState()
   const [reasonList, setReasonList] = useState([]);
   const { ticketRaiseBookingId, setTicketRaiseBookingId } =
     useContext(BookingContext);
 
   const getAllReasons = async () => {
-    const res = await axios.get(`${BASE_URL}ticket/reason/get-all`);
+    const role = localStorage.getItem("role")
+    const res = await axios.get(`${BASE_URL}ticket/reason/get-all?role=${role}`);
     console.log(res, "reason");
     setReasonList(res?.data?.data);
+    formik.setFieldValue("reason", res?.data?.data[0]._id)
   };
   useEffect(() => {
     if (!ticketRaiseBookingId) {
@@ -32,27 +37,11 @@ const RaiseIssue = () => {
     initialValues: {
       reason: "",
       query: "",
-      doc: {},
     },
     validationSchema: Yup.object({
       reason: Yup.string().required("Reason is Required"),
       query: Yup.string().required("query is Required"),
-      doc: Yup.mixed()
-        .test(
-          "fileSize",
-          "File too large",
-          (value) => !value || (value && value.size <= 1024 * 1024 * 4)
-        )
-        .test(
-          "fileFormat",
-          "Unsupported Format",
-          (value) =>
-            !value ||
-            (value &&
-              ["application/pdf", "image/jpeg", "image/png"].includes(
-                value.type
-              ))
-        ),
+     
     }),
     onSubmit: async (values) => {
       try {
@@ -60,7 +49,8 @@ const RaiseIssue = () => {
         const formData = new FormData();
         formData.append("reason", values.reason);
         formData.append("query", values.query);
-        formData.append("doc", values.doc);
+        // formData.append("doc", values.doc);
+        if(file) formData.append("doc", file)
         formData.append("user", userId);
         formData.append("booking", ticketRaiseBookingId);
 
@@ -85,6 +75,31 @@ const RaiseIssue = () => {
       }
     },
   });
+
+  const handleFileInputChange = (e) => {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      const acceptedTypes = [ "application/pdf", "image/*"];
+      if (acceptedTypes.some((type) => fileType.match(type))) {
+        // File type is valid, you can handle the file here
+        console.log("Selected file:", selectedFile);
+        setFile(selectedFile);
+      } else {
+        // alert("Invalid file type. Please select an audio, PDF, or image file.");
+        toast.error(
+          "Invalid file type. Please select an PDF, or image file."
+        );
+        // Clear the input to prevent further submission
+        setFile();
+        fileInputRef.current.value = "";
+      }
+    }
+    // Check if the selected file type matches any of the accepted types
+
+    // Do something with the selected file, e.g., upload or process it
+  };
 
   return (
     <>
@@ -170,10 +185,9 @@ const RaiseIssue = () => {
                 <div className="input-field">
                   <TextInput
                     type="file"
+                    ref={fileInputRef}
                     name="doc"
-                    handleChange={(event) => {
-                      formik.setFieldValue("doc", event.currentTarget.files[0]);
-                    }}
+                    handleChange={handleFileInputChange}
                   />
                   {formik.touched.doc && formik.errors.doc ? (
                     <div
@@ -191,7 +205,7 @@ const RaiseIssue = () => {
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <span>
                     {" "}
-                    File types must be like PDFs, docs, png, jpg. Max File Size:
+                    File types must be like PDFs, png, jpg. Max File Size:
                     4 mb
                   </span>
                 </div>

@@ -328,11 +328,12 @@ const Header = () => {
         logOut={() => {
           const role = localStorage.getItem("role");
           localStorage.removeItem("token");
+          logoutFun()
+
           localStorage.removeItem("userId");
           localStorage.removeItem("role");
           localStorage.removeItem("isFirstBookingDone");
           // if(role==='AGENCY'){
-            logoutFun()
           // navigate("/agency/login");
           // } else {
           navigate("/login");

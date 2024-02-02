@@ -47,6 +47,7 @@ const AllTickets = () => {
                     status={ticket?.status}
                     ticketNo={ticket?.ticketNo}
                     createdAt={ticket?.createdAt}
+                    feedbackByAdmin={ticket?.feedbackByAdmin}
                   />
                 );
               })}
@@ -61,7 +62,15 @@ const AllTickets = () => {
                   marginTop: "40px",
                 }}
               >
-                <div style={{margin:"25px",padding:"25px", background:"#C2FFDD 0% 0% no-repeat padding-box", border:"1px solid #8DF3BD", borderRadius:"50%"}}>
+                <div
+                  style={{
+                    margin: "25px",
+                    padding: "25px",
+                    background: "#C2FFDD 0% 0% no-repeat padding-box",
+                    border: "1px solid #8DF3BD",
+                    borderRadius: "50%",
+                  }}
+                >
                   <img src={NoTicketIcon} />
                 </div>
                 <h3>No Ticket</h3>

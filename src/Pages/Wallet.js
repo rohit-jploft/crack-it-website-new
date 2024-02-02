@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import Walletimg from "./../Images/wallet.svg";
 import { getAllWithDrawal, getWallet } from "../data/wallet";
 import { useContext, useEffect, useState } from "react";
-import { getDateFromTimeStamps } from "../helper/helper";
+import { getDateFromTimeStamps, getTimeFromTimestamps } from "../helper/helper";
 import { useNavigate } from "react-router-dom";
 import { isExpert } from "../utils/authHelper";
 import { UserContext } from "../context/userContext";
@@ -88,6 +88,7 @@ const Wallet = () => {
                                   <th width="15%">Name</th>
                                   <th width="24%">Date</th>
                                   <th width="24%">Title</th>
+                                  <th width="24%">Booking Id</th>
                                   <th width="15%">Status</th>
                                   <th width="15%">Amount</th>
                                 </tr>
@@ -105,6 +106,7 @@ const Wallet = () => {
                                       type,
                                       title,
                                       user,
+                                      booking,
                                       otherUser,
                                       createdAt,
                                     } = transaction;
@@ -123,8 +125,11 @@ const Wallet = () => {
                                         </td>
                                         <td>
                                           {getDateFromTimeStamps(createdAt)}
+                                          <br />
+                                          {getTimeFromTimestamps(createdAt)}
                                         </td>
                                         <td>{title}</td>
+                                        <td>{booking?.bookingId}</td>
                                         <td>
                                           <div className="status_success">
                                             {status}
@@ -207,6 +212,8 @@ const Wallet = () => {
                                       </td>
                                       <td>
                                         {getDateFromTimeStamps(createdAt)}
+                                        <br />
+                                        {getTimeFromTimestamps(createdAt)}
                                       </td>
                                       <td>
                                         <div
@@ -260,6 +267,7 @@ const Wallet = () => {
                               <th width="15%">Name</th>
                               <th width="15%">Title</th>
                               <th width="15%">Method</th>
+                              <th width="15%">BookingId</th>
                               <th width="24%">Date</th>
                               <th width="15%">Status</th>
                               <th width="15%">Amount</th>
@@ -278,6 +286,7 @@ const Wallet = () => {
                                 title,
                                 user,
                                 paymentMethod,
+                                booking,
                                 otherUser,
                                 createdAt,
                               } = transaction;
@@ -291,11 +300,16 @@ const Wallet = () => {
                                     />
                                   </td>
                                   <td className="Wname">
-                                    {otherUser?.firstName} {otherUser?.lastName}
+                                    {user?.firstName} {user?.lastName}
                                   </td>
                                   <td>{title}</td>
                                   <td>{paymentMethod}</td>
-                                  <td>{getDateFromTimeStamps(createdAt)}</td>
+                                  <td>{booking?.bookingId}</td>
+                                  <td>
+                                    {getDateFromTimeStamps(createdAt)}
+                                    <br />
+                                    {getTimeFromTimestamps(createdAt)}
+                                  </td>
 
                                   <td>
                                     <div

@@ -7,7 +7,7 @@ export const VAPID_KEY =
   "BJOOPyywRkNWAub0wJ4vmdT4lqtndIxr7OLGm2Ct6NwF-rXW1-vDXv6ufruFJFjtXMjYll3OX--2S8gRXNH1aOE";
 export const STRIPE_PUBLIC_KEY =
   "pk_test_51NLl4oBJG0qcZ8qIRik60miJ5fayU9GyJgV19GWMPCc9e84A6xyD6ZAU4nIKG01HwukmK9ACWz8mWnht79pDR4t300kYWwP2ox";
-  export const geoapify_key = 'fa32fc869d1d40a89090f1a5963f36a5';
+export const geoapify_key = 'fa32fc869d1d40a89090f1a5963f36a5';
 export const timeZoneList = [
   { offsetMinutes: -720, symbol: "IDLW", name: "International Date Line West" },
   { offsetMinutes: -600, symbol: "HST", name: "Hawaii-Aleutian Standard Time" },

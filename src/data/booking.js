@@ -66,6 +66,10 @@ export const listExpert = async (
   rating,
   typeOfExpert
 ) => {
+  console.error("inside api", minExperience, "minExp")
+  console.error("inside api", maxExperience, "minExp")
+  console.error("inside api", minPrice, "minPrice")
+  console.error("inside api", maxPrice, "maxPrice")
   try {
     let url = `${BASE_URL}expert/get/all?`;
 
@@ -88,7 +92,6 @@ export const listExpert = async (
       queryParams.endPrice = 250;
     }
     if (maxPrice) {
-      queryParams.startPrice = 0;
       queryParams.endPrice = maxPrice;
     }
     if (minExperience) {
@@ -96,7 +99,6 @@ export const listExpert = async (
       queryParams.maxExperience = 50;
     }
     if (maxExperience) {
-      queryParams.minExperience = 0;
       queryParams.maxExperience = maxExperience;
     }
 

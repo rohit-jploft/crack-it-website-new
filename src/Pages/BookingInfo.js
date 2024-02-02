@@ -1,6 +1,7 @@
 import "./../style.css";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Chip from '@mui/material/Chip';
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
 import Bookingimg2 from "./../Images/default_avatar.png";
@@ -215,18 +216,18 @@ const BookingInfo = () => {
   const proceedWhenAmountIsZero = async () => {
     setIsLoading(true);
     const res = await Axios.put(`${BASE_URL}payment/booking/zero/${bookingId}`);
-    console.log(res, "zero amount")
-    if(res && res?.data && res.data.success){
-      toast.success("Booking has been confirmed")
-      setWalletPaymentDone(false)
+    console.log(res, "zero amount");
+    if (res && res?.data && res.data.success) {
+      toast.success("Booking has been confirmed");
+      setWalletPaymentDone(false);
       setIsLoading(false);
-      window.location.reload()
+      window.location.reload();
     } else {
-      toast.error(res?.data?.message)
+      toast.error(res?.data?.message);
       setIsLoading(false);
     }
   };
- 
+
   const getWalletData = async () => {
     const data = await getWallet();
     setWalletAmount(data?.data?.wallet?.amount);
@@ -257,7 +258,10 @@ const BookingInfo = () => {
           <div className="main-content">
             <div class="content-head">
               <div>
-                <h2>Booking info</h2>
+                <h2>
+                  Booking info (BookingId -{" "}
+                  {bookingData?.booking?.booking?.bookingId})
+                </h2>
                 <p>See your scheduled meetings from your calendar</p>
               </div>
               <div>
@@ -277,54 +281,94 @@ const BookingInfo = () => {
               </div>
             </div>
             <div className="provider-info">
-              <div className="info-header">
+             <div style={{display:"flex", justifyContent:"space-between"}}>
+             <div className="info-header">
+                
                 {!isThisExpert && <h6>Service Provider Info</h6>}
                 {isThisExpert && <h6>Service Taker Info</h6>}
-                <div className="profile-detail">
-                  <div>
-                    {!isThisExpert && (
-                      <img
-                        src={
-                          bookingData?.booking?.booking?.expert?.profilePhoto
-                            ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.expert?.profilePhoto}`
-                            : Bookingimg2
-                        }
-                        alt="img"
-                      />
-                    )}
-                    {isThisExpert && (
-                      <img
-                        src={
-                          bookingData?.booking?.booking?.user?.profilePhoto
-                            ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.user?.profilePhoto}`
-                            : Bookingimg2
-                        }
-                        alt="img"
-                      />
-                    )}
+               
+                <div
+                  className="profile-detail"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    <div>
+                      {!isThisExpert && (
+                        <img
+                          src={
+                            bookingData?.booking?.booking?.expert?.profilePhoto
+                              ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.expert?.profilePhoto}`
+                              : Bookingimg2
+                          }
+                          alt="img"
+                        />
+                      )}
+                      {isThisExpert && (
+                        <img
+                          src={
+                            bookingData?.booking?.booking?.user?.profilePhoto
+                              ? `${AVATAR_BASE_URL}${bookingData?.booking?.booking?.user?.profilePhoto}`
+                              : Bookingimg2
+                          }
+                          alt="img"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      {!isThisExpert && (
+                        <h4>
+                          {bookingData?.booking?.booking?.expert?.firstName}{" "}
+                          {bookingData?.booking?.booking?.expert?.lastName}
+                        </h4>
+                      )}
+                      {isThisExpert && (
+                        <h4>
+                          {bookingData?.booking?.booking?.user?.firstName}{" "}
+                          {bookingData?.booking?.booking?.user?.lastName}
+                        </h4>
+                      )}
+                      {!isThisExpert && (
+                        <p>
+                          {bookingData?.expertProfile?.jobCategory?.title} |{" "}
+                          {bookingData?.expertProfile?.experience} year
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    {!isThisExpert && (
-                      <h4>
-                        {bookingData?.booking?.booking?.expert?.firstName}{" "}
-                        {bookingData?.booking?.booking?.expert?.lastName}
-                      </h4>
+                  {bookingData?.booking?.booking?.status === "CANCELLED" &&
+                    bookingData?.booking?.booking?.cancelBy == "EXPERT" && (
+                      <div style={{}}>
+                        <button
+                          type="submit"
+                          className="raise_issue_button"
+                          style={{
+                            float: "right",
+                            width: "150px",
+                            height: "40px",
+                          }}
+                          onClick={() => {
+                            navigate(`/rebooking/experts/${bookingId}`)
+                          }}
+                        >
+                          Re-Book
+                        </button>
+                      </div>
                     )}
-                    {isThisExpert && (
-                      <h4>
-                        {bookingData?.booking?.booking?.user?.firstName}{" "}
-                        {bookingData?.booking?.booking?.user?.lastName}
-                      </h4>
-                    )}
-                    {!isThisExpert && (
-                      <p>
-                        {bookingData?.expertProfile?.jobCategory?.title} |{" "}
-                        {bookingData?.expertProfile?.experience} year
-                      </p>
-                    )}
-                  </div>
                 </div>
               </div>
+              <div>
+                <span><b>Job-Category - </b> {bookingData?.booking?.booking?.jobCategory?.title}</span><br/>
+                <span><b>Skills - </b> {bookingData?.booking?.booking?.skills.length>0 &&bookingData?.booking?.booking?.skills.map((skill) =><Chip label={skill?.title} variant="outlined" />) }</span><br/>
+                <span><b>Job Description - </b> {bookingData?.booking?.booking?.jobDescription}</span>
+              </div>
+             </div>
               <div className="info-content">
                 <div className="info-detail">
                   <div className="datetime-info">
@@ -452,7 +496,7 @@ const BookingInfo = () => {
                         //   bookingId
                         // );
                         if (bookingData?.booking?.grandTotal == 0) {
-                          proceedWhenAmountIsZero()
+                          proceedWhenAmountIsZero();
                         } else {
                           setPaymentAmount(bookingData?.booking?.grandTotal);
                           setShowPaymentMethodModel(true);

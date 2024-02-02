@@ -30,6 +30,7 @@ const BookingListItem = ({
   userName,
   userPic,
   expertPic,
+  bookingUniqueId
 }) => {
   const navigate = useNavigate();
   const { ratingBookingId, setRatingBookingId } = useContext(BookingContext);
@@ -37,37 +38,9 @@ const BookingListItem = ({
   const isThisAgency = isAgency();
   const isThisUser = isUser();
   
-  const makePayment = async (amount, meetingId) => {
-    const stripe = await loadStripe(STRIPE_PUBLIC_KEY);
-
-    try {
-      const body = {
-        amount: amount,
-        meetingId: meetingId,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      const response = await fetch(`${BASE_URL}payment/intent/create`, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-      });
-
-      const session = await response.json();
-
-      const result = stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-
-      if (result.error) {
-        console.log(result.error);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+ 
   console.log(startTime, "startTime");
+  console.log(bookingUniqueId, "bookingUniqueId")
 
   return (
     <div className="booking_field active">
@@ -81,6 +54,11 @@ const BookingListItem = ({
         <br />
         {startTime} - {endTime}
       </div>
+     <div style={{display:"flex", flexDirection:"column"}}>
+     <span style={{fontSize:"13px"}}>Booking Id</span>
+     
+      <span>{bookingUniqueId}</span>
+     </div>
       {!isThisExpert && !isThisAgency && (
         <div className="profile-detail">
           <div>
@@ -125,6 +103,18 @@ const BookingListItem = ({
       </div>}
       <div className="action">
         {cancelButton && status !== "REQUESTED" && (
+          <button
+            className="btn_border"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickCancel();
+            }}
+            variant="primary"
+          >
+            Cancel
+          </button>
+        )}
+        {cancelButton && status === "REQUESTED" && isThisUser && (
           <button
             className="btn_border"
             onClick={(e) => {

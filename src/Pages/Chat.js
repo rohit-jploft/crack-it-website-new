@@ -46,6 +46,7 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [file, setFile] = useState();
+  const [isSelectedChatClosed, setIsSelectedChatClosed] = useState();
   const [newMsgObj, setNewMsgObj] = useState();
   const scrollRef = useRef(null);
 
@@ -174,6 +175,7 @@ const Chat = () => {
                               onClick={() => {
                                 handleConversationClick(conversation?._id);
                                 setConvoData(conversation);
+                                setIsSelectedChatClosed(conversation?.isClosed);
                               }}
                               class={`contact ${
                                 selectedConversation === conversation?._id
@@ -217,19 +219,28 @@ const Chat = () => {
                                   style={{ marginLeft: "-40px" }}
                                 />
                                 <div class="meta">
-                                  <p class="name">
-                                    {isUserNameDisplay(
-                                      conversation?.participants[1]?._id
-                                    )
-                                      ? `${conversation?.participants[0]?.firstName} ${conversation?.participants[0]?.lastName}`
-                                      : `${conversation?.participants[1]?.firstName} ${conversation?.participants[1]?.lastName}`}
-                                    {conversation?.admin &&
-                                      `${" & "}` +
-                                        conversation?.admin.firstName}
-                                    {conversation?.superAdmin &&
-                                      `${" & "}` +
-                                        conversation?.superAdmin.firstName}
-                                  </p>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                    }}
+                                  >
+                                    <p class="name">
+                                      {isUserNameDisplay(
+                                        conversation?.participants[1]?._id
+                                      )
+                                        ? `${conversation?.participants[0]?.firstName} ${conversation?.participants[0]?.lastName}`
+                                        : `${conversation?.participants[1]?.firstName} ${conversation?.participants[1]?.lastName}`}
+                                      {conversation?.admin &&
+                                        `${" & "}` +
+                                          conversation?.admin.firstName}
+                                      {conversation?.superAdmin &&
+                                        `${" & "}` +
+                                          conversation?.superAdmin.firstName}
+                                    </p>
+                                    <p> {conversation?.booking?.bookingId}</p>
+                                  </div>
+
                                   <div
                                     style={{
                                       display: "flex",
@@ -243,11 +254,25 @@ const Chat = () => {
                                     >
                                       {conversation?.latestMessage?.content}
                                     </p>
-                                    <p class="preview">
-                                      {format(
-                                        conversation?.latestMessage?.createdAt
-                                      )}
-                                    </p>
+                                    {!conversation?.isClosed && (
+                                      <p class="preview">
+                                        {format(
+                                          conversation?.latestMessage?.createdAt
+                                        )}
+                                      </p>
+                                    )}
+                                    {conversation?.isClosed && (
+                                      <p
+                                        class="preview"
+                                        style={{ color: "red" }}
+                                      >
+                                        Closed
+                                      </p>
+                                    )}
+                                    {console.log(
+                                      "isClosed",
+                                      conversation?.isClosed
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -445,6 +470,7 @@ const Chat = () => {
                                     }}
                                   />
                                 )}
+                                <h6 style={{marginTop:"-15px", color:"black", fontWeight:"900"}}>{message?.sender?.role}</h6>
                                 <p>{message?.content}</p>
                                 <h6>{format(message?.createdAt)}</h6>
                               </li>
@@ -507,7 +533,7 @@ const Chat = () => {
                               </span>{" "}
                               <button onClick={() => setFile()}>
                                 <img
-                                  src="   https://cdn-icons-png.flaticon.com/512/660/660252.png "
+                                  src="https://cdn-icons-png.flaticon.com/512/660/660252.png "
                                   style={{ width: "22px" }}
                                   alt=""
                                   title=""
@@ -516,19 +542,21 @@ const Chat = () => {
                               </button>
                             </p>
                           )}
-                          <img
-                            src={EmojiIcon}
-                            style={{
-                              width: "35px",
-                              height: "35px",
-                              cursor: "pointer",
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowEmoji(!showEmoji);
-                            }}
-                          />
-                          {showEmoji && (
+                          {!isSelectedChatClosed && (
+                            <img
+                              src={EmojiIcon}
+                              style={{
+                                width: "35px",
+                                height: "35px",
+                                cursor: "pointer",
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowEmoji(!showEmoji);
+                              }}
+                            />
+                          )}
+                          {showEmoji && !isSelectedChatClosed && (
                             <div
                               style={{
                                 marginBottom: "500px",
@@ -546,29 +574,47 @@ const Chat = () => {
                               />
                             </div>
                           )}
-                          <input
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            onKeyPress={(e) => {
-                              if (e.key === "Enter")
-                                handleSendMessage(newMessage);
-                              if (showEmoji) setShowEmoji(false);
-                            }}
-                            placeholder="Write your message..."
-                          />
-                          <div style={{ display: "flex" }}>
-                            <FileInputIcon
-                              file={file}
-                              setFile={(value) => setFile(value)}
+                          {!isSelectedChatClosed && (
+                            <input
+                              type="text"
+                              value={newMessage}
+                              onChange={(e) => setNewMessage(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === "Enter")
+                                  handleSendMessage(newMessage);
+                                if (showEmoji) setShowEmoji(false);
+                              }}
+                              placeholder="Write your message..."
                             />
-                            <img
-                              style={{ cursor: "pointer" }}
-                              src={Send}
-                              alt="img"
-                              onClick={() => handleSendMessage(newMessage)}
-                            />
-                          </div>
+                          )}
+                          {!isSelectedChatClosed && (
+                            <div style={{ display: "flex" }}>
+                              <FileInputIcon
+                                file={file}
+                                setFile={(value) => setFile(value)}
+                              />
+                              <img
+                                style={{ cursor: "pointer" }}
+                                src={Send}
+                                alt="img"
+                                onClick={() => handleSendMessage(newMessage)}
+                              />
+                            </div>
+                          )}
+                          {isSelectedChatClosed && (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                width: "-webkit-fill-available",
+                                color: "red",
+                              }}
+                            >
+                              <h6>Closed</h6>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}

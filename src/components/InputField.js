@@ -14,10 +14,11 @@ const TextInput = ({
   helperText,
   readonly,
   max,
- step,
- pattern,
- style,
- autoComplete
+  step,
+  pattern,
+  style,
+  autoComplete,
+  ref,
 }) => {
   const handleKeyPress = (e) => {
     // Get the pressed key
@@ -25,7 +26,14 @@ const TextInput = ({
       const pressedKey = e.key;
 
       // Check if the pressed key is "e" or "i"
-      if (pressedKey === "e" || pressedKey === "i" || pressedKey === '+' || pressedKey === "E" || pressedKey === "." || pressedKey === '-') {
+      if (
+        pressedKey === "e" ||
+        pressedKey === "i" ||
+        pressedKey === "+" ||
+        pressedKey === "E" ||
+        pressedKey === "." ||
+        pressedKey === "-"
+      ) {
         // Prevent the keypress from being added to the input value
         e.preventDefault();
       }
@@ -37,13 +45,18 @@ const TextInput = ({
         {label}
       </label>
       <input
+        ref={ref}
         type={type}
-        step={type === 'number' ? step : null}
-        pattern={type === 'number' ? pattern : null}
+        step={type === "number" ? step : null}
+        pattern={type === "number" ? pattern : null}
         maxLength={max}
         name={name}
         value={value}
-        style={{...style, backgroundColor:readonly ? "#E5E4E2" : "white", paddingRight: setShowPassword ? "40px" : "0px"}}
+        style={{
+          ...style,
+          backgroundColor: readonly ? "#E5E4E2" : "white",
+          paddingRight: setShowPassword ? "40px" : "0px",
+        }}
         onKeyPress={handleKeyPress}
         onChange={handleChange}
         // onPaste={(e) =>{
@@ -54,16 +67,14 @@ const TextInput = ({
         id="exampleFormControlInput1"
         placeholder={placeholder}
         autoComplete="on"
-        
         readOnly={readonly}
-        
       />
       {setShowPassword && (
         <img
           className="visible-icon"
-          src={type ==="password" ? hidden: Visible}
+          src={type === "password" ? hidden : Visible}
           alt=""
-          style={{ cursor: "pointer", height:"25px", marginBottom:"25px" }}
+          style={{ cursor: "pointer", height: "25px", marginBottom: "25px" }}
           onClick={() => setShowPassword(!showPassword)}
         />
       )}

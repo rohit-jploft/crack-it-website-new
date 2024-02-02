@@ -46,7 +46,8 @@ if (isThisExpert) {
 }
 
 const MyBookings = () => {
-  const { isExpertVerified, setExpertVerified, setIsFirstBookingDone  } = useContext(UserContext);
+  const { isExpertVerified, setExpertVerified, setIsFirstBookingDone } =
+    useContext(UserContext);
   const [showtour, setShowTour] = useState(true);
   const [cancelReason, setReason] = useState("");
   const [comment, setComment] = useState("");
@@ -88,7 +89,6 @@ const MyBookings = () => {
     setTotalCount(res?.pagination?.totalCount);
   };
 
-
   useEffect(() => {
     if (isThisExpert) {
       setTabArray(["New", "Upcoming", "Past"]);
@@ -96,6 +96,7 @@ const MyBookings = () => {
   }, []);
   const showBookingGuide = localStorage.getItem("showBookingGuide");
   useEffect(() => {
+    console.log("Key", key);
     setCancelDone(false);
     getData();
   }, [key, cancelDone, limit]);
@@ -109,9 +110,13 @@ const MyBookings = () => {
     );
     console.log(cancel);
     if (cancel && cancel?.data?.status === 200) {
-      toast.success(cancel.data.message);
-      setCancelDone(true);
-      handleClose();
+      if (!cancel.data.success) {
+        toast.error(cancel.data.message);
+      } else {
+        toast.success(cancel.data.message);
+        setCancelDone(true);
+        handleClose();
+      }
     }
     if (cancel && cancel?.data.status === 201) {
       toast.error(cancel.data.message);
@@ -119,16 +124,23 @@ const MyBookings = () => {
     }
   };
   const AcceptBooking = async (bookingId) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const accept = await Axios.put(`${BASE_URL}booking/accept/${bookingId}`);
     console.log(accept);
     if (accept && accept?.data?.status === 200) {
-      toast.success(accept.data.message);
-      setCancelDone(true);
-      handleClose();
-      setIsLoading(false)
+      if (!accept?.data?.success) {
+        toast.error(accept?.data?.message);
+        setCancelDone(true);
+        handleClose();
+        setIsLoading(false);
+      } else {
+        toast.success(accept.data.message);
+        setCancelDone(true);
+        handleClose();
+        setIsLoading(false);
+      }
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
   const declineBooking = async (bookingId) => {
@@ -138,6 +150,8 @@ const MyBookings = () => {
       toast.success(accept.data.message);
       setCancelDone(true);
       setShowDecline(false);
+    } else {
+      toast.error("Something went wrong");
     }
   };
 
@@ -185,15 +199,18 @@ const MyBookings = () => {
   };
   console.log(typeof dashboardData?.monthlyMeetings, "arrType");
   const isThisUser = localStorage.getItem("role");
-
-  
+  console.log(meetingData, "meeting");
 
   return (
     <>
       <Header />
 
       <ToastContainer />
-      <Loader open={isLoading} title={"Accepting Request....."} handleClose={() => setIsLoading(false)}/>
+      <Loader
+        open={isLoading}
+        title={"Accepting Request....."}
+        handleClose={() => setIsLoading(false)}
+      />
       <section className="">
         <Container>
           <div className="main-content">
@@ -252,19 +269,24 @@ const MyBookings = () => {
               id="uncontrolled-tab-example"
               className="bookings_tabs"
               activeKey={key}
-              onSelect={(k) => setKey(k)}
+              onSelect={(k) => {
+                console.log("setKey(k)", k);
+                setKey(k);
+              }}
             >
               {tabArray?.map((item, index) => {
                 return (
                   <Tab eventKey={item} key={index} title={item}>
                     {meetingData?.map((meet) => {
-                      console.log(meetingData.length, "length meeting");
+                      console.log(meet, "meet");
                       return (
                         <div
                           onClick={() => navigate(`/bookingInfo/${meet._id}`)}
                           style={{ cursor: "pointer" }}
                           key={meet._id}
                         >
+                          {console.log(meet, "meet")}
+
                           <BookingListItem
                             date={new Date(meet.date).getDate()}
                             JobCategory={meet.jobCategory.title}
@@ -278,6 +300,7 @@ const MyBookings = () => {
                             timeZone={meet.timeZone}
                             experience={meet?.expertData?.experience}
                             cancelled={meet.status === "CANCELLED"}
+                            bookingUniqueId={meet?.bookingId}
                             cancelButton={
                               meet.status === "REQUESTED" ||
                               meet.status === "CONFIRMED"
@@ -404,8 +427,7 @@ const MyBookings = () => {
         setComment={(value) => setComment(value)}
       />
 
-      
-      {(isThisUser === "USER" && showBookingGuide=='true' )&& (
+      {isThisUser === "USER" && showBookingGuide == "true" && (
         <JoyRideComponent
           steps={[
             {
